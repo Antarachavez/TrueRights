@@ -17,6 +17,7 @@ export default function RootLayout() {
         <Stack.Screen name="index" />
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="category/[id]" />
+        <Stack.Screen name="subcategory/[categoryId]/[subcategoryId]" />
         <Stack.Screen name="scenario/[id]" />
         <Stack.Screen 
           name="emergency" 

@@ -7,7 +7,14 @@ import axios from 'axios';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
-const { width } = Dimensions.get('window');
+
+interface Scenario {
+  id: string;
+  question: string;
+  short_answer: string;
+  category: string;
+  subcategory: string;
+}
 
 interface Subcategory {
   id: string;
@@ -61,33 +68,34 @@ const ICON_MAP: { [key: string]: keyof typeof Ionicons.glyphMap } = {
   'moon': 'moon',
 };
 
-export default function CategoryScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+export default function SubcategoryScreen() {
+  const { categoryId, subcategoryId } = useLocalSearchParams<{ categoryId: string; subcategoryId: string }>();
   const router = useRouter();
   const [category, setCategory] = useState<Category | null>(null);
-  const [scenarioCounts, setScenarioCounts] = useState<{ [key: string]: number }>({});
+  const [subcategory, setSubcategory] = useState<Subcategory | null>(null);
+  const [scenarios, setScenarios] = useState<Scenario[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchData();
-  }, [id]);
+  }, [categoryId, subcategoryId]);
 
   const fetchData = async () => {
     try {
       const [categoriesRes, scenariosRes] = await Promise.all([
         axios.get(`${BACKEND_URL}/api/categories`),
-        axios.get(`${BACKEND_URL}/api/scenarios/${id}`)
+        axios.get(`${BACKEND_URL}/api/scenarios/${categoryId}/${subcategoryId}`)
       ]);
       
-      const foundCategory = categoriesRes.data.find((c: Category) => c.id === id);
+      const foundCategory = categoriesRes.data.find((c: Category) => c.id === categoryId);
       setCategory(foundCategory);
       
-      // Count scenarios per subcategory
-      const counts: { [key: string]: number } = {};
-      scenariosRes.data.forEach((scenario: any) => {
-        counts[scenario.subcategory] = (counts[scenario.subcategory] || 0) + 1;
-      });
-      setScenarioCounts(counts);
+      if (foundCategory) {
+        const foundSubcategory = foundCategory.subcategories?.find((s: Subcategory) => s.id === subcategoryId);
+        setSubcategory(foundSubcategory);
+      }
+      
+      setScenarios(scenariosRes.data);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -99,7 +107,7 @@ export default function CategoryScreen() {
     return ICON_MAP[icon] || 'help-circle';
   };
 
-  if (loading || !category) {
+  if (loading || !category || !subcategory) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
@@ -112,55 +120,52 @@ export default function CategoryScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       {/* Header */}
-      <View style={[styles.header, { borderBottomColor: `${category.color}30` }]}>
+      <View style={[styles.header, { borderBottomColor: `${subcategory.color}30` }]}>
         <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
         </TouchableOpacity>
         
         <View style={styles.headerContent}>
-          <View style={[styles.categoryIcon, { backgroundColor: `${category.color}20` }]}>
-            <Ionicons name={getIconName(category.icon)} size={32} color={category.color} />
+          <View style={[styles.subcategoryIcon, { backgroundColor: `${subcategory.color}20` }]}>
+            <Ionicons name={getIconName(subcategory.icon)} size={28} color={subcategory.color} />
           </View>
           <View style={styles.headerText}>
-            <Text style={styles.categoryName}>{category.name}</Text>
-            <Text style={styles.categoryDesc}>{category.description}</Text>
+            <Text style={styles.breadcrumb}>{category.name}</Text>
+            <Text style={[styles.subcategoryName, { color: subcategory.color }]}>{subcategory.name}</Text>
+            <Text style={styles.questionCount}>{scenarios.length} questions</Text>
           </View>
         </View>
       </View>
 
-      {/* Subcategories Grid */}
+      {/* Questions List */}
       <ScrollView 
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.sectionTitle}>Choose a Topic</Text>
+        <Text style={styles.sectionTitle}>Common Questions</Text>
         
-        <View style={styles.subcategoriesGrid}>
-          {category.subcategories?.map((sub, index) => (
-            <Animated.View 
-              key={sub.id}
-              entering={FadeInUp.duration(400).delay(index * 80)}
-              style={styles.subcategoryCardWrapper}
+        {scenarios.map((scenario, index) => (
+          <Animated.View 
+            key={scenario.id}
+            entering={FadeInUp.duration(400).delay(index * 60)}
+          >
+            <TouchableOpacity
+              style={[styles.scenarioCard, { borderLeftColor: subcategory.color }]}
+              onPress={() => router.push(`/scenario/${scenario.id}`)}
             >
-              <TouchableOpacity
-                style={[styles.subcategoryCard, { borderColor: `${sub.color}50` }]}
-                onPress={() => router.push(`/subcategory/${id}/${sub.id}`)}
-              >
-                <View style={[styles.subcategoryIcon, { backgroundColor: `${sub.color}20` }]}>
-                  <Ionicons name={getIconName(sub.icon)} size={28} color={sub.color} />
-                </View>
-                <Text style={styles.subcategoryName}>{sub.name}</Text>
-                <Text style={styles.subcategoryCount}>
-                  {scenarioCounts[sub.id] || 0} questions
+              <View style={styles.scenarioContent}>
+                <Text style={styles.scenarioQuestion}>{scenario.question}</Text>
+                <Text style={styles.scenarioAnswer} numberOfLines={2}>
+                  {scenario.short_answer}
                 </Text>
-                <View style={[styles.arrowCircle, { backgroundColor: `${sub.color}20` }]}>
-                  <Ionicons name="chevron-forward" size={16} color={sub.color} />
-                </View>
-              </TouchableOpacity>
-            </Animated.View>
-          ))}
-        </View>
+              </View>
+              <View style={[styles.arrowCircle, { backgroundColor: `${subcategory.color}15` }]}>
+                <Ionicons name="chevron-forward" size={18} color={subcategory.color} />
+              </View>
+            </TouchableOpacity>
+          </Animated.View>
+        ))}
 
         {/* Ask AI Card */}
         <TouchableOpacity 
@@ -172,7 +177,7 @@ export default function CategoryScreen() {
               <Ionicons name="chatbubbles" size={24} color="#3B82F6" />
             </View>
             <View style={styles.askAiText}>
-              <Text style={styles.askAiTitle}>Have a different question?</Text>
+              <Text style={styles.askAiTitle}>Don't see your question?</Text>
               <Text style={styles.askAiDesc}>Ask our AI assistant for help</Text>
             </View>
           </View>
@@ -224,10 +229,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  categoryIcon: {
-    width: 64,
-    height: 64,
-    borderRadius: 18,
+  subcategoryIcon: {
+    width: 60,
+    height: 60,
+    borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
@@ -235,13 +240,17 @@ const styles = StyleSheet.create({
   headerText: {
     flex: 1,
   },
-  categoryName: {
-    fontSize: 26,
-    fontWeight: '700',
-    color: '#FFFFFF',
+  breadcrumb: {
+    fontSize: 13,
+    color: '#6B7280',
+    marginBottom: 4,
   },
-  categoryDesc: {
-    fontSize: 14,
+  subcategoryName: {
+    fontSize: 22,
+    fontWeight: '700',
+  },
+  questionCount: {
+    fontSize: 13,
     color: '#9CA3AF',
     marginTop: 4,
   },
@@ -252,52 +261,40 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
     color: '#9CA3AF',
     marginBottom: 16,
   },
-  subcategoriesGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  subcategoryCardWrapper: {
-    width: (width - 52) / 2,
-    marginBottom: 12,
-  },
-  subcategoryCard: {
+  scenarioCard: {
     backgroundColor: '#1A1A1A',
     borderRadius: 16,
     padding: 16,
-    borderWidth: 1,
-    minHeight: 140,
-  },
-  subcategoryIcon: {
-    width: 52,
-    height: 52,
-    borderRadius: 14,
-    justifyContent: 'center',
-    alignItems: 'center',
     marginBottom: 12,
+    borderLeftWidth: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  subcategoryName: {
-    fontSize: 15,
+  scenarioContent: {
+    flex: 1,
+    marginRight: 12,
+  },
+  scenarioQuestion: {
+    fontSize: 16,
     fontWeight: '600',
     color: '#FFFFFF',
-    marginBottom: 4,
+    marginBottom: 8,
+    lineHeight: 22,
   },
-  subcategoryCount: {
-    fontSize: 12,
-    color: '#6B7280',
+  scenarioAnswer: {
+    fontSize: 14,
+    color: '#9CA3AF',
+    lineHeight: 20,
   },
   arrowCircle: {
-    position: 'absolute',
-    top: 12,
-    right: 12,
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     justifyContent: 'center',
     alignItems: 'center',
   },
