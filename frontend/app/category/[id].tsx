@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
-import Animated, { FadeInUp } from 'react-native-reanimated';
+import Animated, { FadeInUp, FadeIn } from 'react-native-reanimated';
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
 const { width } = Dimensions.get('window');
@@ -14,6 +14,14 @@ interface Scenario {
   question: string;
   short_answer: string;
   category: string;
+  subcategory: string;
+}
+
+interface Subcategory {
+  id: string;
+  name: string;
+  icon: string;
+  color: string;
 }
 
 interface Category {
@@ -22,6 +30,7 @@ interface Category {
   icon: string;
   color: string;
   description: string;
+  subcategories: Subcategory[];
 }
 
 const ICON_MAP: { [key: string]: keyof typeof Ionicons.glyphMap } = {
@@ -31,13 +40,41 @@ const ICON_MAP: { [key: string]: keyof typeof Ionicons.glyphMap } = {
   'shield': 'shield',
   'lock': 'lock-closed',
   'map-pin': 'location',
+  'search': 'search',
+  'warning': 'warning',
+  'time': 'time',
+  'megaphone': 'megaphone',
+  'people': 'people',
+  'shirt': 'shirt',
+  'cash': 'cash',
+  'shield-checkmark': 'shield-checkmark',
+  'alert-circle': 'alert-circle',
+  'exit': 'exit',
+  'eye-off': 'eye-off',
+  'key': 'key',
+  'construct': 'construct',
+  'log-out': 'log-out',
+  'document-text': 'document-text',
+  'hand-left': 'hand-left',
+  'lock-closed': 'lock-closed',
+  'videocam': 'videocam',
+  'share-social': 'share-social',
+  'analytics': 'analytics',
+  'images': 'images',
+  'eye': 'eye',
+  'camera': 'camera',
+  'storefront': 'storefront',
+  'bus': 'bus',
+  'leaf': 'leaf',
+  'moon': 'moon',
 };
 
 export default function CategoryScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
-  const [scenarios, setScenarios] = useState<Scenario[]>([]);
   const [category, setCategory] = useState<Category | null>(null);
+  const [scenarios, setScenarios] = useState<Scenario[]>([]);
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -54,6 +91,11 @@ export default function CategoryScreen() {
       const foundCategory = categoriesRes.data.find((c: Category) => c.id === id);
       setCategory(foundCategory);
       setScenarios(scenariosRes.data);
+      
+      // Select first subcategory by default
+      if (foundCategory?.subcategories?.length > 0) {
+        setSelectedSubcategory(foundCategory.subcategories[0].id);
+      }
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -63,6 +105,15 @@ export default function CategoryScreen() {
 
   const getIconName = (icon: string): keyof typeof Ionicons.glyphMap => {
     return ICON_MAP[icon] || 'help-circle';
+  };
+
+  const filteredScenarios = selectedSubcategory 
+    ? scenarios.filter(s => s.subcategory === selectedSubcategory)
+    : scenarios;
+
+  const getSelectedSubcategoryInfo = () => {
+    if (!category || !selectedSubcategory) return null;
+    return category.subcategories.find(s => s.id === selectedSubcategory);
   };
 
   if (loading || !category) {
@@ -75,14 +126,13 @@ export default function CategoryScreen() {
     );
   }
 
+  const subcategoryInfo = getSelectedSubcategoryInfo();
+
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       {/* Header */}
       <View style={[styles.header, { borderBottomColor: `${category.color}30` }]}>
-        <TouchableOpacity 
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
+        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
         </TouchableOpacity>
         
@@ -97,21 +147,62 @@ export default function CategoryScreen() {
         </View>
       </View>
 
+      {/* Subcategory Pills */}
+      <View style={styles.subcategoryContainer}>
+        <ScrollView 
+          horizontal 
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.subcategoryScroll}
+        >
+          {category.subcategories?.map((sub, index) => (
+            <Animated.View key={sub.id} entering={FadeIn.duration(300).delay(index * 50)}>
+              <TouchableOpacity
+                style={[
+                  styles.subcategoryPill,
+                  selectedSubcategory === sub.id && { backgroundColor: sub.color }
+                ]}
+                onPress={() => setSelectedSubcategory(sub.id)}
+              >
+                <Ionicons 
+                  name={getIconName(sub.icon)} 
+                  size={16} 
+                  color={selectedSubcategory === sub.id ? '#FFFFFF' : sub.color} 
+                />
+                <Text style={[
+                  styles.subcategoryText,
+                  selectedSubcategory === sub.id && styles.subcategoryTextActive
+                ]}>
+                  {sub.name}
+                </Text>
+              </TouchableOpacity>
+            </Animated.View>
+          ))}
+        </ScrollView>
+      </View>
+
+      {/* Subcategory Title */}
+      {subcategoryInfo && (
+        <View style={styles.subcategoryHeader}>
+          <Text style={[styles.subcategoryTitle, { color: subcategoryInfo.color }]}>
+            {subcategoryInfo.name}
+          </Text>
+          <Text style={styles.scenarioCount}>{filteredScenarios.length} questions</Text>
+        </View>
+      )}
+
       {/* Scenarios List */}
       <ScrollView 
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.sectionTitle}>Common Questions</Text>
-        
-        {scenarios.map((scenario, index) => (
+        {filteredScenarios.map((scenario, index) => (
           <Animated.View 
             key={scenario.id}
-            entering={FadeInUp.duration(400).delay(index * 100)}
+            entering={FadeInUp.duration(400).delay(index * 80)}
           >
             <TouchableOpacity
-              style={[styles.scenarioCard, { borderLeftColor: category.color }]}
+              style={[styles.scenarioCard, { borderLeftColor: subcategoryInfo?.color || category.color }]}
               onPress={() => router.push(`/scenario/${scenario.id}`)}
             >
               <View style={styles.scenarioContent}>
@@ -171,7 +262,7 @@ const styles = StyleSheet.create({
   header: {
     paddingHorizontal: 20,
     paddingTop: 8,
-    paddingBottom: 20,
+    paddingBottom: 16,
     borderBottomWidth: 1,
   },
   backButton: {
@@ -208,17 +299,56 @@ const styles = StyleSheet.create({
     color: '#9CA3AF',
     marginTop: 4,
   },
+  subcategoryContainer: {
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#1A1A1A',
+  },
+  subcategoryScroll: {
+    paddingHorizontal: 20,
+  },
+  subcategoryPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#1A1A1A',
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 20,
+    marginRight: 10,
+    borderWidth: 1,
+    borderColor: '#2D2D2D',
+  },
+  subcategoryText: {
+    fontSize: 13,
+    fontWeight: '500',
+    color: '#9CA3AF',
+    marginLeft: 6,
+  },
+  subcategoryTextActive: {
+    color: '#FFFFFF',
+  },
+  subcategoryHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 8,
+  },
+  subcategoryTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  scenarioCount: {
+    fontSize: 13,
+    color: '#6B7280',
+  },
   scrollView: {
     flex: 1,
   },
   scrollContent: {
     padding: 20,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#9CA3AF',
-    marginBottom: 16,
+    paddingTop: 8,
   },
   scenarioCard: {
     backgroundColor: '#1A1A1A',
