@@ -6,7 +6,7 @@ import os
 import logging
 from pathlib import Path
 from pydantic import BaseModel, Field
-from typing import List, Optional
+from typing import Optional
 import uuid
 from datetime import datetime
 from emergentintegrations.llm.chat import LlmChat, UserMessage
@@ -85,34 +85,49 @@ class SMSRequest(BaseModel):
     message: str
     from_name: str
 
-# CATEGORIES
+# CATEGORIES - Now with 8 main categories
 CATEGORIES = [
     {"id": "school", "name": "School", "icon": "school", "color": "#3B82F6", "description": "Know your rights at school",
      "subcategories": [
          {"id": "searches", "name": "Searches & Privacy", "icon": "search", "color": "#3B82F6"},
          {"id": "discipline", "name": "Discipline & Suspension", "icon": "warning", "color": "#EF4444"},
-         {"id": "attendance", "name": "Attendance & Timing", "icon": "time", "color": "#F59E0B"},
-         {"id": "expression", "name": "Free Speech & Expression", "icon": "megaphone", "color": "#8B5CF6"},
+         {"id": "attendance", "name": "Attendance", "icon": "time", "color": "#F59E0B"},
+         {"id": "expression", "name": "Free Speech", "icon": "megaphone", "color": "#8B5CF6"},
          {"id": "administration", "name": "Teachers & Admin", "icon": "people", "color": "#10B981"},
-         {"id": "personal", "name": "Personal Items & Dress", "icon": "shirt", "color": "#EC4899"}
+         {"id": "personal", "name": "Personal Items", "icon": "shirt", "color": "#EC4899"},
+         {"id": "grades", "name": "Grades & Testing", "icon": "document-text", "color": "#14B8A6"},
+         {"id": "sports", "name": "Sports & Activities", "icon": "football", "color": "#F97316"},
+         {"id": "special-ed", "name": "Special Education", "icon": "accessibility", "color": "#6366F1"},
+         {"id": "safety", "name": "Safety & Health", "icon": "medkit", "color": "#DC2626"},
+         {"id": "technology", "name": "Technology", "icon": "laptop", "color": "#0EA5E9"}
      ]},
     {"id": "work", "name": "Work", "icon": "briefcase", "color": "#F97316", "description": "Workplace rights",
      "subcategories": [
          {"id": "pay", "name": "Pay & Wages", "icon": "cash", "color": "#10B981"},
          {"id": "hours", "name": "Hours & Breaks", "icon": "time", "color": "#F97316"},
-         {"id": "safety", "name": "Workplace Safety", "icon": "shield-checkmark", "color": "#EF4444"},
+         {"id": "safety", "name": "Safety", "icon": "shield-checkmark", "color": "#EF4444"},
          {"id": "harassment", "name": "Harassment", "icon": "alert-circle", "color": "#DC2626"},
          {"id": "firing", "name": "Firing & Quitting", "icon": "exit", "color": "#6B7280"},
-         {"id": "privacy", "name": "Privacy at Work", "icon": "eye-off", "color": "#8B5CF6"}
+         {"id": "privacy", "name": "Privacy", "icon": "eye-off", "color": "#8B5CF6"},
+         {"id": "minors", "name": "Teen Workers", "icon": "person", "color": "#3B82F6"},
+         {"id": "scheduling", "name": "Scheduling", "icon": "calendar", "color": "#14B8A6"},
+         {"id": "tips", "name": "Tips & Commission", "icon": "wallet", "color": "#F59E0B"},
+         {"id": "contracts", "name": "Contracts", "icon": "document-text", "color": "#6366F1"},
+         {"id": "discrimination", "name": "Discrimination", "icon": "ban", "color": "#EC4899"}
      ]},
     {"id": "housing", "name": "Housing", "icon": "home", "color": "#10B981", "description": "Tenant rights",
      "subcategories": [
          {"id": "entry", "name": "Landlord Entry", "icon": "key", "color": "#F97316"},
-         {"id": "repairs", "name": "Repairs & Conditions", "icon": "construct", "color": "#3B82F6"},
-         {"id": "eviction", "name": "Eviction & Moving", "icon": "log-out", "color": "#EF4444"},
-         {"id": "deposits", "name": "Security Deposits", "icon": "cash", "color": "#10B981"},
+         {"id": "repairs", "name": "Repairs", "icon": "construct", "color": "#3B82F6"},
+         {"id": "eviction", "name": "Eviction", "icon": "log-out", "color": "#EF4444"},
+         {"id": "deposits", "name": "Deposits", "icon": "cash", "color": "#10B981"},
          {"id": "lease", "name": "Lease & Rent", "icon": "document-text", "color": "#8B5CF6"},
-         {"id": "roommates", "name": "Roommates & Guests", "icon": "people", "color": "#EC4899"}
+         {"id": "roommates", "name": "Roommates", "icon": "people", "color": "#EC4899"},
+         {"id": "utilities", "name": "Utilities", "icon": "flash", "color": "#F59E0B"},
+         {"id": "pets", "name": "Pets", "icon": "paw", "color": "#14B8A6"},
+         {"id": "noise", "name": "Noise & Neighbors", "icon": "volume-high", "color": "#6366F1"},
+         {"id": "discrimination", "name": "Discrimination", "icon": "ban", "color": "#DC2626"},
+         {"id": "moving", "name": "Moving Out", "icon": "car", "color": "#0EA5E9"}
      ]},
     {"id": "police", "name": "Police", "icon": "shield", "color": "#EF4444", "description": "Police interactions",
      "subcategories": [
@@ -120,317 +135,604 @@ CATEGORIES = [
          {"id": "searches", "name": "Searches", "icon": "search", "color": "#EF4444"},
          {"id": "arrests", "name": "Arrests", "icon": "lock-closed", "color": "#DC2626"},
          {"id": "rights", "name": "Your Rights", "icon": "shield-checkmark", "color": "#3B82F6"},
-         {"id": "recording", "name": "Recording Police", "icon": "videocam", "color": "#8B5CF6"},
-         {"id": "complaints", "name": "Complaints", "icon": "document-text", "color": "#6B7280"}
+         {"id": "recording", "name": "Recording", "icon": "videocam", "color": "#8B5CF6"},
+         {"id": "complaints", "name": "Complaints", "icon": "document-text", "color": "#6B7280"},
+         {"id": "minors", "name": "Minors & Police", "icon": "person", "color": "#10B981"},
+         {"id": "traffic", "name": "Traffic Stops", "icon": "car", "color": "#F59E0B"},
+         {"id": "home", "name": "Police at Home", "icon": "home", "color": "#14B8A6"},
+         {"id": "witnesses", "name": "Being a Witness", "icon": "eye", "color": "#6366F1"},
+         {"id": "after", "name": "After Arrest", "icon": "time", "color": "#EC4899"}
      ]},
-    {"id": "online", "name": "Online Privacy", "icon": "lock", "color": "#8B5CF6", "description": "Digital safety",
+    {"id": "online", "name": "Online", "icon": "lock", "color": "#8B5CF6", "description": "Digital safety",
      "subcategories": [
          {"id": "social", "name": "Social Media", "icon": "share-social", "color": "#3B82F6"},
          {"id": "data", "name": "Data & Tracking", "icon": "analytics", "color": "#10B981"},
-         {"id": "harassment", "name": "Online Harassment", "icon": "alert-circle", "color": "#EF4444"},
+         {"id": "harassment", "name": "Harassment", "icon": "alert-circle", "color": "#EF4444"},
          {"id": "photos", "name": "Photos & Images", "icon": "images", "color": "#EC4899"},
-         {"id": "accounts", "name": "Accounts & Security", "icon": "key", "color": "#F97316"},
-         {"id": "school-monitoring", "name": "School Monitoring", "icon": "eye", "color": "#6B7280"}
+         {"id": "accounts", "name": "Accounts", "icon": "key", "color": "#F97316"},
+         {"id": "school-monitoring", "name": "School Devices", "icon": "eye", "color": "#6B7280"},
+         {"id": "scams", "name": "Scams & Fraud", "icon": "warning", "color": "#DC2626"},
+         {"id": "gaming", "name": "Gaming", "icon": "game-controller", "color": "#8B5CF6"},
+         {"id": "shopping", "name": "Online Shopping", "icon": "cart", "color": "#14B8A6"},
+         {"id": "copyright", "name": "Copyright", "icon": "document", "color": "#6366F1"},
+         {"id": "ai", "name": "AI & Deepfakes", "icon": "hardware-chip", "color": "#0EA5E9"}
      ]},
     {"id": "public", "name": "Public Spaces", "icon": "map-pin", "color": "#14B8A6", "description": "Public rights",
      "subcategories": [
-         {"id": "filming", "name": "Filming & Photos", "icon": "camera", "color": "#3B82F6"},
+         {"id": "filming", "name": "Filming", "icon": "camera", "color": "#3B82F6"},
          {"id": "protests", "name": "Protests", "icon": "megaphone", "color": "#EF4444"},
-         {"id": "stores", "name": "Stores & Businesses", "icon": "storefront", "color": "#F97316"},
+         {"id": "stores", "name": "Stores", "icon": "storefront", "color": "#F97316"},
          {"id": "transport", "name": "Transportation", "icon": "bus", "color": "#10B981"},
-         {"id": "parks", "name": "Parks & Streets", "icon": "leaf", "color": "#14B8A6"},
-         {"id": "curfew", "name": "Curfews", "icon": "moon", "color": "#8B5CF6"}
+         {"id": "parks", "name": "Parks", "icon": "leaf", "color": "#14B8A6"},
+         {"id": "curfew", "name": "Curfews", "icon": "moon", "color": "#8B5CF6"},
+         {"id": "malls", "name": "Malls & Shopping", "icon": "bag", "color": "#EC4899"},
+         {"id": "events", "name": "Events & Concerts", "icon": "musical-notes", "color": "#6366F1"},
+         {"id": "restaurants", "name": "Restaurants", "icon": "restaurant", "color": "#F59E0B"},
+         {"id": "id", "name": "ID Requirements", "icon": "card", "color": "#DC2626"},
+         {"id": "banned", "name": "Being Banned", "icon": "ban", "color": "#6B7280"}
+     ]},
+    {"id": "immigration", "name": "Immigration", "icon": "globe", "color": "#0EA5E9", "description": "Immigration rights",
+     "subcategories": [
+         {"id": "documents", "name": "Documents", "icon": "document-text", "color": "#3B82F6"},
+         {"id": "police", "name": "Police & ICE", "icon": "shield", "color": "#EF4444"},
+         {"id": "work", "name": "Work Rights", "icon": "briefcase", "color": "#F97316"},
+         {"id": "school", "name": "School Rights", "icon": "school", "color": "#10B981"},
+         {"id": "travel", "name": "Travel", "icon": "airplane", "color": "#8B5CF6"},
+         {"id": "healthcare", "name": "Healthcare", "icon": "medkit", "color": "#EC4899"},
+         {"id": "housing", "name": "Housing", "icon": "home", "color": "#14B8A6"},
+         {"id": "detention", "name": "Detention", "icon": "lock-closed", "color": "#DC2626"},
+         {"id": "family", "name": "Family", "icon": "people", "color": "#6366F1"},
+         {"id": "daca", "name": "DACA", "icon": "ribbon", "color": "#F59E0B"},
+         {"id": "raids", "name": "Raids & Checkpoints", "icon": "warning", "color": "#6B7280"}
+     ]},
+    {"id": "consumer", "name": "Customer Service", "icon": "cart", "color": "#EC4899", "description": "Consumer rights",
+     "subcategories": [
+         {"id": "returns", "name": "Returns & Refunds", "icon": "refresh", "color": "#10B981"},
+         {"id": "warranties", "name": "Warranties", "icon": "shield-checkmark", "color": "#3B82F6"},
+         {"id": "scams", "name": "Scams", "icon": "warning", "color": "#EF4444"},
+         {"id": "billing", "name": "Billing Disputes", "icon": "card", "color": "#F97316"},
+         {"id": "complaints", "name": "Complaints", "icon": "megaphone", "color": "#8B5CF6"},
+         {"id": "contracts", "name": "Contracts & Subscriptions", "icon": "document-text", "color": "#6366F1"},
+         {"id": "debt", "name": "Debt Collection", "icon": "cash", "color": "#DC2626"},
+         {"id": "privacy", "name": "Privacy & Data", "icon": "lock-closed", "color": "#14B8A6"},
+         {"id": "discrimination", "name": "Discrimination", "icon": "ban", "color": "#EC4899"},
+         {"id": "repairs", "name": "Repairs & Services", "icon": "construct", "color": "#F59E0B"},
+         {"id": "online", "name": "Online Purchases", "icon": "globe", "color": "#0EA5E9"}
      ]}
 ]
 
-# SCENARIOS - More concise, natural language
+# MASSIVE SCENARIOS DATABASE
 SCENARIOS = {
     "school": {
         "searches": [
-            {"id": "s1", "question": "Can they search my phone?", "short_answer": "They need a real reason to suspect YOU specifically broke a rule. Ask to call your parents first.", "explanation": "Schools can't just randomly grab phones. They need 'reasonable suspicion' - meaning something specific made them think YOU did something wrong.", "script": "I'd like to call my parent before you search my phone.", "next_steps": ["Stay calm", "Ask why they want to search", "Call a parent", "Write down what happened"]},
-            {"id": "s2", "question": "Can they search my locker?", "short_answer": "Probably yes. Most schools own the lockers, so they can check them.", "explanation": "Lockers are usually school property. Your personal stuff inside might have more protection though.", "script": "Can I ask what this is about?", "next_steps": ["Stay calm", "Note who's there", "Tell your parents after"]},
-            {"id": "s3", "question": "Can they go through my bag?", "short_answer": "Only if they have a specific reason to suspect you. Not just random bag checks.", "explanation": "Your backpack is your property. They need actual suspicion that YOU broke a rule, not just general searching.", "script": "What rule do you think I broke?", "next_steps": ["Ask why", "Don't consent but don't fight", "Document it"]},
-            {"id": "s4", "question": "Can they search my car?", "short_answer": "If it's parked on school property, usually yes. You agreed to it by parking there.", "explanation": "Most parking permits include consent to search. Check what you signed.", "script": "Can I see the parking agreement I signed?", "next_steps": ["Check your permit", "Ask what they're looking for"]},
-            {"id": "s5", "question": "Can they strip search me?", "short_answer": "Almost NEVER. This is extreme and usually illegal. Refuse and demand your parents.", "explanation": "The Supreme Court basically said no to this. Schools need crazy strong reasons.", "script": "No. I want my parents and a lawyer NOW.", "next_steps": ["Say no firmly", "Demand parents", "Report this immediately"]},
-            {"id": "s6", "question": "Can a teacher look through my texts?", "short_answer": "Not without good reason. Your phone is private property.", "explanation": "Teachers need actual suspicion of rule-breaking, not just curiosity.", "script": "I don't consent to that. Can I call my parent?", "next_steps": ["Don't unlock it", "Ask for a parent", "Stay polite but firm"]},
-            {"id": "s7", "question": "What if they find something?", "short_answer": "Depends what it is. Illegal stuff = police. Against rules = school punishment.", "explanation": "Drugs or weapons mean cops. Other stuff is usually just school discipline.", "script": "I'd like to call my parents before we go further.", "next_steps": ["Stay quiet", "Get your parents", "Get a lawyer for serious stuff"]}
+            {"id": "sch-s1", "question": "Can they search my phone?", "short_answer": "They need a real reason to suspect YOU broke a rule. Ask to call your parents first.", "explanation": "Schools can't randomly grab phones. They need specific suspicion about you.", "script": "I'd like to call my parent before any search.", "next_steps": ["Stay calm", "Ask why", "Call parent", "Document it"]},
+            {"id": "sch-s2", "question": "Can they search my locker?", "short_answer": "Probably yes. Most schools own lockers.", "explanation": "Lockers are usually school property.", "script": "Can I ask what this is about?", "next_steps": ["Stay calm", "Note witnesses", "Tell parents"]},
+            {"id": "sch-s3", "question": "Can they go through my bag?", "short_answer": "Only with specific suspicion about you, not random checks.", "explanation": "Your backpack is your property.", "script": "What rule am I suspected of breaking?", "next_steps": ["Ask why", "Don't resist", "Document"]},
+            {"id": "sch-s4", "question": "Can they search my car?", "short_answer": "If parked at school, usually yes - you agreed by parking there.", "explanation": "Check your parking permit.", "script": "Can I see the parking policy?", "next_steps": ["Check permit", "Ask reason"]},
+            {"id": "sch-s5", "question": "Can they strip search me?", "short_answer": "Almost NEVER. Refuse and demand parents immediately.", "explanation": "Supreme Court basically banned this.", "script": "No. I want my parents and a lawyer NOW.", "next_steps": ["Say no", "Demand parents", "Report"]},
+            {"id": "sch-s6", "question": "Can a teacher read my texts?", "short_answer": "Not without good reason. Your phone is private.", "explanation": "Teachers need actual suspicion.", "script": "I don't consent. Can I call my parent?", "next_steps": ["Don't unlock", "Ask for parent"]},
+            {"id": "sch-s7", "question": "Can they make me empty my pockets?", "short_answer": "They need reasonable suspicion first.", "explanation": "Can't just randomly search everyone.", "script": "What's the reason for this?", "next_steps": ["Ask why", "Stay calm"]},
+            {"id": "sch-s8", "question": "Can they use metal detectors?", "short_answer": "Yes, if everyone goes through them. Random selection is trickier.", "explanation": "General screening is usually okay.", "script": "Is everyone being screened?", "next_steps": ["Comply if general", "Ask if targeted"]}
         ],
         "discipline": [
-            {"id": "d1", "question": "I'm getting suspended. What now?", "short_answer": "You have the right to know the charges and tell your side. Get it in writing.", "explanation": "For short suspensions, they have to tell you what you did and let you respond. Longer ones need formal hearings.", "script": "What exactly am I accused of? I want to explain my side.", "next_steps": ["Ask for specifics", "Tell your version", "Get it in writing", "Involve parents"]},
-            {"id": "d2", "question": "Can they expel me?", "short_answer": "Only after a formal hearing where you can defend yourself and bring witnesses.", "explanation": "Expulsion is serious. You get a real hearing, can have a lawyer sometimes, and can appeal.", "script": "I want a formal hearing with my parents present.", "next_steps": ["Request formal hearing", "Bring witnesses", "Consider a lawyer", "Prepare your defense"]},
-            {"id": "d3", "question": "Do I have to stay for detention?", "short_answer": "Usually yes, but your parents should be told and you still get bathroom breaks.", "explanation": "Schools can give detention. They should notify parents, especially for after-school.", "script": "Can you make sure my parents know about this?", "next_steps": ["Make sure parents know", "Figure out transportation", "Serve it", "Move on"]},
-            {"id": "d4", "question": "Others got lighter punishment. Is that fair?", "short_answer": "Should be consistent. If it seems based on race, gender, etc., that's discrimination.", "explanation": "Schools can't punish you harder because of who you are. Document if you see a pattern.", "script": "I noticed others got different consequences. Can we discuss this?", "next_steps": ["Document similar cases", "Talk to counselor", "File complaint if needed"]},
-            {"id": "d5", "question": "Can I appeal?", "short_answer": "Yes. Most schools have an appeals process. Ask for it in writing.", "explanation": "You can usually appeal suspensions, expulsions, and other big decisions.", "script": "I want to appeal. What's the process and deadline?", "next_steps": ["Get the process in writing", "Meet deadlines", "Gather evidence"]},
-            {"id": "d6", "question": "Zero tolerance - do I have any rights?", "short_answer": "Yes! You still get to explain what happened. Context matters.", "explanation": "Zero tolerance doesn't mean zero rights. You can still explain circumstances.", "script": "I understand the policy, but can I explain what actually happened?", "next_steps": ["Explain context", "Ask about exceptions", "Involve parents"]},
-            {"id": "d7", "question": "They want me to sign something. Should I?", "short_answer": "Read it first. You can ask for time and for parents to review it.", "explanation": "Don't sign anything you don't understand. Take it home if needed.", "script": "I want my parents to read this before I sign anything.", "next_steps": ["Read carefully", "Take it home", "Don't feel pressured"]},
-            {"id": "d8", "question": "Can they search me after detention?", "short_answer": "Same rules as always - they need specific suspicion about you.", "explanation": "Detention doesn't give them extra search powers.", "script": "What's the reason for this search?", "next_steps": ["Ask why", "Don't consent unnecessarily", "Document it"]}
+            {"id": "sch-d1", "question": "I'm getting suspended. What now?", "short_answer": "You have the right to know charges and tell your side.", "explanation": "Short suspensions need basic due process.", "script": "What exactly am I accused of?", "next_steps": ["Ask specifics", "Tell your side", "Get it in writing"]},
+            {"id": "sch-d2", "question": "Can they expel me?", "short_answer": "Only after a formal hearing where you can defend yourself.", "explanation": "Expulsion is serious - you get a real hearing.", "script": "I want a formal hearing.", "next_steps": ["Request hearing", "Bring witnesses", "Get lawyer"]},
+            {"id": "sch-d3", "question": "Do I have to stay for detention?", "short_answer": "Usually yes, but parents should be notified.", "explanation": "Schools can give detention.", "script": "Can you notify my parents?", "next_steps": ["Confirm parents know", "Serve it"]},
+            {"id": "sch-d4", "question": "Others got lighter punishment. Fair?", "short_answer": "Should be consistent. If it's about race/gender, that's discrimination.", "explanation": "Can't punish you harder because of who you are.", "script": "Others got different consequences. Can we discuss?", "next_steps": ["Document", "Talk to counselor"]},
+            {"id": "sch-d5", "question": "Can I appeal?", "short_answer": "Yes. Most schools have appeals.", "explanation": "Big decisions can be appealed.", "script": "What's the appeals process?", "next_steps": ["Get process", "Meet deadlines"]},
+            {"id": "sch-d6", "question": "Zero tolerance - any rights?", "short_answer": "Yes! You still get to explain what happened.", "explanation": "Zero tolerance doesn't mean zero rights.", "script": "Can I explain the circumstances?", "next_steps": ["Explain context", "Involve parents"]},
+            {"id": "sch-d7", "question": "They want me to sign something.", "short_answer": "Read it first. Take it home if needed.", "explanation": "Don't sign what you don't understand.", "script": "I want my parents to see this first.", "next_steps": ["Read carefully", "Take home"]},
+            {"id": "sch-d8", "question": "Can they call the cops on me?", "short_answer": "For serious stuff, yes. Schools can involve police.", "explanation": "Crimes can involve police.", "script": "I want a lawyer before talking to police.", "next_steps": ["Stay silent", "Get lawyer"]}
         ],
         "attendance": [
-            {"id": "a1", "question": "What happens if I'm late a lot?", "short_answer": "Usually starts with warnings, then detention, then bigger consequences.", "explanation": "Schools track tardiness. It escalates: warnings → detention → parent meetings → worse.", "script": "I know I've been late. Can we talk about what's causing it?", "next_steps": ["Be honest", "Ask for help", "Make a plan", "Stick to it"]},
-            {"id": "a2", "question": "What's an excused absence?", "short_answer": "Sickness, family emergency, religious holidays, mental health days (in some states).", "explanation": "Policies vary. Usually need a parent note or doctor note. Check your school's rules.", "script": "What documentation do you need?", "next_steps": ["Check school policy", "Get the right paperwork", "Turn it in on time"]},
-            {"id": "a3", "question": "Can I leave early?", "short_answer": "Yes, but need parent permission and have to sign out at the office.", "explanation": "Schools are responsible for you. They need to know you're leaving.", "script": "My parent called the office. Where do I sign out?", "next_steps": ["Have parent call", "Go to office", "Sign out properly"]},
-            {"id": "a4", "question": "What's truancy and why should I care?", "short_answer": "Too many unexcused absences. Can lead to fines, court, or parents getting in trouble.", "explanation": "States require you to be in school. Skip too much and it becomes a legal issue.", "script": "I'm having attendance issues. Can I talk to a counselor?", "next_steps": ["Talk to counselor", "Figure out what's going on", "Make a plan"]},
-            {"id": "a5", "question": "Can I take a mental health day?", "short_answer": "More states allow this now. Check your state law or have a parent excuse you for 'illness.'", "explanation": "Mental health days are becoming recognized. Parents can usually excuse you anyway.", "script": "I need a day for mental health. Can my parent excuse me?", "next_steps": ["Talk to parent", "Check state law", "Get help if it's ongoing"]},
-            {"id": "a6", "question": "My parent won't write a note. What do I do?", "short_answer": "Talk to a counselor. There might be bigger issues they can help with.", "explanation": "If you're missing school and parents won't help, counselors can step in.", "script": "I need help with my attendance situation.", "next_steps": ["Talk to counselor", "Be honest about home issues"]},
-            {"id": "a7", "question": "Can they call the cops on me for skipping?", "short_answer": "Eventually, yes. Truancy officers exist. Don't let it get that far.", "explanation": "Excessive truancy can involve police and courts. It's serious.", "script": "I know I need to be here more. Can we make a plan?", "next_steps": ["Get help early", "Don't let it escalate"]}
+            {"id": "sch-a1", "question": "What if I'm late a lot?", "short_answer": "Usually warnings, then detention, then bigger problems.", "explanation": "Tardiness escalates.", "script": "Can we talk about what's causing this?", "next_steps": ["Be honest", "Get help"]},
+            {"id": "sch-a2", "question": "What's excused absence?", "short_answer": "Sickness, emergency, religious holiday, mental health (some states).", "explanation": "Need documentation usually.", "script": "What paperwork do you need?", "next_steps": ["Check policy", "Get docs"]},
+            {"id": "sch-a3", "question": "Can I leave early?", "short_answer": "Yes with parent permission and signing out.", "explanation": "Schools need to know.", "script": "My parent called. Where do I sign out?", "next_steps": ["Have parent call", "Sign out"]},
+            {"id": "sch-a4", "question": "What's truancy?", "short_answer": "Too many unexcused absences. Can lead to court.", "explanation": "It's a legal issue.", "script": "I need help with attendance.", "next_steps": ["Talk to counselor", "Make plan"]},
+            {"id": "sch-a5", "question": "Mental health day?", "short_answer": "More states allow this now.", "explanation": "Mental health is real health.", "script": "Can my parent excuse me for health?", "next_steps": ["Check state law", "Get help if ongoing"]},
+            {"id": "sch-a6", "question": "Parent won't write note?", "short_answer": "Talk to counselor. There might be bigger issues.", "explanation": "Counselors can help.", "script": "I need help with my situation.", "next_steps": ["Talk to counselor"]}
         ],
         "expression": [
-            {"id": "e1", "question": "Do I have free speech at school?", "short_answer": "Yes, but limited. Can't substantially disrupt learning or use vulgar language.", "explanation": "Supreme Court says students have rights, but schools can limit disruption.", "script": "I believe this is protected speech. Can we discuss?", "next_steps": ["Keep it peaceful", "Know the limits", "Document if censored unfairly"]},
-            {"id": "e2", "question": "Can I organize a protest?", "short_answer": "You can express views, but might face consequences for missing class.", "explanation": "Walkouts are often protected, but you might get marked absent or get detention.", "script": "We want to organize a peaceful demonstration. What are the rules?", "next_steps": ["Know consequences first", "Keep it peaceful", "Have a clear message"]},
-            {"id": "e3", "question": "Can I get in trouble for social media posts?", "short_answer": "Off-campus posts are mostly protected now. But threats or major disruptions = trouble.", "explanation": "2021 Supreme Court ruling protects most off-campus speech. Not everything though.", "script": "This was posted off-campus. Why am I being punished?", "next_steps": ["Know the recent law", "Document the post", "Get help if needed"]},
-            {"id": "e4", "question": "Can they censor the school newspaper?", "short_answer": "Depends on your state. Some have strong student press protection.", "explanation": "Schools have more control over school-sponsored stuff. Check your state's press laws.", "script": "What's the legal basis for this censorship?", "next_steps": ["Check state press laws", "Contact Student Press Law Center"]},
-            {"id": "e5", "question": "Can I wear political clothing?", "short_answer": "Usually yes, unless it's vulgar, promotes drugs, or causes real disruption.", "explanation": "Political messages are generally protected. The Tinker case protected armbands.", "script": "My shirt has a peaceful political message. What rule does it break?", "next_steps": ["Know dress code", "Keep messages appropriate", "Advocate for change"]},
-            {"id": "e6", "question": "Can I practice my religion at school?", "short_answer": "YES. You can pray, wear religious items, and discuss your faith.", "explanation": "Schools can't promote religion, but students CAN practice theirs.", "script": "This is my personal religious practice, not the school endorsing it.", "next_steps": ["Know your rights", "Be respectful", "Report discrimination"]},
-            {"id": "e7", "question": "Can they stop me from dying my hair?", "short_answer": "Depends on dress code. Can't discriminate against natural hairstyles though.", "explanation": "Some dress codes restrict unnatural colors. CROWN Act protects natural Black hairstyles.", "script": "Can you show me where this is in the dress code?", "next_steps": ["Check the code", "Know anti-discrimination laws"]},
-            {"id": "e8", "question": "Can I start a club they don't like?", "short_answer": "If they allow other non-curriculum clubs, they have to treat yours equally.", "explanation": "Schools can't pick and choose which student clubs to allow based on viewpoint.", "script": "Other student clubs exist. Why is ours being treated differently?", "next_steps": ["Document unequal treatment", "Know the Equal Access Act"]}
+            {"id": "sch-e1", "question": "Do I have free speech?", "short_answer": "Yes, but limited. Can't disrupt learning.", "explanation": "Students have rights but with limits.", "script": "Is this protected speech?", "next_steps": ["Keep peaceful", "Know limits"]},
+            {"id": "sch-e2", "question": "Can I protest?", "short_answer": "You can express views but might get marked absent.", "explanation": "Walkouts are protected but have consequences.", "script": "What are the rules for demonstrations?", "next_steps": ["Know consequences", "Stay peaceful"]},
+            {"id": "sch-e3", "question": "Trouble for social media?", "short_answer": "Off-campus posts mostly protected now. Threats = trouble.", "explanation": "2021 Supreme Court ruling helps.", "script": "This was off-campus. Why punishment?", "next_steps": ["Know the law", "Document"]},
+            {"id": "sch-e4", "question": "Political clothing?", "short_answer": "Usually yes unless vulgar or causing disruption.", "explanation": "Political messages are generally protected.", "script": "What rule does my shirt break?", "next_steps": ["Know dress code"]},
+            {"id": "sch-e5", "question": "Practice religion at school?", "short_answer": "YES. You can pray and wear religious items.", "explanation": "Students can practice their faith.", "script": "This is my personal religious practice.", "next_steps": ["Know rights", "Report discrimination"]},
+            {"id": "sch-e6", "question": "Can I start a controversial club?", "short_answer": "If other clubs exist, yours should be treated equally.", "explanation": "Can't discriminate by viewpoint.", "script": "Why is our club different?", "next_steps": ["Document unequal treatment"]}
         ],
         "administration": [
-            {"id": "ad1", "question": "Can I fight a grade I think is unfair?", "short_answer": "Yes. Start with the teacher, then department head, then admin.", "explanation": "There's usually a process. Keep records of your work.", "script": "I'd like to discuss my grade. I think there might be an error.", "next_steps": ["Talk to teacher first", "Bring evidence", "Follow chain of command"]},
-            {"id": "ad2", "question": "A teacher treats me unfairly. What can I do?", "short_answer": "Document it. Talk to counselor or admin. Involve parents if needed.", "explanation": "Teachers should treat everyone fairly. If it's discriminatory, it's illegal.", "script": "I'm having issues in this class. Can I talk to someone?", "next_steps": ["Document incidents", "Talk to counselor", "Involve parents"]},
-            {"id": "ad3", "question": "How do I report bullying?", "short_answer": "Tell a trusted adult - teacher, counselor, admin. Most schools must investigate.", "explanation": "Schools are required to address bullying, especially if it's about race, gender, disability, etc.", "script": "I need to report bullying. I have documentation.", "next_steps": ["Document incidents", "Report to adult", "Follow up"]},
-            {"id": "ad4", "question": "I have an IEP/504. School isn't following it.", "short_answer": "They MUST follow it. It's the law. Request an IEP meeting.", "explanation": "IEPs and 504 plans are legal documents. Non-compliance can be reported.", "script": "My IEP says I get [accommodation]. This isn't being provided.", "next_steps": ["Know your plan", "Document non-compliance", "Request meeting", "File complaint if needed"]},
-            {"id": "ad5", "question": "Can I see the school counselor?", "short_answer": "Yes. For urgent stuff, you should be able to see them quickly.", "explanation": "Counselors are there to help. You have a right to support.", "script": "I need to talk to a counselor about something important.", "next_steps": ["Ask to see them", "Use 'urgent' if needed", "Know crisis resources"]},
-            {"id": "ad6", "question": "Can I see my school records?", "short_answer": "Yes. You and your parents have that right under FERPA.", "explanation": "FERPA gives you the right to access and request corrections to your records.", "script": "I'd like to see my educational records.", "next_steps": ["Submit written request", "Review within 45 days"]}
+            {"id": "sch-ad1", "question": "Fight unfair grade?",  "short_answer": "Yes. Teacher → department → admin.", "explanation": "There's a process.", "script": "Can we discuss this grade?", "next_steps": ["Talk to teacher", "Bring evidence"]},
+            {"id": "sch-ad2", "question": "Teacher treats me unfairly?", "short_answer": "Document it. Talk to counselor.", "explanation": "Teachers should be fair.", "script": "I'm having issues. Can I talk to someone?", "next_steps": ["Document", "Talk to counselor"]},
+            {"id": "sch-ad3", "question": "Report bullying?", "short_answer": "Tell trusted adult. Schools must investigate.", "explanation": "Schools are required to address bullying.", "script": "I need to report bullying.", "next_steps": ["Document", "Report", "Follow up"]},
+            {"id": "sch-ad4", "question": "IEP/504 not being followed?", "short_answer": "They MUST follow it. It's law.", "explanation": "These are legal documents.", "script": "My IEP requires this. It's not provided.", "next_steps": ["Know your plan", "Request meeting"]},
+            {"id": "sch-ad5", "question": "See school counselor?", "short_answer": "Yes. Urgent issues should be seen quickly.", "explanation": "Counselors are there to help.", "script": "I need to talk to someone.", "next_steps": ["Ask to see them"]}
         ],
         "personal": [
-            {"id": "p1", "question": "Can they take my phone all day?", "short_answer": "Many schools do this. Check if it's in the handbook you agreed to.", "explanation": "Schools can restrict phones during class. All-day policies vary.", "script": "When will I get it back? Is it stored securely?", "next_steps": ["Know the policy", "Follow it", "Get it back after"]},
-            {"id": "p2", "question": "Is the dress code fair?", "short_answer": "It can't discriminate based on gender, race, or religion.", "explanation": "Dress codes must be applied equally. Sexist or racist enforcement is illegal.", "script": "I'm concerned this rule is applied differently to different groups.", "next_steps": ["Read full code", "Document unequal enforcement"]},
-            {"id": "p3", "question": "Can I carry my medication?", "short_answer": "Usually needs documentation. Emergency meds like inhalers/EpiPens often get exceptions.", "explanation": "Most meds go to the nurse. You can often carry emergency ones with paperwork.", "script": "I need to carry my medication. What forms do I need?", "next_steps": ["Get doctor documentation", "Fill out school forms"]},
-            {"id": "p4", "question": "Can they tell me how to wear my hair?", "short_answer": "Many states now protect natural hairstyles. Check the CROWN Act.", "explanation": "Schools can't ban braids, locs, twists, etc. That's often discrimination.", "script": "I believe this policy might be discriminatory.", "next_steps": ["Know your state laws", "Cite CROWN Act if applicable"]},
-            {"id": "p5", "question": "They won't let me use the bathroom. Is that legal?", "short_answer": "Overly restrictive bathroom policies can be challenged, especially for health reasons.", "explanation": "You have a right to use the bathroom. Extreme restrictions aren't okay.", "script": "I need to use the bathroom and this is affecting my health.", "next_steps": ["Get medical documentation if needed", "Talk to counselor"]},
-            {"id": "p6", "question": "What are my rights as an LGBTQ+ student?", "short_answer": "You can be out, form clubs, and should be free from harassment.", "explanation": "LGBTQ+ students are protected from discrimination. Many places recognize chosen names/pronouns.", "script": "I want to be called by my correct name and pronouns.", "next_steps": ["Know your state's protections", "Talk to counselor", "Report discrimination"]}
+            {"id": "sch-p1", "question": "Take my phone all day?", "short_answer": "Many schools do this. Check handbook.", "explanation": "Schools can restrict phones.", "script": "When do I get it back?", "next_steps": ["Know policy"]},
+            {"id": "sch-p2", "question": "Dress code fair?", "short_answer": "Can't discriminate by gender, race, religion.", "explanation": "Must be applied equally.", "script": "Is this applied to everyone equally?", "next_steps": ["Document unequal enforcement"]},
+            {"id": "sch-p3", "question": "Carry medication?", "short_answer": "Usually needs paperwork. Emergency meds often allowed.", "explanation": "Most meds go to nurse.", "script": "What forms do I need?", "next_steps": ["Get doctor note"]},
+            {"id": "sch-p4", "question": "Hair rules?", "short_answer": "Natural hairstyles protected in many states.", "explanation": "CROWN Act protects Black hairstyles.", "script": "This might be discriminatory.", "next_steps": ["Know state laws"]},
+            {"id": "sch-p5", "question": "Bathroom access?", "short_answer": "Overly restrictive policies can be challenged.", "explanation": "You have basic needs.", "script": "This is affecting my health.", "next_steps": ["Get medical docs if needed"]},
+            {"id": "sch-p6", "question": "LGBTQ+ rights?", "short_answer": "Can be out, form clubs, free from harassment.", "explanation": "Protected from discrimination.", "script": "I want my correct name/pronouns.", "next_steps": ["Know protections", "Report issues"]}
+        ],
+        "grades": [
+            {"id": "sch-g1", "question": "Grade changed without telling me?", "short_answer": "You should be notified of grade changes.", "explanation": "Transparency matters.", "script": "Why was my grade changed?", "next_steps": ["Ask for explanation", "Document"]},
+            {"id": "sch-g2", "question": "Failed for attendance?", "short_answer": "Usually allowed but check policy for exceptions.", "explanation": "Many schools have attendance policies.", "script": "Are there exceptions to this policy?", "next_steps": ["Check policy", "Appeal if unfair"]},
+            {"id": "sch-g3", "question": "Extra credit refused?", "short_answer": "Teachers don't have to offer it.", "explanation": "Extra credit is optional.", "script": "Are there other ways to improve?", "next_steps": ["Ask about alternatives"]},
+            {"id": "sch-g4", "question": "Accused of cheating unfairly?", "short_answer": "You should get to explain before punishment.", "explanation": "Due process applies.", "script": "Can I explain what happened?", "next_steps": ["Defend yourself", "Get evidence"]},
+            {"id": "sch-g5", "question": "Test accommodations denied?", "short_answer": "If you have IEP/504, they must provide them.", "explanation": "Legal requirement.", "script": "My plan requires this accommodation.", "next_steps": ["Show documentation", "Request meeting"]}
+        ],
+        "sports": [
+            {"id": "sch-sp1", "question": "Cut from team unfairly?", "short_answer": "Coaches have discretion, but can't discriminate.", "explanation": "Fair tryouts required.", "script": "Can you explain the selection criteria?", "next_steps": ["Ask for criteria", "Document if discriminatory"]},
+            {"id": "sch-sp2", "question": "Benched for no reason?", "short_answer": "Coaches decide playing time. Unless it's discrimination.", "explanation": "Playing time isn't guaranteed.", "script": "Can we discuss what I need to improve?", "next_steps": ["Ask for feedback"]},
+            {"id": "sch-sp3", "question": "Forced to play injured?", "short_answer": "Never required. Your health comes first.", "explanation": "Safety is priority.", "script": "I'm injured and can't play safely.", "next_steps": ["Get medical note", "Don't risk health"]},
+            {"id": "sch-sp4", "question": "Hazing on the team?", "short_answer": "Illegal in most states. Report it.", "explanation": "Hazing is abuse.", "script": "I need to report hazing.", "next_steps": ["Report to admin", "Tell parents"]},
+            {"id": "sch-sp5", "question": "Drug testing for sports?", "short_answer": "Schools can require it for athletes.", "explanation": "Athletes have less privacy here.", "script": "What's the testing policy?", "next_steps": ["Know the rules"]}
+        ],
+        "special-ed": [
+            {"id": "sch-se1", "question": "How do I get an IEP?", "short_answer": "Request evaluation in writing. School must respond.", "explanation": "You have the right to be evaluated.", "script": "I'm requesting a special education evaluation.", "next_steps": ["Request in writing", "Keep copies"]},
+            {"id": "sch-se2", "question": "School won't evaluate me?", "short_answer": "They must respond to requests. File complaint if ignored.", "explanation": "Legal requirement to respond.", "script": "I requested evaluation on [date]. What's the status?", "next_steps": ["Follow up in writing", "File complaint"]},
+            {"id": "sch-se3", "question": "IEP not being followed?", "short_answer": "Document it. Request IEP meeting.", "explanation": "They must follow the plan.", "script": "My IEP says X but I'm not getting it.", "next_steps": ["Document", "Request meeting"]},
+            {"id": "sch-se4", "question": "Want different services?", "short_answer": "Request IEP meeting to discuss changes.", "explanation": "You can request changes.", "script": "I'd like to discuss my services.", "next_steps": ["Request meeting", "Bring suggestions"]},
+            {"id": "sch-se5", "question": "Graduation requirements different?", "short_answer": "IEP can modify requirements.", "explanation": "Accommodations can apply to graduation.", "script": "What are my graduation options?", "next_steps": ["Discuss at IEP meeting"]}
+        ],
+        "safety": [
+            {"id": "sch-sf1", "question": "Report unsafe conditions?", "short_answer": "Tell admin, parent, or report to district.", "explanation": "Schools must be safe.", "script": "I'm concerned about safety.", "next_steps": ["Report to admin", "Tell parents"]},
+            {"id": "sch-sf2", "question": "Can they give me medicine?", "short_answer": "Only with parent permission and proper forms.", "explanation": "Medical consent required.", "script": "I need parent permission for that.", "next_steps": ["Have parents sign forms"]},
+            {"id": "sch-sf3", "question": "Someone has a weapon?", "short_answer": "Tell an adult IMMEDIATELY.", "explanation": "Safety first.", "script": "Someone has something dangerous.", "next_steps": ["Tell adult now", "Don't confront them"]},
+            {"id": "sch-sf4", "question": "Feeling unsafe at school?", "short_answer": "Tell counselor, parent, or trusted adult.", "explanation": "You deserve to feel safe.", "script": "I don't feel safe.", "next_steps": ["Talk to someone", "Make safety plan"]}
+        ],
+        "technology": [
+            {"id": "sch-t1", "question": "School see everything on school device?", "short_answer": "YES. Everything. Don't expect privacy.", "explanation": "School devices are monitored.", "script": "I'll use personal device for personal stuff.", "next_steps": ["Don't use for private things"]},
+            {"id": "sch-t2", "question": "Track me at home?", "short_answer": "If using school device or logged in, probably yes.", "explanation": "Monitoring software works everywhere.", "script": "I'll log out at home.", "next_steps": ["Use personal devices at home"]},
+            {"id": "sch-t3", "question": "Blocked website I need?", "short_answer": "Ask teacher or tech support to unblock for education.", "explanation": "Educational needs should be met.", "script": "I need this site for homework.", "next_steps": ["Ask teacher"]},
+            {"id": "sch-t4", "question": "Accused of hacking?", "short_answer": "Serious accusation. Get parents and maybe lawyer.", "explanation": "Can have legal consequences.", "script": "I want my parents here.", "next_steps": ["Don't admit anything", "Get parents"]}
         ]
     },
     "work": {
         "pay": [
-            {"id": "wp1", "question": "Am I getting paid enough?", "short_answer": "Must be at least minimum wage. Check your state - it might be higher than federal.", "explanation": "Federal is $7.25/hr. Many states and cities are higher. Tipped workers have different rules but must still hit minimum.", "script": "Can you show me my hourly rate and any deductions?", "next_steps": ["Check your state's minimum", "Review pay stubs", "Report violations"]},
-            {"id": "wp2", "question": "Can they make me work off the clock?", "short_answer": "NO. If you're hourly, every minute of work must be paid.", "explanation": "Working 'off the clock' is illegal. Before shift, after shift, through breaks - all counts.", "script": "I want to make sure I'm clocking all my time.", "next_steps": ["Track your hours", "Document unpaid time", "Report to labor dept"]},
-            {"id": "wp3", "question": "When do I get overtime?", "short_answer": "Over 40 hours/week = time and a half. Some states have daily overtime too.", "explanation": "Non-exempt workers get 1.5x pay after 40 hours. Salary doesn't automatically mean no overtime.", "script": "I worked over 40 hours. Will I get overtime pay?", "next_steps": ["Track hours", "Know if you're exempt", "Check state laws"]},
-            {"id": "wp4", "question": "Can they take money from my check?", "short_answer": "Only taxes and stuff you agreed to in writing. Can't drop you below minimum wage.", "explanation": "Employers need written consent for most deductions. Uniforms, shortages - usually need your okay.", "script": "What's this deduction? I didn't authorize it.", "next_steps": ["Review stubs", "Ask about deductions", "Report illegal ones"]},
-            {"id": "wp5", "question": "Can my boss take my tips?", "short_answer": "No. Tips are yours. Managers usually can't take from tip pools either.", "explanation": "Tip pooling with other workers can be okay. But your boss keeping tips? Illegal.", "script": "How exactly are tips distributed here?", "next_steps": ["Know tip laws", "Track your tips", "Report violations"]},
-            {"id": "wp6", "question": "My paycheck bounced. Now what?", "short_answer": "This is illegal. They owe you the money plus often penalties.", "explanation": "Employers must pay for work done. Bounced checks can get them in serious trouble.", "script": "My check didn't clear. When will I get my money?", "next_steps": ["Document it", "Notify in writing", "File wage complaint"]},
-            {"id": "wp7", "question": "I'm paid less than coworkers doing the same job.", "short_answer": "If it's because of your race, gender, etc., that's illegal discrimination.", "explanation": "Equal pay laws exist. Different pay for same work based on protected characteristics = illegal.", "script": "I'd like to understand how pay is determined.", "next_steps": ["Document differences", "Ask HR", "File complaint if discriminatory"]},
-            {"id": "wp8", "question": "Can they pay me less because I'm young?", "short_answer": "There's a lower 'youth minimum wage' in some places for the first 90 days only.", "explanation": "After 90 days, same minimum wage applies. Check your state's rules.", "script": "How long does the training wage apply?", "next_steps": ["Know the rules", "Track your days", "Ask after 90 days"]}
+            {"id": "wrk-p1", "question": "Am I getting minimum wage?", "short_answer": "Check your state - might be higher than federal $7.25.", "explanation": "State rates often higher.", "script": "What's my exact hourly rate?", "next_steps": ["Check state minimum", "Review stubs"]},
+            {"id": "wrk-p2", "question": "Working off the clock?", "short_answer": "Illegal if you're hourly. All work time must be paid.", "explanation": "Every minute counts.", "script": "I want to clock all my time.", "next_steps": ["Track hours", "Report violations"]},
+            {"id": "wrk-p3", "question": "When's overtime?", "short_answer": "Over 40 hrs/week = 1.5x pay.", "explanation": "Non-exempt workers get overtime.", "script": "Will I get overtime for this?", "next_steps": ["Track hours", "Know if exempt"]},
+            {"id": "wrk-p4", "question": "Deductions from paycheck?", "short_answer": "Only taxes and stuff you agreed to in writing.", "explanation": "Need written consent for most.", "script": "What's this deduction?", "next_steps": ["Review stubs", "Report illegal ones"]},
+            {"id": "wrk-p5", "question": "Tips being taken?", "short_answer": "Illegal. Tips are yours.", "explanation": "Managers can't take tips.", "script": "How are tips distributed?", "next_steps": ["Know tip laws", "Report violations"]},
+            {"id": "wrk-p6", "question": "Paycheck bounced?", "short_answer": "Illegal. They owe you plus penalties.", "explanation": "Must pay for work done.", "script": "When will I get my money?", "next_steps": ["Document", "File complaint"]},
+            {"id": "wrk-p7", "question": "Paid less than coworkers?", "short_answer": "If it's discrimination, that's illegal.", "explanation": "Equal pay laws exist.", "script": "How is pay determined?", "next_steps": ["Document", "Ask HR"]},
+            {"id": "wrk-p8", "question": "Commission not paid?", "short_answer": "Must pay earned commission per agreement.", "explanation": "Check your agreement.", "script": "What's the commission calculation?", "next_steps": ["Review agreement", "Document sales"]}
         ],
         "hours": [
-            {"id": "wh1", "question": "Do I get breaks?", "short_answer": "Depends on state. Many require meal and rest breaks for longer shifts.", "explanation": "Federal law doesn't require breaks, but many states do. Minors usually get more.", "script": "What's the break policy here?", "next_steps": ["Look up state law", "Check company policy", "Document denied breaks"]},
-            {"id": "wh2", "question": "Can they change my schedule last minute?", "short_answer": "Usually yes, unless you're in a city with predictive scheduling laws.", "explanation": "Most workers don't have schedule protection. Some cities require advance notice.", "script": "What's the policy on schedule changes?", "next_steps": ["Check local laws", "Ask about notice policy"]},
-            {"id": "wh3", "question": "Can I refuse overtime?", "short_answer": "Usually they can require it, but they MUST pay you time and a half.", "explanation": "Most places can mandate overtime. You must be paid for it though.", "script": "I can work overtime. Can you confirm the rate?", "next_steps": ["Know your rights", "Get paid properly"]},
-            {"id": "wh4", "question": "They want me to stay late. Do I get paid?", "short_answer": "Yes. All time worked must be paid. Clock out when you ACTUALLY leave.", "explanation": "If they require you to stay, it's work time. Period.", "script": "I'll clock out when I actually leave, right?", "next_steps": ["Clock all time", "Document late stays"]},
-            {"id": "wh5", "question": "How many hours can I work as a minor?", "short_answer": "Limited. Usually 3hrs on school days, 18hrs in school week for under 16.", "explanation": "Strict limits exist for workers under 18. Varies by age and school schedule.", "script": "Can you verify my hours are legal for my age?", "next_steps": ["Know state rules", "Track hours", "Speak up if exceeded"]},
-            {"id": "wh6", "question": "Can they schedule me during school?", "short_answer": "Not during school hours if you're required to be there.", "explanation": "School comes first. Employers can't schedule you during class.", "script": "I can't work during school hours.", "next_steps": ["Give your school schedule", "Stand firm"]},
-            {"id": "wh7", "question": "I worked through lunch. Do I get paid?", "short_answer": "Yes. If you worked, you get paid. Even if you were 'supposed' to be on break.", "explanation": "Working through a break = paid time. Can't be denied.", "script": "I worked through my break. I'm logging that time.", "next_steps": ["Log the time", "Document it"]}
+            {"id": "wrk-h1", "question": "Do I get breaks?", "short_answer": "Depends on state. Many require meal and rest breaks.", "explanation": "Federal doesn't require, states often do.", "script": "What's the break policy?", "next_steps": ["Check state law"]},
+            {"id": "wrk-h2", "question": "Last minute schedule change?", "short_answer": "Usually legal unless you have predictive scheduling laws.", "explanation": "Most workers don't have protection.", "script": "What's the schedule change policy?", "next_steps": ["Check local laws"]},
+            {"id": "wrk-h3", "question": "Refuse overtime?", "short_answer": "Usually they can require it, but must pay you.", "explanation": "Overtime often mandatory.", "script": "What's the overtime rate?", "next_steps": ["Get paid properly"]},
+            {"id": "wrk-h4", "question": "Stay late without pay?", "short_answer": "All time worked must be paid.", "explanation": "If required to stay, it's work time.", "script": "I'll clock out when I actually leave.", "next_steps": ["Clock all time"]},
+            {"id": "wrk-h5", "question": "Hours as a minor?", "short_answer": "Limited by law. Usually 3 hrs on school days.", "explanation": "Strict rules for under 18.", "script": "Are my hours legal?", "next_steps": ["Know state rules"]},
+            {"id": "wrk-h6", "question": "Scheduled during school?", "short_answer": "Can't work during required school hours.", "explanation": "School comes first.", "script": "I can't work during school.", "next_steps": ["Give school schedule"]}
         ],
         "safety": [
-            {"id": "ws1", "question": "This place seems unsafe. What can I do?", "short_answer": "Report it. You can even file anonymous OSHA complaints.", "explanation": "OSHA requires safe workplaces. You're protected from retaliation for reporting.", "script": "I'm concerned about a safety issue.", "next_steps": ["Document it", "Report to supervisor", "File OSHA complaint if ignored"]},
-            {"id": "ws2", "question": "I got hurt at work. Now what?", "short_answer": "Report it immediately. You might qualify for workers' comp.", "explanation": "Workers' comp covers medical bills and lost wages. Don't need to prove fault.", "script": "I got injured at work. I need to report this.", "next_steps": ["Report immediately", "Get medical care", "File workers' comp"]},
-            {"id": "ws3", "question": "Do they have to give me safety gear?", "short_answer": "Yes. Employers must provide and pay for required safety equipment.", "explanation": "OSHA requires employers to give you PPE free of charge.", "script": "I need proper safety equipment for this job.", "next_steps": ["Request it", "Document the request", "Report if denied"]},
-            {"id": "ws4", "question": "Can I refuse dangerous work?", "short_answer": "Only if there's immediate serious danger and no other option.", "explanation": "Limited right to refuse. Danger must be immediate and you must have tried other ways.", "script": "This seems dangerous. Can we discuss safety measures?", "next_steps": ["Explain concerns", "Ask for alternatives", "Document everything"]},
-            {"id": "ws5", "question": "They're not following COVID/health rules.", "short_answer": "Report to OSHA or your local health department.", "explanation": "Employers must follow health guidelines. Violations are reportable.", "script": "I'm concerned about health protocols here.", "next_steps": ["Document violations", "Report to OSHA or health dept"]}
+            {"id": "wrk-sf1", "question": "Unsafe workplace?", "short_answer": "Report it. OSHA complaints can be anonymous.", "explanation": "You have right to safe work.", "script": "I'm concerned about safety.", "next_steps": ["Document", "File OSHA complaint"]},
+            {"id": "wrk-sf2", "question": "Hurt at work?", "short_answer": "Report immediately. Workers' comp covers you.", "explanation": "Don't need to prove fault.", "script": "I got injured at work.", "next_steps": ["Report", "Get medical care"]},
+            {"id": "wrk-sf3", "question": "Who pays for safety gear?", "short_answer": "Employer must provide it free.", "explanation": "OSHA requires this.", "script": "I need safety equipment.", "next_steps": ["Request it"]},
+            {"id": "wrk-sf4", "question": "Refuse dangerous work?", "short_answer": "Only if immediate serious danger.", "explanation": "Limited right to refuse.", "script": "This seems dangerous.", "next_steps": ["Explain concerns"]}
         ],
         "harassment": [
-            {"id": "wha1", "question": "What counts as sexual harassment?", "short_answer": "Unwanted sexual comments, touching, requests for dates, quid pro quo.", "explanation": "Anything unwelcome and sexual that affects your job or creates a hostile environment.", "script": "I need to report harassment.", "next_steps": ["Document incidents", "Report to HR", "File EEOC complaint"]},
-            {"id": "wha2", "question": "I'm being treated differently because of who I am.", "short_answer": "Discrimination based on race, gender, religion, etc. is illegal.", "explanation": "Protected characteristics: race, color, religion, sex, national origin, age, disability, and more.", "script": "I'm concerned about discriminatory treatment.", "next_steps": ["Document everything", "Report to HR", "File EEOC complaint"]},
-            {"id": "wha3", "question": "What's a hostile work environment?", "short_answer": "When harassment is so bad or constant that it makes work impossible.", "explanation": "Not one bad joke. It's ongoing patterns or extreme single incidents.", "script": "The ongoing behavior is affecting my ability to work.", "next_steps": ["Keep detailed records", "Report to management", "File complaint"]},
-            {"id": "wha4", "question": "Can they punish me for reporting?", "short_answer": "No. Retaliation is illegal.", "explanation": "Can't fire, demote, or punish you for reporting harassment, even if complaint doesn't pan out.", "script": "I'm concerned about retaliation.", "next_steps": ["Document any changes", "Report retaliation too"]},
-            {"id": "wha5", "question": "HR isn't helping. Now what?", "short_answer": "File with the EEOC or your state's civil rights agency.", "explanation": "If internal complaints fail, government agencies can investigate.", "script": "I'd like to file an external complaint.", "next_steps": ["File with EEOC", "Consider a lawyer"]}
+            {"id": "wrk-hr1", "question": "Sexual harassment?", "short_answer": "Unwanted sexual conduct is illegal.", "explanation": "Report it.", "script": "I need to report harassment.", "next_steps": ["Document", "Report to HR"]},
+            {"id": "wrk-hr2", "question": "Treated differently because of who I am?", "short_answer": "Discrimination based on protected traits is illegal.", "explanation": "Many characteristics protected.", "script": "I'm concerned about discrimination.", "next_steps": ["Document", "Report"]},
+            {"id": "wrk-hr3", "question": "Punished for reporting?", "short_answer": "Retaliation is illegal.", "explanation": "Can't punish you for reporting.", "script": "I'm worried about retaliation.", "next_steps": ["Document changes", "Report retaliation"]},
+            {"id": "wrk-hr4", "question": "HR not helping?", "short_answer": "File with EEOC.", "explanation": "Government can investigate.", "script": "I want to file external complaint.", "next_steps": ["File EEOC complaint"]}
         ],
         "firing": [
-            {"id": "wf1", "question": "Can they fire me for no reason?", "short_answer": "In most states, yes. But not for illegal reasons like discrimination.", "explanation": "Most workers are 'at-will.' Either side can end it. But illegal reasons (discrimination, retaliation) are still illegal.", "script": "Can I get the reason for termination in writing?", "next_steps": ["Ask for written reason", "Check for illegal reasons", "File complaint if needed"]},
-            {"id": "wf2", "question": "When do I get my last paycheck?", "short_answer": "Depends on state. Some say immediately, others say next regular payday.", "explanation": "State laws vary. All owed wages must be paid.", "script": "When will I receive my final pay?", "next_steps": ["Know state law", "Verify amount", "File complaint if unpaid"]},
-            {"id": "wf3", "question": "Can I get unemployment?", "short_answer": "Usually yes if you're fired (not for serious misconduct) or laid off.", "explanation": "Quitting usually doesn't qualify unless you had good cause.", "script": "I'm applying for unemployment. Can I get my separation info?", "next_steps": ["Apply quickly", "Appeal if denied"]},
-            {"id": "wf4", "question": "Do I have to give two weeks notice?", "short_answer": "Usually no, it's just polite. But check your contract.", "explanation": "Two weeks is courtesy, not law. Some contracts may require notice.", "script": "I'm resigning effective [date].", "next_steps": ["Check contract", "Give notice if possible"]},
-            {"id": "wf5", "question": "They want me to sign something when I leave.", "short_answer": "Read it carefully. You might be giving up rights. Take time to review.", "explanation": "Severance agreements often waive your right to sue. Understand before signing.", "script": "I'd like time to review this before signing.", "next_steps": ["Read carefully", "Consider a lawyer", "Don't feel rushed"]}
+            {"id": "wrk-f1", "question": "Fired for no reason?", "short_answer": "Usually legal unless discriminatory.", "explanation": "Most states are at-will.", "script": "Can I get termination reason in writing?", "next_steps": ["Get written reason"]},
+            {"id": "wrk-f2", "question": "Final paycheck?", "short_answer": "Depends on state. Some say immediately.", "explanation": "State laws vary.", "script": "When do I get final pay?", "next_steps": ["Know state law"]},
+            {"id": "wrk-f3", "question": "Unemployment?", "short_answer": "Usually yes if fired (not for misconduct).", "explanation": "Apply quickly.", "script": "I'm applying for unemployment.", "next_steps": ["Apply fast"]},
+            {"id": "wrk-f4", "question": "Two weeks notice required?", "short_answer": "Usually no, just polite.", "explanation": "Check your contract.", "script": "I'm resigning effective [date].", "next_steps": ["Check contract"]},
+            {"id": "wrk-f5", "question": "Sign something when leaving?", "short_answer": "Read carefully. Might give up rights.", "explanation": "Don't rush.", "script": "I need time to review this.", "next_steps": ["Read carefully", "Get lawyer maybe"]}
         ],
         "privacy": [
-            {"id": "wpr1", "question": "Can they read my work emails?", "short_answer": "Yes. Work email = work property. Don't use it for personal stuff.", "explanation": "Anything on company systems can be monitored. Use personal devices for private matters.", "script": "I understand work email is monitored.", "next_steps": ["Don't expect privacy", "Use personal devices for personal stuff"]},
-            {"id": "wpr2", "question": "Can they drug test me?", "short_answer": "Often yes for hiring. Random testing varies by state and job.", "explanation": "Rules vary. Safety-sensitive jobs have more testing. Some states protect off-duty marijuana use.", "script": "What's the drug testing policy?", "next_steps": ["Know state laws", "Understand the policy"]},
-            {"id": "wpr3", "question": "Can I be fired for social media posts?", "short_answer": "Often yes. But discussing wages or working conditions is usually protected.", "explanation": "Private employers can fire for posts. But talking about work conditions = often protected.", "script": "What social media activities affect employment?", "next_steps": ["Know what's protected", "Be careful online"]},
-            {"id": "wpr4", "question": "Can they check my criminal record?", "short_answer": "Yes, but many places limit WHEN they can ask. 'Ban the box' laws help.", "explanation": "Many states make employers wait until later to ask about criminal history.", "script": "How is criminal history considered in hiring?", "next_steps": ["Know your state's laws", "Be honest when asked"]}
+            {"id": "wrk-pr1", "question": "Read my work emails?", "short_answer": "Yes. Work email = work property.", "explanation": "No privacy on work systems.", "script": "I understand email is monitored.", "next_steps": ["Use personal for personal"]},
+            {"id": "wrk-pr2", "question": "Drug test me?", "short_answer": "Often yes, especially for hiring.", "explanation": "Rules vary by state.", "script": "What's the policy?", "next_steps": ["Know state laws"]},
+            {"id": "wrk-pr3", "question": "Fired for social media?", "short_answer": "Often yes. But discussing work conditions is protected.", "explanation": "Some speech protected.", "script": "What posts affect employment?", "next_steps": ["Be careful online"]}
+        ],
+        "minors": [
+            {"id": "wrk-m1", "question": "What jobs can I do as a teen?", "short_answer": "Depends on age. Some jobs banned for under 18.", "explanation": "Hazardous work restricted.", "script": "What am I allowed to do at my age?", "next_steps": ["Know restrictions"]},
+            {"id": "wrk-m2", "question": "Work late on school night?", "short_answer": "Limited hours during school week.", "explanation": "Usually can't work past certain time.", "script": "What are my hour limits?", "next_steps": ["Know the rules"]},
+            {"id": "wrk-m3", "question": "Work permit needed?", "short_answer": "Many states require work permits for minors.", "explanation": "Get from school usually.", "script": "How do I get a work permit?", "next_steps": ["Ask school"]},
+            {"id": "wrk-m4", "question": "Boss making me do dangerous stuff?", "short_answer": "Minors have extra protections from hazardous work.", "explanation": "Some tasks banned for minors.", "script": "I don't think I'm allowed to do this.", "next_steps": ["Know restrictions", "Report"]}
+        ],
+        "scheduling": [
+            {"id": "wrk-sc1", "question": "On call without pay?", "short_answer": "If you must stay available, you might need to be paid.", "explanation": "Depends on restrictions.", "script": "What are the on-call rules?", "next_steps": ["Know the policy"]},
+            {"id": "wrk-sc2", "question": "Shift cancelled last minute?", "short_answer": "Some places have 'show up pay' laws.", "explanation": "Check local laws.", "script": "Is there pay for cancelled shifts?", "next_steps": ["Check local rules"]},
+            {"id": "wrk-sc3", "question": "Too many hours?", "short_answer": "No federal cap but must be paid. Minors have limits.", "explanation": "Must pay for all hours.", "script": "I'm working too many hours.", "next_steps": ["Track hours"]},
+            {"id": "wrk-sc4", "question": "Need day off they won't give?", "short_answer": "No law requires time off except FMLA for family/medical.", "explanation": "Depends on circumstances.", "script": "I need this day off for [reason].", "next_steps": ["Ask about policies"]}
+        ],
+        "tips": [
+            {"id": "wrk-tp1", "question": "Tip pooling?", "short_answer": "Okay with other tipped workers. Managers usually can't take.", "explanation": "Must follow rules.", "script": "Who's in the tip pool?", "next_steps": ["Know the rules"]},
+            {"id": "wrk-tp2", "question": "Credit card tips?", "short_answer": "Must give you full tip amount. Small processing fee sometimes okay.", "explanation": "Tips are yours.", "script": "When do I get card tips?", "next_steps": ["Track tips"]},
+            {"id": "wrk-tp3", "question": "Making less than minimum with tips?", "short_answer": "Employer must make up difference to minimum wage.", "explanation": "Must hit minimum total.", "script": "I'm not making minimum wage.", "next_steps": ["Track wages and tips"]}
+        ],
+        "contracts": [
+            {"id": "wrk-c1", "question": "Non-compete agreement?", "short_answer": "Many states limit or ban them, especially for low-wage workers.", "explanation": "May not be enforceable.", "script": "Is this enforceable in our state?", "next_steps": ["Check state law"]},
+            {"id": "wrk-c2", "question": "Signed something I didn't understand?", "short_answer": "You're usually bound. Get lawyer to review.", "explanation": "Read before signing.", "script": "Can I get a copy of what I signed?", "next_steps": ["Get copy", "Review"]},
+            {"id": "wrk-c3", "question": "Job different than promised?", "short_answer": "Verbal promises hard to enforce. Check written agreement.", "explanation": "Get important stuff in writing.", "script": "This wasn't what was described.", "next_steps": ["Document", "Ask HR"]}
+        ],
+        "discrimination": [
+            {"id": "wrk-ds1", "question": "Not hired because of age?", "short_answer": "Age discrimination illegal for 40+. Younger workers less protected.", "explanation": "Laws protect older workers more.", "script": "Why wasn't I selected?", "next_steps": ["Ask for reason"]},
+            {"id": "wrk-ds2", "question": "Pregnancy discrimination?", "short_answer": "Illegal. Must treat like other medical conditions.", "explanation": "Protected status.", "script": "I need pregnancy accommodations.", "next_steps": ["Request accommodations"]},
+            {"id": "wrk-ds3", "question": "Accent discrimination?", "short_answer": "Illegal if based on national origin.", "explanation": "National origin protected.", "script": "I'm being treated differently.", "next_steps": ["Document", "Report"]}
         ]
     },
     "housing": {
         "entry": [
-            {"id": "he1", "question": "Can my landlord just walk in?", "short_answer": "No. Most places require 24-48 hours notice. Emergencies only exception.", "explanation": "You have the right to 'quiet enjoyment.' They can't just show up.", "script": "I need proper notice before any entry.", "next_steps": ["Check state law", "Review lease", "Send written request"]},
-            {"id": "he2", "question": "What counts as an emergency?", "short_answer": "Fire, flooding, gas leak. NOT routine stuff or wanting to 'check.'", "explanation": "Real emergencies only. A repair that can wait isn't an emergency.", "script": "This doesn't seem like an emergency. I'd like notice.", "next_steps": ["Know what's really emergency", "Document any entry"]},
-            {"id": "he3", "question": "Can I change my locks?", "short_answer": "Usually yes, but you may have to give landlord a key.", "explanation": "You can change locks for safety. Check your lease. DV victims often have extra protections.", "script": "I'd like to change locks for safety. What's the process?", "next_steps": ["Check lease", "Give key if required"]},
-            {"id": "he4", "question": "They keep showing my apartment to people.", "short_answer": "They can show it with proper notice, but you can request reasonable times.", "explanation": "Landlords can show to prospective tenants/buyers. But must give notice.", "script": "Can we schedule showings at convenient times?", "next_steps": ["Know notice requirements", "Request reasonable times"]}
+            {"id": "hsg-e1", "question": "Landlord just walk in?", "short_answer": "No. Need 24-48 hours notice except emergencies.", "explanation": "Right to quiet enjoyment.", "script": "I need proper notice.", "next_steps": ["Check state law"]},
+            {"id": "hsg-e2", "question": "What's emergency?", "short_answer": "Fire, flood, gas leak. NOT routine stuff.", "explanation": "Real emergencies only.", "script": "This doesn't seem like emergency.", "next_steps": ["Know what qualifies"]},
+            {"id": "hsg-e3", "question": "Change locks?", "short_answer": "Usually yes but might need to give landlord key.", "explanation": "Check lease.", "script": "I want to change locks for safety.", "next_steps": ["Check lease"]},
+            {"id": "hsg-e4", "question": "Too many showings?", "short_answer": "Can ask for reasonable limits.", "explanation": "Must give notice.", "script": "Can we limit showing times?", "next_steps": ["Request reasonable schedule"]}
         ],
         "repairs": [
-            {"id": "hr1", "question": "Landlord won't fix stuff. What now?", "short_answer": "Put request in writing. You may be able to withhold rent or fix it yourself.", "explanation": "Landlords must keep places livable. Document everything.", "script": "I reported this on [date]. Can you give me a repair timeline in writing?", "next_steps": ["Request in writing", "Take photos", "Know state options"]},
-            {"id": "hr2", "question": "No heat or hot water!", "short_answer": "This is an emergency. They must fix it fast or face consequences.", "explanation": "Heat and hot water are basic requirements. This is urgent.", "script": "No heat/hot water is an emergency. I need this fixed within 24 hours.", "next_steps": ["Report immediately", "Document", "Call code enforcement"]},
-            {"id": "hr3", "question": "There's mold or bugs.", "short_answer": "Usually landlord's problem. Document it and report in writing.", "explanation": "Mold and pests are typically landlord responsibility.", "script": "I'm reporting a mold/pest issue. This is a health hazard.", "next_steps": ["Take photos", "Report in writing", "See doctor if needed"]},
-            {"id": "hr4", "question": "Can they evict me for asking for repairs?", "short_answer": "No. That's illegal retaliation.", "explanation": "Landlords can't punish you for requesting repairs or calling code enforcement.", "script": "I'm documenting this as exercising my legal tenant rights.", "next_steps": ["Document timeline", "Report retaliation"]}
+            {"id": "hsg-r1", "question": "Won't fix stuff?", "short_answer": "Put in writing. May have legal options.", "explanation": "Landlord must maintain habitability.", "script": "When will this be fixed?", "next_steps": ["Request in writing"]},
+            {"id": "hsg-r2", "question": "No heat or hot water?", "short_answer": "Emergency. Must fix fast.", "explanation": "Basic requirements.", "script": "This is an emergency.", "next_steps": ["Report", "Call code enforcement"]},
+            {"id": "hsg-r3", "question": "Mold or bugs?", "short_answer": "Usually landlord's problem.", "explanation": "Document and report.", "script": "I'm reporting a health hazard.", "next_steps": ["Take photos", "Report"]}
         ],
         "eviction": [
-            {"id": "hev1", "question": "Can they kick me out right now?", "short_answer": "No. Eviction requires legal process, notice, usually court.", "explanation": "They can't just force you out. There's a legal process.", "script": "I need to see the formal eviction notice.", "next_steps": ["Don't leave without process", "Know notice requirements", "Get legal help"]},
-            {"id": "hev2", "question": "How much notice do I get?", "short_answer": "Varies by reason and state. Usually 3-30 days before court.", "explanation": "Non-payment: usually 3-14 days. Other reasons: 14-30 days. No-cause: 30-60 days.", "script": "What's the timeline for this?", "next_steps": ["Read notice carefully", "Note deadline", "Respond in time"]},
-            {"id": "hev3", "question": "They locked me out or shut off utilities!", "short_answer": "ILLEGAL. Call police and sue them.", "explanation": "Landlords can't lock you out, take your stuff, or shut off utilities. It's a crime.", "script": "This is an illegal lockout. I'm calling police.", "next_steps": ["Call police", "Document everything", "Sue them"]},
-            {"id": "hev4", "question": "Will eviction show on my record?", "short_answer": "Court filings are public. Even cases you win might show up.", "explanation": "Eviction records can appear on tenant screening. Some states allow sealing.", "script": "How will this affect my record?", "next_steps": ["Try to settle", "Get case dismissed if possible", "Know sealing laws"]}
+            {"id": "hsg-ev1", "question": "Kicked out immediately?", "short_answer": "No. Legal process required.", "explanation": "Can't force you out.", "script": "I need formal notice.", "next_steps": ["Don't leave without process"]},
+            {"id": "hsg-ev2", "question": "How much notice?", "short_answer": "Varies by state and reason. Usually 3-30 days.", "explanation": "Depends on circumstances.", "script": "What's the timeline?", "next_steps": ["Read notice carefully"]},
+            {"id": "hsg-ev3", "question": "Locked out?", "short_answer": "ILLEGAL. Call police.", "explanation": "Self-help eviction banned.", "script": "This is illegal lockout.", "next_steps": ["Call police", "Sue them"]}
         ],
         "deposits": [
-            {"id": "hd1", "question": "When do I get my deposit back?", "short_answer": "Usually 14-30 days after moving out. Must include itemized list.", "explanation": "State laws set deadlines. They must list any deductions with receipts.", "script": "I've moved out. When will I get my deposit and itemized list?", "next_steps": ["Give forwarding address", "Document condition at move-out"]},
-            {"id": "hd2", "question": "They're keeping it for normal wear and tear.", "short_answer": "That's not allowed. Normal wear can't be deducted.", "explanation": "Faded paint, worn carpet = normal. Holes, stains = damage.", "script": "These charges are for normal wear and tear. I'm disputing them.", "next_steps": ["Document everything", "Dispute in writing", "Sue in small claims"]},
-            {"id": "hd3", "question": "How much can they charge upfront?", "short_answer": "Many states cap deposits at 1-2 months rent.", "explanation": "Check your state's limits on security and pet deposits.", "script": "Does this deposit comply with state limits?", "next_steps": ["Know state limits", "Get receipts"]}
+            {"id": "hsg-d1", "question": "When get deposit back?", "short_answer": "Usually 14-30 days with itemized list.", "explanation": "State sets deadline.", "script": "When do I get deposit?", "next_steps": ["Give forwarding address"]},
+            {"id": "hsg-d2", "question": "Keeping for normal wear?", "short_answer": "Not allowed. Normal wear isn't damage.", "explanation": "Faded paint is normal.", "script": "These are normal wear.", "next_steps": ["Dispute in writing"]},
+            {"id": "hsg-d3", "question": "Deposit too high?", "short_answer": "Many states cap at 1-2 months.", "explanation": "Check state limits.", "script": "Is this within legal limits?", "next_steps": ["Know state rules"]}
         ],
         "lease": [
-            {"id": "hl1", "question": "Can I break my lease early?", "short_answer": "You might owe money, but landlords must try to re-rent.", "explanation": "Breaking lease has consequences, but they can't just let it sit empty and charge you.", "script": "I need to break my lease. What are my options?", "next_steps": ["Read lease", "Give notice", "Know mitigation rules"]},
-            {"id": "hl2", "question": "Can they raise my rent?", "short_answer": "Not during lease. After, they need proper notice. Rent control may apply.", "explanation": "During lease = usually fixed. After = can raise with notice.", "script": "What's the process for rent increases?", "next_steps": ["Check lease", "Know notice requirements", "Check for rent control"]},
-            {"id": "hl3", "question": "My lease has weird terms. Are they legal?", "short_answer": "Illegal terms are unenforceable. You can't sign away your rights.", "explanation": "Terms like 'landlord not responsible for anything' usually aren't enforceable.", "script": "I don't think this term is legal.", "next_steps": ["Know tenant rights", "Consult legal aid"]}
+            {"id": "hsg-l1", "question": "Break lease early?", "short_answer": "May owe money but landlord must try to re-rent.", "explanation": "Mitigation required.", "script": "What are my options?", "next_steps": ["Read lease", "Give notice"]},
+            {"id": "hsg-l2", "question": "Raise rent during lease?", "short_answer": "Usually no. After lease, need proper notice.", "explanation": "During lease = fixed.", "script": "What's the rent increase process?", "next_steps": ["Check lease"]}
         ],
         "roommates": [
-            {"id": "hro1", "question": "Roommate bailed. Am I stuck paying everything?", "short_answer": "If you're both on the lease, landlord can go after either of you for full rent.", "explanation": "Joint and several liability means either roommate can be held responsible for all.", "script": "My roommate left. What are my options?", "next_steps": ["Talk to landlord", "Find replacement", "Get things in writing"]},
-            {"id": "hro2", "question": "Can I sublet or get a roommate?", "short_answer": "Check your lease. Usually need landlord permission.", "explanation": "Most leases require approval for new occupants or subletters.", "script": "What's the process for adding a roommate?", "next_steps": ["Read lease", "Get written permission"]},
-            {"id": "hro3", "question": "Can landlord limit my guests?", "short_answer": "Some limits on long-term guests are okay. Can't ban normal visitors.", "explanation": "Overnight guests for 7-14 days usually fine. Living there = different.", "script": "What's the guest policy?", "next_steps": ["Know the limits", "Consider adding to lease if permanent"]}
+            {"id": "hsg-rm1", "question": "Roommate bailed?", "short_answer": "If both on lease, either can be liable for all.", "explanation": "Joint liability.", "script": "My roommate left. Options?", "next_steps": ["Talk to landlord"]},
+            {"id": "hsg-rm2", "question": "Can I sublet?", "short_answer": "Check lease. Usually need permission.", "explanation": "Most require approval.", "script": "What's the process to sublet?", "next_steps": ["Read lease", "Get permission"]}
+        ],
+        "utilities": [
+            {"id": "hsg-u1", "question": "Landlord shut off utilities?", "short_answer": "ILLEGAL in most places.", "explanation": "Can't cut utilities to force you out.", "script": "This is illegal.", "next_steps": ["Call police", "Report"]},
+            {"id": "hsg-u2", "question": "Who pays utilities?", "short_answer": "Check lease. Should be clear.", "explanation": "Lease should specify.", "script": "What utilities am I responsible for?", "next_steps": ["Check lease"]},
+            {"id": "hsg-u3", "question": "Bill seems too high?", "short_answer": "Can request sub-metering or audit.", "explanation": "Should be fair.", "script": "Can we verify these charges?", "next_steps": ["Request breakdown"]}
+        ],
+        "pets": [
+            {"id": "hsg-pt1", "question": "Pet deposit too high?", "short_answer": "Some states limit pet deposits.", "explanation": "Check state rules.", "script": "Is this within legal limits?", "next_steps": ["Know state rules"]},
+            {"id": "hsg-pt2", "question": "Service animal fees?", "short_answer": "Can't charge extra for service animals.", "explanation": "Service animals aren't pets legally.", "script": "This is a service animal.", "next_steps": ["Provide documentation"]},
+            {"id": "hsg-pt3", "question": "Changed pet policy?", "short_answer": "Can't change during lease usually.", "explanation": "Lease terms apply.", "script": "My lease allows this.", "next_steps": ["Show lease"]}
+        ],
+        "noise": [
+            {"id": "hsg-n1", "question": "Neighbors too loud?", "short_answer": "Complain to landlord. May be lease violation.", "explanation": "Right to quiet enjoyment.", "script": "The noise is unreasonable.", "next_steps": ["Document incidents", "Complain"]},
+            {"id": "hsg-n2", "question": "Accused of being too loud?", "short_answer": "Know quiet hours. Reasonable noise is allowed.", "explanation": "Normal living noise is okay.", "script": "What specific noise violated rules?", "next_steps": ["Know quiet hours"]}
+        ],
+        "discrimination": [
+            {"id": "hsg-ds1", "question": "Denied because of kids?", "short_answer": "Familial status is protected. Usually illegal.", "explanation": "Can't discriminate against families.", "script": "Is this because I have children?", "next_steps": ["Document", "Report to HUD"]},
+            {"id": "hsg-ds2", "question": "Denied for race/religion?", "short_answer": "Illegal. Fair Housing Act.", "explanation": "Many characteristics protected.", "script": "Why was I denied?", "next_steps": ["Get reason in writing", "Report"]}
+        ],
+        "moving": [
+            {"id": "hsg-mv1", "question": "How much notice to move out?", "short_answer": "Usually 30 days. Check lease.", "explanation": "Give proper notice.", "script": "What notice is required?", "next_steps": ["Check lease", "Give written notice"]},
+            {"id": "hsg-mv2", "question": "Cleaning required?", "short_answer": "Usually must leave reasonably clean.", "explanation": "Normal cleaning expected.", "script": "What cleaning is expected?", "next_steps": ["Take photos", "Clean reasonably"]},
+            {"id": "hsg-mv3", "question": "Stuff left behind?", "short_answer": "Landlord may be able to dispose of it.", "explanation": "Take everything.", "script": "I need more time to get my things.", "next_steps": ["Get extension if needed"]}
         ]
     },
     "police": {
         "stops": [
-            {"id": "ps1", "question": "Cops stopped me walking. What do I do?", "short_answer": "Stay calm. Hands visible. Ask if you're free to go.", "explanation": "You can ask if you're detained. If not, you can leave. Don't run.", "script": "Am I free to go or am I being detained?", "next_steps": ["Stay calm", "Hands visible", "Ask if free to go", "Don't run"]},
-            {"id": "ps2", "question": "What about traffic stops?", "short_answer": "Pull over safely. Hands on wheel. Give license/registration when asked.", "explanation": "Pull over, turn off car, hands visible, announce movements.", "script": "I'm reaching for my license in my [location].", "next_steps": ["Pull over safely", "Stay calm", "Hands on wheel"]},
-            {"id": "ps3", "question": "Can I walk away?", "short_answer": "Ask if you're detained. If no, leave calmly. Never run.", "explanation": "If they have 'reasonable suspicion,' they can briefly detain you.", "script": "Am I being detained? If not, I'm leaving.", "next_steps": ["Ask clearly", "Wait for answer", "Leave calmly if free"]},
-            {"id": "ps4", "question": "Do I have to give my name?", "short_answer": "In most states, yes if detained. Other questions? You can stay silent.", "explanation": "Most states require name when lawfully detained. Nothing else though.", "script": "I'll give my name. I'm staying silent on other questions.", "next_steps": ["Know your state's law", "Give name if required"]}
+            {"id": "pol-st1", "question": "Stopped walking?", "short_answer": "Stay calm. Hands visible. Ask if free to go.", "explanation": "Can ask if detained.", "script": "Am I free to go?", "next_steps": ["Stay calm", "Don't run"]},
+            {"id": "pol-st2", "question": "Have to give name?", "short_answer": "Usually yes if detained. Other questions optional.", "explanation": "Most states require ID when detained.", "script": "I'll give my name. I'm staying silent otherwise.", "next_steps": ["Know state law"]},
+            {"id": "pol-st3", "question": "Can I walk away?", "short_answer": "Ask if detained. If no, leave calmly.", "explanation": "Never run.", "script": "Am I being detained?", "next_steps": ["Ask clearly", "Leave if free"]}
         ],
         "searches": [
-            {"id": "pse1", "question": "Can they search me?", "short_answer": "Pat-down for weapons needs reasonable suspicion. Full search needs more.", "explanation": "Quick frisk for weapons if they think you're armed. Full search = probable cause, consent, or arrest.", "script": "I don't consent to a search.", "next_steps": ["Say you don't consent", "Don't resist physically"]},
-            {"id": "pse2", "question": "Can they search my car?", "short_answer": "They need probable cause, consent, or warrant. Say you don't consent.", "explanation": "Smell drugs, see contraband = probable cause. You can always refuse consent.", "script": "I don't consent to a search of my car.", "next_steps": ["Don't consent", "Don't unlock/open", "Stay polite"]},
-            {"id": "pse3", "question": "Can they go through my phone?", "short_answer": "NO. Supreme Court says they need a warrant. Don't unlock it.", "explanation": "Phones require warrants. Don't unlock it, give passwords, or use face/fingerprint.", "script": "I don't consent to searching my phone. Show me a warrant.", "next_steps": ["Don't unlock", "Don't give password", "Ask for warrant"]},
-            {"id": "pse4", "question": "Can they search my house?", "short_answer": "Need warrant, consent, or emergency. Don't let them in.", "explanation": "Your home has strong protection. Don't invite them in.", "script": "I don't consent. Please show a warrant.", "next_steps": ["Don't invite in", "Step outside to talk", "Ask for warrant"]},
-            {"id": "pse5", "question": "What about drug dogs?", "short_answer": "Can't extend a stop just to bring dogs. If already there, sniff is allowed.", "explanation": "They can't hold you longer than normal stop to wait for K-9.", "script": "Is this stop taking longer than necessary?", "next_steps": ["Know the limits", "Challenge in court"]}
+            {"id": "pol-se1", "question": "Search my body?", "short_answer": "Pat-down for weapons needs suspicion. Full search needs more.", "explanation": "Say you don't consent.", "script": "I don't consent to a search.", "next_steps": ["Don't consent", "Don't resist"]},
+            {"id": "pol-se2", "question": "Search my car?", "short_answer": "Need probable cause or consent. Say no.", "explanation": "You can refuse consent.", "script": "I don't consent.", "next_steps": ["Don't consent", "Stay polite"]},
+            {"id": "pol-se3", "question": "Search phone?", "short_answer": "NO. Need warrant. Don't unlock it.", "explanation": "Supreme Court says warrant required.", "script": "Show me a warrant.", "next_steps": ["Don't unlock", "Don't give password"]},
+            {"id": "pol-se4", "question": "Search home?", "short_answer": "Need warrant. Don't let them in.", "explanation": "Strong home protection.", "script": "I don't consent. Show warrant.", "next_steps": ["Step outside", "Ask for warrant"]}
         ],
         "arrests": [
-            {"id": "pa1", "question": "I'm being arrested. What now?", "short_answer": "Don't resist. Say 'I want a lawyer' and 'I'm staying silent.'", "explanation": "Even if arrest is wrong, don't fight. Challenge it in court.", "script": "I'm not resisting. I want a lawyer. I'm staying silent.", "next_steps": ["Don't resist", "Ask for lawyer", "Stay quiet"]},
-            {"id": "pa2", "question": "What are Miranda rights?", "short_answer": "Right to silence and right to lawyer before questioning.", "explanation": "After arrest, they must read these before questioning. Invoke them.", "script": "I'm invoking my right to remain silent and I want a lawyer.", "next_steps": ["Remember these rights", "Invoke clearly", "Stop talking"]},
-            {"id": "pa3", "question": "Do I get a phone call?", "short_answer": "Yes. Usually within reasonable time after arrest.", "explanation": "You can call lawyer and family. Timing varies.", "script": "I'd like to make my phone call.", "next_steps": ["Ask for call", "Call lawyer first"]},
-            {"id": "pa4", "question": "How does bail work?", "short_answer": "Money to get out before trial. Pay full amount (returned later) or use bondsman (10% fee).", "explanation": "Amount depends on charge and your situation.", "script": "I'd like a bail hearing.", "next_steps": ["Ask about bail", "Contact family", "Show up to court"]}
+            {"id": "pol-ar1", "question": "Being arrested?", "short_answer": "Don't resist. Say 'lawyer' and 'silent.'", "explanation": "Fight it in court.", "script": "I want a lawyer. I'm staying silent.", "next_steps": ["Don't resist", "Stay quiet"]},
+            {"id": "pol-ar2", "question": "Miranda rights?", "short_answer": "Right to silence and lawyer.", "explanation": "Invoke them clearly.", "script": "I invoke my rights.", "next_steps": ["Say it clearly", "Stop talking"]},
+            {"id": "pol-ar3", "question": "Phone call?", "short_answer": "Yes, usually within reasonable time.", "explanation": "You get to call.", "script": "I want my phone call.", "next_steps": ["Call lawyer first"]}
         ],
         "rights": [
-            {"id": "pr1", "question": "What's the right to remain silent?", "short_answer": "You don't have to answer questions. Can't be used against you.", "explanation": "Fifth Amendment. You can refuse to answer. Just say it clearly.", "script": "I'm exercising my right to remain silent.", "next_steps": ["State it clearly", "Stop talking"]},
-            {"id": "pr2", "question": "When can I have a lawyer?", "short_answer": "Before and during any questioning. If you can't afford one, you get one free.", "explanation": "Once you ask for a lawyer, questioning must stop.", "script": "I want a lawyer before answering anything.", "next_steps": ["Ask immediately", "Don't waive this right"]},
-            {"id": "pr3", "question": "What if they arrested me unfairly?", "short_answer": "Don't resist. Document everything. Challenge it in court.", "explanation": "Fighting makes it worse. Get justice through the legal system.", "script": "I believe this is unlawful but I'm not resisting. I want a lawyer.", "next_steps": ["Don't resist", "Document", "Get lawyer", "File complaint"]}
+            {"id": "pol-rt1", "question": "Right to remain silent?", "short_answer": "Yes. You don't have to answer questions.", "explanation": "Fifth Amendment.", "script": "I'm exercising my right to remain silent.", "next_steps": ["Say it clearly", "Stop talking"]},
+            {"id": "pol-rt2", "question": "Right to lawyer?", "short_answer": "Before and during questioning. Free if you can't afford.", "explanation": "Questioning must stop when you ask.", "script": "I want a lawyer.", "next_steps": ["Ask immediately"]}
         ],
         "recording": [
-            {"id": "pre1", "question": "Can I record police?", "short_answer": "Yes. In public, from a safe distance, without interfering.", "explanation": "First Amendment protects this. Stay back and don't get in the way.", "script": "I'm recording from a safe distance without interfering.", "next_steps": ["Keep distance", "Don't interfere", "Back up video"]},
-            {"id": "pre2", "question": "Can they make me delete it?", "short_answer": "No. That's illegal. Don't unlock your phone for them.", "explanation": "They can't legally make you delete recordings.", "script": "I don't consent to deleting recordings or unlocking my phone.", "next_steps": ["Don't delete", "Don't unlock"]}
+            {"id": "pol-rc1", "question": "Can I record police?", "short_answer": "Yes in public. Safe distance, don't interfere.", "explanation": "First Amendment right.", "script": "I'm recording from safe distance.", "next_steps": ["Stay back", "Back up video"]},
+            {"id": "pol-rc2", "question": "Make me delete?", "short_answer": "No. That's illegal.", "explanation": "Don't delete.", "script": "I don't consent to deleting.", "next_steps": ["Don't delete", "Don't unlock"]}
         ],
         "complaints": [
-            {"id": "pc1", "question": "How do I file a complaint?", "short_answer": "Internal affairs, civilian review board, or DOJ for serious stuff.", "explanation": "Most departments have complaint processes. Document everything first.", "script": "I want to file a formal complaint.", "next_steps": ["Document everything", "File written complaint", "Keep copies"]},
-            {"id": "pc2", "question": "Can I sue the police?", "short_answer": "Yes for civil rights violations, but it's hard. Get a lawyer.", "explanation": "Section 1983 lawsuits exist. Police have some immunity. It's complicated.", "script": "I want to talk to a civil rights attorney.", "next_steps": ["Document everything", "Find lawyer", "Know time limits"]}
+            {"id": "pol-cm1", "question": "File complaint?", "short_answer": "Internal affairs or civilian review board.", "explanation": "Document everything first.", "script": "I want to file complaint.", "next_steps": ["Document", "File in writing"]},
+            {"id": "pol-cm2", "question": "Sue police?", "short_answer": "Possible for civil rights violations. Get lawyer.", "explanation": "It's hard but possible.", "script": "I want to talk to civil rights attorney.", "next_steps": ["Get lawyer"]}
+        ],
+        "minors": [
+            {"id": "pol-mn1", "question": "Questioned without parents?", "short_answer": "You can ask for parents. Rules vary.", "explanation": "Minors have some extra protections.", "script": "I want my parents here.", "next_steps": ["Ask for parents", "Stay silent"]},
+            {"id": "pol-mn2", "question": "Curfew violation?", "short_answer": "May get ticket or taken to parents.", "explanation": "Usually not serious.", "script": "I was heading home.", "next_steps": ["Be honest", "Know exceptions"]},
+            {"id": "pol-mn3", "question": "Juvenile record?", "short_answer": "Often sealed at 18. Ask lawyer.", "explanation": "May not follow you.", "script": "What happens to this record?", "next_steps": ["Ask about sealing"]}
+        ],
+        "traffic": [
+            {"id": "pol-tr1", "question": "Pulled over?", "short_answer": "Pull over safely. Hands on wheel. Be polite.", "explanation": "Stay calm.", "script": "I'm reaching for my license.", "next_steps": ["Hands visible", "Announce movements"]},
+            {"id": "pol-tr2", "question": "Have to get out of car?", "short_answer": "If they order you out, yes.", "explanation": "Legal order to exit.", "script": "Okay, I'm getting out.", "next_steps": ["Comply calmly"]},
+            {"id": "pol-tr3", "question": "Sobriety test?", "short_answer": "Can refuse field tests. Chemical test refusal has consequences.", "explanation": "Implied consent laws.", "script": "What are consequences of refusing?", "next_steps": ["Know state rules"]}
+        ],
+        "home": [
+            {"id": "pol-hm1", "question": "Police at my door?", "short_answer": "Don't have to open. Talk through door.", "explanation": "Your home is protected.", "script": "How can I help you?", "next_steps": ["Don't open", "Ask for warrant"]},
+            {"id": "pol-hm2", "question": "They have warrant?", "short_answer": "Ask to see it. Check name, address, what they can search.", "explanation": "Verify it's valid.", "script": "Let me see the warrant.", "next_steps": ["Check details", "Watch what they search"]},
+            {"id": "pol-hm3", "question": "Came in without warrant?", "short_answer": "Say you don't consent. Document everything.", "explanation": "May be illegal search.", "script": "I don't consent to this.", "next_steps": ["Don't consent", "Get lawyer"]}
+        ],
+        "witnesses": [
+            {"id": "pol-wt1", "question": "Have to talk as witness?", "short_answer": "Generally yes, but can have lawyer.", "explanation": "Witnesses usually must cooperate.", "script": "Can I have a lawyer present?", "next_steps": ["Ask for lawyer if nervous"]},
+            {"id": "pol-wt2", "question": "Subpoenaed?", "short_answer": "Must appear. Can be held in contempt otherwise.", "explanation": "Court orders are mandatory.", "script": "I received a subpoena.", "next_steps": ["Show up", "Get lawyer if needed"]}
+        ],
+        "after": [
+            {"id": "pol-af1", "question": "How does bail work?", "short_answer": "Money to get out before trial.", "explanation": "Pay full or use bondsman.", "script": "I'd like a bail hearing.", "next_steps": ["Ask about bail"]},
+            {"id": "pol-af2", "question": "Public defender?", "short_answer": "Free if you can't afford lawyer.", "explanation": "Right to counsel.", "script": "I need a public defender.", "next_steps": ["Request one"]},
+            {"id": "pol-af3", "question": "What happens at arraignment?", "short_answer": "Hear charges, enter plea.", "explanation": "Usually plead not guilty.", "script": "I plead not guilty.", "next_steps": ["Get lawyer first"]}
         ]
     },
     "online": {
         "social": [
-            {"id": "os1", "question": "Who can see my posts?", "short_answer": "Check privacy settings. But anyone who sees can screenshot.", "explanation": "Settings control direct viewing. Nothing is truly private.", "script": "Where are my privacy settings?", "next_steps": ["Check settings", "Audit regularly"]},
-            {"id": "os2", "question": "Can I really delete something?", "short_answer": "From the platform, yes. But screenshots and copies may exist.", "explanation": "The internet is forever. Think before posting.", "script": "How do I delete this?", "next_steps": ["Delete from platform", "Know copies may exist"]},
-            {"id": "os3", "question": "Someone hacked my account.", "short_answer": "Change passwords, enable 2FA, report to platform, warn contacts.", "explanation": "Act fast. Secure everything.", "script": "My account was hacked. I need help.", "next_steps": ["Change passwords", "Enable 2FA", "Report", "Warn friends"]},
-            {"id": "os4", "question": "Someone's pretending to be me online.", "short_answer": "Report to platform. It violates terms of service.", "explanation": "Most platforms have impersonation reporting.", "script": "I need to report a fake account.", "next_steps": ["Report to platform", "Document it"]}
+            {"id": "onl-so1", "question": "Who sees my posts?", "short_answer": "Check settings. Anyone can screenshot.", "explanation": "Nothing truly private.", "script": "Where are privacy settings?", "next_steps": ["Check settings"]},
+            {"id": "onl-so2", "question": "Delete something?", "short_answer": "From platform yes. Copies may exist.", "explanation": "Internet is forever.", "script": "How do I delete this?", "next_steps": ["Delete from platform"]},
+            {"id": "onl-so3", "question": "Account hacked?", "short_answer": "Change passwords, enable 2FA, report.", "explanation": "Act fast.", "script": "My account was hacked.", "next_steps": ["Change passwords", "Enable 2FA"]}
         ],
         "data": [
-            {"id": "od1", "question": "What data do apps collect?", "short_answer": "Usually a lot: location, browsing, purchases, messages.", "explanation": "Read privacy policies. They're long but tell you what's collected.", "script": "What data do you collect about me?", "next_steps": ["Read privacy policies", "Check settings"]},
-            {"id": "od2", "question": "Can I get my data deleted?", "short_answer": "Yes in some states (like California). Many companies offer it anyway.", "explanation": "CCPA and similar laws give deletion rights.", "script": "I want to request deletion of my data.", "next_steps": ["Find deletion option", "Submit request"]}
+            {"id": "onl-dt1", "question": "What data do apps collect?", "short_answer": "Usually a lot. Check privacy policy.", "explanation": "Location, browsing, contacts...", "script": "What do you collect?", "next_steps": ["Read policies"]},
+            {"id": "onl-dt2", "question": "Get my data deleted?", "short_answer": "Yes in some states.", "explanation": "CCPA and similar laws.", "script": "I want my data deleted.", "next_steps": ["Submit request"]}
         ],
         "harassment": [
-            {"id": "oh1", "question": "Someone's cyberbullying me.", "short_answer": "Screenshot, block, report. If threats, tell an adult and maybe police.", "explanation": "Document everything. Get help for serious stuff.", "script": "I'm being cyberbullied and I have documentation.", "next_steps": ["Screenshot", "Block", "Report", "Tell trusted adult"]},
-            {"id": "oh2", "question": "Someone posted my personal info (doxxing).", "short_answer": "Report for removal. Call police if there are threats.", "explanation": "Doxxing can be dangerous. Take it seriously.", "script": "My info was posted without consent. Remove it.", "next_steps": ["Report for removal", "Police if threats", "Secure accounts"]},
-            {"id": "oh3", "question": "I got threats online.", "short_answer": "Take it seriously. Screenshot, report, contact police.", "explanation": "Online threats can be crimes. Document everything.", "script": "I've received threats. Reporting to police.", "next_steps": ["Screenshot", "Report", "Contact police"]}
+            {"id": "onl-hr1", "question": "Cyberbullied?", "short_answer": "Screenshot, block, report. Threats = police.", "explanation": "Document everything.", "script": "I'm being cyberbullied.", "next_steps": ["Screenshot", "Block", "Report"]},
+            {"id": "onl-hr2", "question": "Doxxed?", "short_answer": "Report for removal. Police if threats.", "explanation": "Take it seriously.", "script": "My info was posted.", "next_steps": ["Report", "Police if threats"]},
+            {"id": "onl-hr3", "question": "Online threats?", "short_answer": "Screenshot. Report. Police.", "explanation": "Threats can be crimes.", "script": "I've received threats.", "next_steps": ["Screenshot", "Report", "Police"]}
         ],
         "photos": [
-            {"id": "op1", "question": "Someone posted my photo without asking.", "short_answer": "In public, usually legal. For harassment or profit, you may have recourse.", "explanation": "Public photos are generally okay. Intimate images have special protections.", "script": "This photo was used harmfully. I need it removed.", "next_steps": ["Report to platform", "Check laws"]},
-            {"id": "op2", "question": "Someone shared intimate images of me.", "short_answer": "This is illegal in most states. Report to platform AND police.", "explanation": "'Revenge porn' is illegal. Get help.", "script": "Intimate images shared without consent. This is illegal.", "next_steps": ["Report to platform", "Contact police", "Call Cyber Civil Rights Initiative"]}
+            {"id": "onl-ph1", "question": "Photo posted without consent?", "short_answer": "In public usually legal. Harassment/profit different.", "explanation": "Context matters.", "script": "This was used harmfully.", "next_steps": ["Report to platform"]},
+            {"id": "onl-ph2", "question": "Intimate images shared?", "short_answer": "Illegal in most states. Report to platform AND police.", "explanation": "'Revenge porn' is crime.", "script": "This is illegal.", "next_steps": ["Report platform", "Contact police"]}
         ],
         "accounts": [
-            {"id": "oa1", "question": "Can school/parents demand my passwords?", "short_answer": "Parents often can for minors. Schools usually can't for personal accounts.", "explanation": "Parents have authority over kids' accounts. Schools can access school accounts, not personal.", "script": "Why is my password being requested?", "next_steps": ["Understand who's asking", "Protect personal accounts"]},
-            {"id": "oa2", "question": "How do I make my accounts secure?", "short_answer": "Strong unique passwords, 2FA, watch for phishing.", "explanation": "Use different passwords. Turn on two-factor. Don't click sketchy links.", "script": "How do I enable two-factor?", "next_steps": ["Use password manager", "Enable 2FA", "Watch for scams"]}
+            {"id": "onl-ac1", "question": "Parents/school want password?", "short_answer": "Parents often can for minors. Schools usually can't for personal.", "explanation": "Depends who's asking.", "script": "Why do you need this?", "next_steps": ["Protect personal accounts"]},
+            {"id": "onl-ac2", "question": "Make accounts secure?", "short_answer": "Strong passwords, 2FA, watch for phishing.", "explanation": "Use different passwords.", "script": "How do I enable 2FA?", "next_steps": ["Enable 2FA everywhere"]}
         ],
         "school-monitoring": [
-            {"id": "osm1", "question": "Can school see what I do on school devices?", "short_answer": "YES. Everything. Don't expect privacy on school stuff.", "explanation": "School devices are fully monitored. Never use for personal things.", "script": "I'll use my personal device for personal stuff.", "next_steps": ["Don't use for private things", "Use personal devices"]},
-            {"id": "osm2", "question": "Can they track me at home?", "short_answer": "If using school device or logged into school accounts, probably yes.", "explanation": "Monitoring software works everywhere. School accounts may also track.", "script": "I'll log out of school accounts at home.", "next_steps": ["Use personal device at home", "Log out of school accounts"]}
+            {"id": "onl-sm1", "question": "School see school device?", "short_answer": "YES. Everything.", "explanation": "Fully monitored.", "script": "I'll use personal for personal.", "next_steps": ["Don't use for private"]},
+            {"id": "onl-sm2", "question": "Track me at home?", "short_answer": "If using school device, probably.", "explanation": "Monitoring works everywhere.", "script": "I'll log out at home.", "next_steps": ["Use personal at home"]}
+        ],
+        "scams": [
+            {"id": "onl-sc1", "question": "Think I got scammed?", "short_answer": "Report to FTC. Contact bank. Change passwords.", "explanation": "Act fast to limit damage.", "script": "I need to report a scam.", "next_steps": ["Report to FTC", "Contact bank"]},
+            {"id": "onl-sc2", "question": "Phishing email?", "short_answer": "Don't click. Report. Delete.", "explanation": "Never give info to suspicious emails.", "script": "This looks fake.", "next_steps": ["Don't click", "Report"]},
+            {"id": "onl-sc3", "question": "Gave scammer my info?", "short_answer": "Change passwords. Freeze credit. Monitor accounts.", "explanation": "Minimize damage.", "script": "I accidentally gave info.", "next_steps": ["Change passwords", "Freeze credit"]}
+        ],
+        "gaming": [
+            {"id": "onl-gm1", "question": "In-game harassment?", "short_answer": "Report to platform. Block. Save evidence.", "explanation": "Platforms have rules.", "script": "I need to report harassment.", "next_steps": ["Report", "Block"]},
+            {"id": "onl-gm2", "question": "Scammed in game trade?", "short_answer": "Report to platform. May not get stuff back.", "explanation": "Virtual items hard to recover.", "script": "I was scammed in a trade.", "next_steps": ["Report to game"]},
+            {"id": "onl-gm3", "question": "Account banned unfairly?", "short_answer": "Appeal through platform process.", "explanation": "Platforms have appeal options.", "script": "I want to appeal this ban.", "next_steps": ["Follow appeal process"]}
+        ],
+        "shopping": [
+            {"id": "onl-sh1", "question": "Package never arrived?", "short_answer": "Contact seller. File dispute with payment method.", "explanation": "Document everything.", "script": "My order never arrived.", "next_steps": ["Contact seller", "Dispute charge"]},
+            {"id": "onl-sh2", "question": "Received wrong item?", "short_answer": "Contact seller. Usually must accept return.", "explanation": "You get what you ordered.", "script": "This isn't what I ordered.", "next_steps": ["Contact seller", "Document"]}
+        ],
+        "copyright": [
+            {"id": "onl-cp1", "question": "Use someone's music/art?", "short_answer": "Need permission or must be fair use.", "explanation": "Copyright protects creators.", "script": "Can I use this?", "next_steps": ["Ask permission", "Check if fair use"]},
+            {"id": "onl-cp2", "question": "Someone stole my content?", "short_answer": "File DMCA takedown with platform.", "explanation": "You have rights to your work.", "script": "My content was stolen.", "next_steps": ["File DMCA"]}
+        ],
+        "ai": [
+            {"id": "onl-ai1", "question": "Deepfake of me?", "short_answer": "Many states have laws against this. Report to platform.", "explanation": "Increasingly illegal.", "script": "There's a fake video/image of me.", "next_steps": ["Report platform", "Check state law"]},
+            {"id": "onl-ai2", "question": "AI using my likeness?", "short_answer": "Emerging legal area. Document and consult lawyer.", "explanation": "Laws developing.", "script": "AI is using my face/voice.", "next_steps": ["Document", "Consult lawyer"]}
         ]
     },
     "public": {
         "filming": [
-            {"id": "pf1", "question": "Can I take photos on the street?", "short_answer": "Yes. Public places = no expectation of privacy.", "explanation": "Photography in public is generally legal.", "script": "I'm in a public space.", "next_steps": ["Stay in public areas", "Be respectful"]},
-            {"id": "pf2", "question": "Can I film cops?", "short_answer": "Yes. It's your First Amendment right. Keep safe distance, don't interfere.", "explanation": "Recording police is protected. Just stay back.", "script": "I'm exercising my right to record police.", "next_steps": ["Keep distance", "Don't interfere", "Back up footage"]},
-            {"id": "pf3", "question": "Can I film in stores?", "short_answer": "Only with permission. Private property, their rules.", "explanation": "Businesses can ban photography. If asked to stop, do it or leave.", "script": "Am I allowed to take photos here?", "next_steps": ["Ask permission", "Leave if asked"]}
+            {"id": "pub-fl1", "question": "Photos on street?", "short_answer": "Yes. No expectation of privacy in public.", "explanation": "Public photography legal.", "script": "I'm in a public space.", "next_steps": ["Be respectful"]},
+            {"id": "pub-fl2", "question": "Film police?", "short_answer": "Yes. First Amendment. Safe distance.", "explanation": "Recording is protected.", "script": "I'm exercising my right to record.", "next_steps": ["Keep distance", "Back up"]}
         ],
         "protests": [
-            {"id": "pp1", "question": "What are my rights at protests?", "short_answer": "First Amendment protects peaceful assembly. Know the limits.", "explanation": "You can protest peacefully. Don't block traffic or trespass.", "script": "I'm exercising my right to peaceful assembly.", "next_steps": ["Stay peaceful", "Know permit rules", "Document if rights violated"]},
-            {"id": "pp2", "question": "Do I need a permit?", "short_answer": "Large organized events often yes. Small spontaneous groups usually no.", "explanation": "Check local rules. Sidewalk gatherings usually fine.", "script": "What are the permit requirements?", "next_steps": ["Check local rules", "Apply if needed"]},
-            {"id": "pp3", "question": "What if I'm arrested at a protest?", "short_answer": "Don't resist. Say 'I want a lawyer' and stay silent.", "explanation": "May be charged with trespassing or disorderly conduct.", "script": "I'm not resisting. I want a lawyer. Staying silent.", "next_steps": ["Don't resist", "Ask for lawyer"]}
+            {"id": "pub-pr1", "question": "Rights at protests?", "short_answer": "First Amendment protects peaceful assembly.", "explanation": "Know the limits.", "script": "I'm exercising my rights.", "next_steps": ["Stay peaceful"]},
+            {"id": "pub-pr2", "question": "Need permit?", "short_answer": "Large events often yes. Small groups usually no.", "explanation": "Check local rules.", "script": "What are permit requirements?", "next_steps": ["Check rules"]},
+            {"id": "pub-pr3", "question": "Arrested at protest?", "short_answer": "Don't resist. Lawyer. Silent.", "explanation": "Challenge in court.", "script": "I want a lawyer.", "next_steps": ["Don't resist"]}
         ],
         "stores": [
-            {"id": "pst1", "question": "Can a store hold me for shoplifting?", "short_answer": "Briefly, if they have reasonable belief. Must be reasonable.", "explanation": "'Shopkeeper's privilege' allows brief detention with good reason.", "script": "I haven't taken anything. Call police if you think I have.", "next_steps": ["Stay calm", "Don't run", "Ask for manager"]},
-            {"id": "pst2", "question": "Can they check my bag?", "short_answer": "They can ask. You can usually refuse, but they might ban you.", "explanation": "Bag checks are usually voluntary unless you agreed (like membership stores).", "script": "Is this required or can I decline?", "next_steps": ["Ask if required", "Comply or leave"]},
-            {"id": "pst3", "question": "Can they kick me out?", "short_answer": "Yes for most reasons. But not discrimination.", "explanation": "Private businesses can refuse service. Can't discriminate based on race, etc.", "script": "May I ask why?", "next_steps": ["Leave if asked", "Note if discriminatory"]}
+            {"id": "pub-st1", "question": "Detained for shoplifting?", "short_answer": "Briefly if reasonable belief.", "explanation": "Shopkeeper's privilege.", "script": "I haven't taken anything.", "next_steps": ["Stay calm"]},
+            {"id": "pub-st2", "question": "Check my bag?", "short_answer": "They ask. You can usually refuse but might get banned.", "explanation": "Usually voluntary.", "script": "Is this required?", "next_steps": ["Ask if required"]}
         ],
         "transport": [
-            {"id": "pt1", "question": "What about public transit?", "short_answer": "It's public but agencies set rules. Pay your fare.", "explanation": "Transit can have rules. Police can be called for violations.", "script": "What are the rules here?", "next_steps": ["Pay fare", "Follow rules"]},
-            {"id": "pt2", "question": "Rights in Uber/Lyft?", "short_answer": "It's a private car. Driver can end rides. Report safety issues.", "explanation": "Drivers can set rules. Use app safety features.", "script": "I feel unsafe. I'm ending this ride.", "next_steps": ["Use safety features", "Report issues"]},
-            {"id": "pt3", "question": "Airport searches?", "short_answer": "You consent by entering security. Can opt out of body scanner for pat-down.", "explanation": "Airport searches are allowed because you choose to fly.", "script": "I'd like to opt out of the body scanner.", "next_steps": ["Know you'll be searched", "Arrive early"]}
+            {"id": "pub-tr1", "question": "Public transit rules?", "short_answer": "Agencies set rules. Pay fare.", "explanation": "Follow rules.", "script": "What are the rules?", "next_steps": ["Pay fare"]},
+            {"id": "pub-tr2", "question": "Uber/Lyft rights?", "short_answer": "Private car. Driver can end ride.", "explanation": "Use safety features.", "script": "I feel unsafe.", "next_steps": ["End ride", "Report"]}
         ],
         "parks": [
-            {"id": "pk1", "question": "What can I do in parks?", "short_answer": "Varies by park. Check posted rules about hours, alcohol, fires.", "explanation": "Public parks have rules. Common: close at dusk, no alcohol.", "script": "What activities are allowed here?", "next_steps": ["Check rules", "Know hours"]},
-            {"id": "pk2", "question": "Can I sleep outside?", "short_answer": "Laws vary. Many ban it, but courts limit enforcement when no shelters available.", "explanation": "Anti-camping laws exist but are being challenged.", "script": "Are there shelter resources available?", "next_steps": ["Know local laws", "Find shelter resources"]}
+            {"id": "pub-pk1", "question": "Park rules?", "short_answer": "Check posted rules. Hours, alcohol, etc.", "explanation": "Parks have rules.", "script": "What's allowed here?", "next_steps": ["Check rules"]},
+            {"id": "pub-pk2", "question": "Sleep outside?", "short_answer": "Laws vary. Being challenged where no shelter available.", "explanation": "Evolving area.", "script": "Where can I get help?", "next_steps": ["Find shelter resources"]}
         ],
         "curfew": [
-            {"id": "cu1", "question": "Are youth curfews legal?", "short_answer": "Many cities have them with exceptions for work, school events, emergencies.", "explanation": "Curfews are common but have exceptions. Know them.", "script": "I'm heading home from [work/event/with parent].", "next_steps": ["Know your city's curfew", "Know exceptions", "Carry ID"]},
-            {"id": "cu2", "question": "Can I be arrested for loitering?", "short_answer": "Vague loitering laws often unconstitutional. Specific activities may be illegal.", "explanation": "General 'loitering' is hard to enforce. Blocking sidewalks is different.", "script": "What specifically am I accused of?", "next_steps": ["Ask what law violated", "Move along if asked"]}
+            {"id": "pub-cf1", "question": "Youth curfew?", "short_answer": "Many cities have them with exceptions.", "explanation": "Know exceptions.", "script": "I'm heading home from work.", "next_steps": ["Know exceptions"]},
+            {"id": "pub-cf2", "question": "Loitering?", "short_answer": "Vague laws often unconstitutional.", "explanation": "Can ask what you're accused of.", "script": "What am I accused of?", "next_steps": ["Ask specifically"]}
+        ],
+        "malls": [
+            {"id": "pub-ml1", "question": "Kicked out of mall?", "short_answer": "Private property. They can ask you to leave.", "explanation": "But not for discrimination.", "script": "Why am I being asked to leave?", "next_steps": ["Ask reason"]},
+            {"id": "pub-ml2", "question": "Mall security search me?", "short_answer": "Usually need consent. They're not police.", "explanation": "Private security has limits.", "script": "I don't consent to a search.", "next_steps": ["Don't consent"]}
+        ],
+        "events": [
+            {"id": "pub-ev1", "question": "Bag check at concert?", "short_answer": "Condition of entry. You agree by entering.", "explanation": "Private venue rules.", "script": "What's the bag policy?", "next_steps": ["Know policy"]},
+            {"id": "pub-ev2", "question": "Kicked out of event?", "short_answer": "Private venues can remove you.", "explanation": "But not for discrimination.", "script": "Why am I being removed?", "next_steps": ["Ask reason"]}
+        ],
+        "restaurants": [
+            {"id": "pub-rs1", "question": "Refused service?", "short_answer": "Legal unless discrimination.", "explanation": "Private business rights.", "script": "Is this discrimination?", "next_steps": ["Document if discriminatory"]},
+            {"id": "pub-rs2", "question": "Charged for things I didn't order?", "short_answer": "Only pay for what you ordered.", "explanation": "Dispute errors.", "script": "I didn't order this.", "next_steps": ["Dispute charge"]}
+        ],
+        "id": [
+            {"id": "pub-id1", "question": "Have to show ID?", "short_answer": "To police if detained. Others usually no.", "explanation": "Limited requirement.", "script": "Am I required to show ID?", "next_steps": ["Know when required"]},
+            {"id": "pub-id2", "question": "Bouncer wants ID?", "short_answer": "Their policy. Can deny entry.", "explanation": "Private business.", "script": "What ID do you accept?", "next_steps": ["Show if you want entry"]}
+        ],
+        "banned": [
+            {"id": "pub-bn1", "question": "Banned from store?", "short_answer": "Private property. They can ban you.", "explanation": "Unless discrimination.", "script": "Why am I banned?", "next_steps": ["Get reason"]},
+            {"id": "pub-bn2", "question": "Trespassing if return?", "short_answer": "Yes, you can be arrested.", "explanation": "Respect bans.", "script": "Is there an appeal process?", "next_steps": ["Ask about appeal"]}
+        ]
+    },
+    "immigration": {
+        "documents": [
+            {"id": "imm-dc1", "question": "Have to carry papers?", "short_answer": "Should have some form of ID. Depends on status.", "explanation": "Rules vary by status.", "script": "What documentation do I need?", "next_steps": ["Know your requirements"]},
+            {"id": "imm-dc2", "question": "Lost my documents?", "short_answer": "Request replacement from USCIS.", "explanation": "File replacement forms.", "script": "How do I replace lost documents?", "next_steps": ["Contact USCIS"]},
+            {"id": "imm-dc3", "question": "Expired documents?", "short_answer": "Renew before expiration if possible.", "explanation": "Don't let them lapse.", "script": "How do I renew?", "next_steps": ["Apply for renewal"]}
+        ],
+        "police": [
+            {"id": "imm-pl1", "question": "Police ask immigration status?", "short_answer": "In many places, local police can't ask. You don't have to answer.", "explanation": "Know your jurisdiction.", "script": "Am I required to answer?", "next_steps": ["Know local policies", "Stay silent if unsure"]},
+            {"id": "imm-pl2", "question": "ICE wants to talk?", "short_answer": "You have right to remain silent and ask for lawyer.", "explanation": "ICE isn't regular police.", "script": "I'm staying silent. I want a lawyer.", "next_steps": ["Don't answer questions", "Get lawyer"]},
+            {"id": "imm-pl3", "question": "Stopped by ICE?", "short_answer": "Ask if free to go. Don't sign anything. Get lawyer.", "explanation": "You have rights.", "script": "Am I free to go?", "next_steps": ["Ask if detained", "Stay silent", "Lawyer"]},
+            {"id": "imm-pl4", "question": "ICE at my door?", "short_answer": "Don't have to open. Ask for warrant through door.", "explanation": "They need judicial warrant to enter.", "script": "Do you have a warrant signed by a judge?", "next_steps": ["Don't open", "Check warrant"]}
+        ],
+        "work": [
+            {"id": "imm-wk1", "question": "Can I work?", "short_answer": "Depends on your status. Some visas allow, some don't.", "explanation": "Know your authorization.", "script": "What work am I authorized for?", "next_steps": ["Check your status"]},
+            {"id": "imm-wk2", "question": "Employer threats about status?", "short_answer": "Using immigration to threaten is illegal.", "explanation": "Protected from retaliation.", "script": "That threat is illegal.", "next_steps": ["Document", "Report"]},
+            {"id": "imm-wk3", "question": "Work visa issues?", "short_answer": "Contact immigration lawyer immediately.", "explanation": "Time-sensitive.", "script": "I need immigration lawyer.", "next_steps": ["Get lawyer fast"]},
+            {"id": "imm-wk4", "question": "Paid less because of status?", "short_answer": "Illegal. Labor laws protect everyone.", "explanation": "Same wage protections apply.", "script": "I should get equal pay.", "next_steps": ["Document", "Report to DOL"]}
+        ],
+        "school": [
+            {"id": "imm-sc1", "question": "Can I go to public school?", "short_answer": "YES. All kids can attend K-12 regardless of status.", "explanation": "Plyler v. Doe protects this.", "script": "My child has a right to education.", "next_steps": ["Enroll normally"]},
+            {"id": "imm-sc2", "question": "School asking immigration status?", "short_answer": "They shouldn't. It's not relevant for enrollment.", "explanation": "Schools can't require this.", "script": "Why is this being asked?", "next_steps": ["You don't have to answer"]},
+            {"id": "imm-sc3", "question": "College as undocumented?", "short_answer": "Possible. Many schools accept. In-state tuition varies.", "explanation": "Options exist.", "script": "What are my options?", "next_steps": ["Research schools", "Ask about policies"]},
+            {"id": "imm-sc4", "question": "Financial aid for undocumented?", "short_answer": "No federal. Some states and private aid available.", "explanation": "Limited but exists.", "script": "What aid can I access?", "next_steps": ["Check state programs", "Private scholarships"]}
+        ],
+        "travel": [
+            {"id": "imm-tv1", "question": "Travel within US?", "short_answer": "Generally yes, but checkpoints exist near borders.", "explanation": "Know the risks.", "script": "What should I expect?", "next_steps": ["Know checkpoint locations"]},
+            {"id": "imm-tv2", "question": "Travel outside US?", "short_answer": "Risky depending on status. May not be able to return.", "explanation": "Consult lawyer first.", "script": "What are the risks?", "next_steps": ["Talk to lawyer"]},
+            {"id": "imm-tv3", "question": "Airport questions?", "short_answer": "You have some rights but CBP has broad authority.", "explanation": "Borders are different.", "script": "I'd like to speak to a lawyer.", "next_steps": ["Know border rules"]}
+        ],
+        "healthcare": [
+            {"id": "imm-hc1", "question": "Get medical care?", "short_answer": "Emergency rooms must treat everyone.", "explanation": "EMTALA applies to all.", "script": "I need emergency care.", "next_steps": ["Get emergency care"]},
+            {"id": "imm-hc2", "question": "Health insurance?", "short_answer": "Options vary by status and state.", "explanation": "Some programs available.", "script": "What programs can I access?", "next_steps": ["Check state programs"]},
+            {"id": "imm-hc3", "question": "Hospital reporting status?", "short_answer": "Generally no. Medical privacy applies.", "explanation": "HIPAA protects you.", "script": "Is my information private?", "next_steps": ["Know your privacy rights"]}
+        ],
+        "housing": [
+            {"id": "imm-hs1", "question": "Rent an apartment?", "short_answer": "Landlords can't discriminate based on citizenship.", "explanation": "Fair Housing protects you.", "script": "Why was I denied?", "next_steps": ["Document if discriminated"]},
+            {"id": "imm-hs2", "question": "Landlord threatening to call ICE?", "short_answer": "Often illegal retaliation.", "explanation": "Can't use immigration to threaten.", "script": "That threat is illegal.", "next_steps": ["Document", "Report"]}
+        ],
+        "detention": [
+            {"id": "imm-dt1", "question": "Detained by ICE?", "short_answer": "You have rights. Don't sign anything. Get lawyer.", "explanation": "Stay silent and ask for lawyer.", "script": "I want a lawyer.", "next_steps": ["Stay silent", "Get lawyer"]},
+            {"id": "imm-dt2", "question": "Detained family member?", "short_answer": "Contact immigration lawyer immediately.", "explanation": "Time is critical.", "script": "I need to find a lawyer.", "next_steps": ["Call immigration lawyer", "Contact family hotline"]},
+            {"id": "imm-dt3", "question": "Rights in detention?", "short_answer": "Right to lawyer, phone calls, medical care.", "explanation": "Rights exist in detention.", "script": "I want to call a lawyer.", "next_steps": ["Assert rights"]}
+        ],
+        "family": [
+            {"id": "imm-fm1", "question": "Sponsor family?", "short_answer": "Depends on your status and their relationship.", "explanation": "Complex rules.", "script": "How do I sponsor family?", "next_steps": ["Consult lawyer"]},
+            {"id": "imm-fm2", "question": "Child born here?", "short_answer": "Child is US citizen. Doesn't automatically change your status.", "explanation": "Child is citizen at birth.", "script": "What are my child's rights?", "next_steps": ["Know child's citizenship"]},
+            {"id": "imm-fm3", "question": "Family separation?", "short_answer": "Contact immigration lawyer and advocacy groups.", "explanation": "Help exists.", "script": "My family was separated.", "next_steps": ["Get legal help", "Contact advocacy groups"]}
+        ],
+        "daca": [
+            {"id": "imm-da1", "question": "What is DACA?", "short_answer": "Program for people brought to US as kids. Protects from deportation.", "explanation": "Work permit and protection.", "script": "Am I eligible for DACA?", "next_steps": ["Check eligibility"]},
+            {"id": "imm-da2", "question": "DACA renewal?", "short_answer": "Renew 150-120 days before expiration.", "explanation": "Don't let it lapse.", "script": "How do I renew?", "next_steps": ["Apply in time"]},
+            {"id": "imm-da3", "question": "DACA expired?", "short_answer": "Check current policy. Rules change.", "explanation": "Consult lawyer.", "script": "What are my options?", "next_steps": ["Talk to lawyer"]}
+        ],
+        "raids": [
+            {"id": "imm-rd1", "question": "ICE raid at work?", "short_answer": "Stay calm. Know your rights. Don't run.", "explanation": "Running makes things worse.", "script": "I'm staying silent.", "next_steps": ["Stay calm", "Stay silent"]},
+            {"id": "imm-rd2", "question": "Checkpoint stopped?", "short_answer": "Answer citizenship question. Can stay silent otherwise.", "explanation": "Limited questioning at checkpoints.", "script": "Am I free to go?", "next_steps": ["Answer briefly", "Don't consent to search"]},
+            {"id": "imm-rd3", "question": "Prepare for raid?", "short_answer": "Have emergency plan. Know lawyer contact. Have power of attorney for kids.", "explanation": "Be prepared.", "script": "What should I prepare?", "next_steps": ["Make plan", "Prepare documents"]}
+        ]
+    },
+    "consumer": {
+        "returns": [
+            {"id": "con-rt1", "question": "Store won't take return?", "short_answer": "Check posted policy. They set their own rules.", "explanation": "No law requires returns.", "script": "What's your return policy?", "next_steps": ["Check policy", "Dispute with card"]},
+            {"id": "con-rt2", "question": "No receipt?", "short_answer": "Many stores can look up purchases. Policy varies.", "explanation": "Ask about options.", "script": "Can you look up my purchase?", "next_steps": ["Ask about alternatives"]},
+            {"id": "con-rt3", "question": "Final sale item broken?", "short_answer": "Defective items often still covered even if 'final sale.'", "explanation": "Defects are different.", "script": "This item was defective.", "next_steps": ["Argue defect", "Dispute charge"]},
+            {"id": "con-rt4", "question": "Store credit only?", "short_answer": "Policy can specify credit only. Check before buying.", "explanation": "Their policy.", "script": "Can I get cash back?", "next_steps": ["Check policy"]}
+        ],
+        "warranties": [
+            {"id": "con-wr1", "question": "Warranty denied?", "short_answer": "Check warranty terms. File complaint if wrongly denied.", "explanation": "Know what's covered.", "script": "This should be covered.", "next_steps": ["Check terms", "Escalate"]},
+            {"id": "con-wr2", "question": "Extended warranty worth it?", "short_answer": "Often no. Credit cards sometimes include protection.", "explanation": "Do the math.", "script": "What does this cover exactly?", "next_steps": ["Read fine print", "Check card benefits"]},
+            {"id": "con-wr3", "question": "Voided warranty?", "short_answer": "Must be for valid reason. FTC has right to repair rules.", "explanation": "Check if legitimate.", "script": "Why is my warranty voided?", "next_steps": ["Get explanation", "File complaint"]},
+            {"id": "con-wr4", "question": "Implied warranty?", "short_answer": "Even without written warranty, products must work basically.", "explanation": "Basic protection exists.", "script": "This doesn't work as expected.", "next_steps": ["Demand fix or refund"]}
+        ],
+        "scams": [
+            {"id": "con-sc1", "question": "Got scammed?", "short_answer": "Report to FTC. Dispute charges. Change passwords.", "explanation": "Act fast.", "script": "I need to report fraud.", "next_steps": ["Report FTC", "Dispute charges"]},
+            {"id": "con-sc2", "question": "Fake product?", "short_answer": "Report to platform and FTC. Dispute charge.", "explanation": "Counterfeits are illegal.", "script": "This is counterfeit.", "next_steps": ["Report", "Dispute"]},
+            {"id": "con-sc3", "question": "Prize scam?", "short_answer": "Real prizes don't require payment. It's a scam.", "explanation": "Never pay to collect.", "script": "This is a scam.", "next_steps": ["Don't pay", "Report"]},
+            {"id": "con-sc4", "question": "Identify theft?", "short_answer": "Freeze credit. Report to FTC. File police report.", "explanation": "Act immediately.", "script": "My identity was stolen.", "next_steps": ["Freeze credit", "Report to FTC"]}
+        ],
+        "billing": [
+            {"id": "con-bl1", "question": "Wrong charge on card?", "short_answer": "Dispute with card company within 60 days.", "explanation": "You have dispute rights.", "script": "I'm disputing this charge.", "next_steps": ["Dispute with card"]},
+            {"id": "con-bl2", "question": "Charged twice?", "short_answer": "Contact merchant first. Then dispute with card.", "explanation": "Document everything.", "script": "I was double charged.", "next_steps": ["Contact merchant", "Dispute"]},
+            {"id": "con-bl3", "question": "Charged for cancelled service?", "short_answer": "Dispute charge. Show cancellation proof.", "explanation": "Keep cancellation records.", "script": "I cancelled this service.", "next_steps": ["Show proof", "Dispute"]},
+            {"id": "con-bl4", "question": "Hidden fees?", "short_answer": "May be able to challenge. Check FTC junk fee rules.", "explanation": "New rules against hidden fees.", "script": "This fee wasn't disclosed.", "next_steps": ["Complain", "Dispute"]}
+        ],
+        "complaints": [
+            {"id": "con-cm1", "question": "Company won't help?", "short_answer": "Escalate to supervisor. Then file complaints.", "explanation": "Multiple options.", "script": "I'd like to speak to a supervisor.", "next_steps": ["Escalate", "File complaints"]},
+            {"id": "con-cm2", "question": "Where to complain?", "short_answer": "BBB, FTC, state AG, CFPB for financial.", "explanation": "Multiple agencies.", "script": "I'm filing a complaint.", "next_steps": ["Choose right agency"]},
+            {"id": "con-cm3", "question": "Small claims court?", "short_answer": "For smaller amounts. No lawyer needed.", "explanation": "DIY court option.", "script": "I'm taking this to small claims.", "next_steps": ["Check amount limits", "File claim"]},
+            {"id": "con-cm4", "question": "Social media complaining?", "short_answer": "Often gets response. Be factual.", "explanation": "Companies watch social.", "script": "I'm posting about this.", "next_steps": ["Be truthful", "Document"]}
+        ],
+        "contracts": [
+            {"id": "con-ct1", "question": "Cancel subscription?", "short_answer": "FTC click-to-cancel rule helps. Companies must make it easy.", "explanation": "Should be simple.", "script": "How do I cancel?", "next_steps": ["Follow process", "Document"]},
+            {"id": "con-ct2", "question": "Contract auto-renewed?", "short_answer": "They must notify. Check for opt-out.", "explanation": "Should give notice.", "script": "I didn't agree to renewal.", "next_steps": ["Check notification", "Dispute"]},
+            {"id": "con-ct3", "question": "Signed bad contract?", "short_answer": "Usually stuck. Some cooling off periods exist.", "explanation": "Read before signing.", "script": "What are my options?", "next_steps": ["Check for cooling off", "Negotiate"]},
+            {"id": "con-ct4", "question": "Gym won't let me cancel?", "short_answer": "Many states have gym cancellation laws.", "explanation": "Check state rules.", "script": "I'm legally entitled to cancel.", "next_steps": ["Check state law", "Send certified letter"]}
+        ],
+        "debt": [
+            {"id": "con-db1", "question": "Debt collector rights?", "short_answer": "They have limits. Can't harass, lie, or call at bad times.", "explanation": "FDCPA protects you.", "script": "Don't call again. Send in writing.", "next_steps": ["Know your rights"]},
+            {"id": "con-db2", "question": "Debt not mine?", "short_answer": "Dispute in writing within 30 days.", "explanation": "They must verify.", "script": "I dispute this debt.", "next_steps": ["Dispute in writing"]},
+            {"id": "con-db3", "question": "Statute of limitations?", "short_answer": "Old debt may be time-barred. Varies by state.", "explanation": "Check if collectible.", "script": "Is this within statute of limitations?", "next_steps": ["Check state law"]},
+            {"id": "con-db4", "question": "Being sued for debt?", "short_answer": "Don't ignore. Respond to lawsuit or get default judgment.", "explanation": "Must respond.", "script": "I need to respond to this.", "next_steps": ["Don't ignore", "Get help"]}
+        ],
+        "privacy": [
+            {"id": "con-pv1", "question": "Company sold my data?", "short_answer": "Some states let you opt out. Check privacy settings.", "explanation": "Rights expanding.", "script": "I want to opt out of data sharing.", "next_steps": ["Check state law", "Submit opt out"]},
+            {"id": "con-pv2", "question": "Stop spam calls?", "short_answer": "Register on Do Not Call. Report violations.", "explanation": "Some protection.", "script": "Stop calling me.", "next_steps": ["Register Do Not Call", "Report"]},
+            {"id": "con-pv3", "question": "Data breach notification?", "short_answer": "Companies must notify. Take steps to protect yourself.", "explanation": "They must tell you.", "script": "What data was exposed?", "next_steps": ["Freeze credit", "Change passwords"]}
+        ],
+        "discrimination": [
+            {"id": "con-ds1", "question": "Refused service because of who I am?", "short_answer": "Discrimination in public accommodations is illegal.", "explanation": "Protected from discrimination.", "script": "Is this discrimination?", "next_steps": ["Document", "File complaint"]},
+            {"id": "con-ds2", "question": "Followed in store?", "short_answer": "Racial profiling may be illegal. Document and report.", "explanation": "May be discrimination.", "script": "Why am I being followed?", "next_steps": ["Document", "Complain"]}
+        ],
+        "repairs": [
+            {"id": "con-rp1", "question": "Bad repair job?", "short_answer": "They should fix it right. Complain and get another opinion.", "explanation": "Entitled to proper work.", "script": "This wasn't done correctly.", "next_steps": ["Demand fix", "Get second opinion"]},
+            {"id": "con-rp2", "question": "Charged more than estimate?", "short_answer": "Should authorize changes. Minor increases okay, major need approval.", "explanation": "Estimates are estimates.", "script": "I only authorized the estimate amount.", "next_steps": ["Dispute excess", "Pay estimate"]},
+            {"id": "con-rp3", "question": "Car held hostage for payment?", "short_answer": "Mechanics can hold car for unpaid work (mechanic's lien).", "explanation": "Legal in most cases.", "script": "What exactly am I being charged for?", "next_steps": ["Get itemized bill", "Dispute if wrong"]}
+        ],
+        "online": [
+            {"id": "con-on1", "question": "Package never came?", "short_answer": "Contact seller. Then dispute charge.", "explanation": "Document everything.", "script": "My order never arrived.", "next_steps": ["Contact seller", "Dispute"]},
+            {"id": "con-on2", "question": "Different from description?", "short_answer": "Return or dispute. Item must match listing.", "explanation": "Must be as described.", "script": "This isn't what was shown.", "next_steps": ["Return", "Dispute"]},
+            {"id": "con-on3", "question": "Third party seller scam?", "short_answer": "Report to platform. Dispute charge. A-to-z guarantee if Amazon.", "explanation": "Platform protections exist.", "script": "Seller scammed me.", "next_steps": ["Report to platform", "Dispute"]}
         ]
     }
 }
 
 DEFAULT_SCRIPTS = [
-    {"id": "ds1", "title": "Don't Consent to Search", "content": "I don't consent to a search.", "category": "general"},
-    {"id": "ds2", "title": "Get It in Writing", "content": "Can you explain that in writing?", "category": "general"},
-    {"id": "ds3", "title": "Call for Help", "content": "I'd like to contact my parent, guardian, or lawyer.", "category": "general"},
-    {"id": "ds4", "title": "Not Comfortable", "content": "I'm not comfortable answering without support.", "category": "general"},
-    {"id": "ds5", "title": "Am I Detained?", "content": "Am I free to go or am I being detained?", "category": "police"},
-    {"id": "ds6", "title": "Stay Silent", "content": "I'm staying silent. I want a lawyer.", "category": "police"},
-    {"id": "ds7", "title": "Phone Protected", "content": "I don't consent to searching my phone.", "category": "police"},
-    {"id": "ds8", "title": "Recording", "content": "I'm recording from a safe distance.", "category": "police"},
-    {"id": "ds9", "title": "Log Hours", "content": "I want to make sure all my time is logged.", "category": "work"},
-    {"id": "ds10", "title": "Need Break", "content": "I need my required break.", "category": "work"},
-    {"id": "ds11", "title": "Entry Notice", "content": "I need proper notice before you enter.", "category": "housing"},
-    {"id": "ds12", "title": "Repairs in Writing", "content": "I'm reporting this in writing. When will it be fixed?", "category": "housing"}
+    {"id": "ds1", "title": "Don't Consent", "content": "I don't consent to a search.", "category": "general"},
+    {"id": "ds2", "title": "In Writing", "content": "Can I get that in writing?", "category": "general"},
+    {"id": "ds3", "title": "Call Parent", "content": "I want to call my parent.", "category": "general"},
+    {"id": "ds4", "title": "Lawyer", "content": "I want a lawyer.", "category": "police"},
+    {"id": "ds5", "title": "Stay Silent", "content": "I'm staying silent.", "category": "police"},
+    {"id": "ds6", "title": "Am I Detained?", "content": "Am I free to go?", "category": "police"},
+    {"id": "ds7", "title": "Warrant", "content": "Do you have a warrant?", "category": "police"},
+    {"id": "ds8", "title": "ICE Rights", "content": "I don't consent. I want a lawyer.", "category": "immigration"}
 ]
 
 RESOURCES = [
     {"category": "Emergency", "items": [
-        {"name": "911", "contact": "911", "description": "Immediate emergencies"},
+        {"name": "911", "contact": "911", "description": "Emergencies"},
         {"name": "Crisis Text", "contact": "Text HOME to 741741", "description": "24/7 crisis support"},
-        {"name": "988", "contact": "988", "description": "Suicide & mental health crisis"}
+        {"name": "988", "contact": "988", "description": "Mental health crisis"}
     ]},
-    {"category": "Legal Help", "items": [
-        {"name": "ACLU", "contact": "aclu.org", "description": "Civil liberties help"},
-        {"name": "LawHelp", "contact": "lawhelp.org", "description": "Free legal aid by state"},
-        {"name": "Legal Aid", "contact": "lsc.gov", "description": "Find free lawyers"}
+    {"category": "Legal", "items": [
+        {"name": "ACLU", "contact": "aclu.org", "description": "Civil liberties"},
+        {"name": "LawHelp", "contact": "lawhelp.org", "description": "Free legal aid"},
+        {"name": "Legal Aid", "contact": "lsc.gov", "description": "Find lawyers"}
     ]},
-    {"category": "Youth Support", "items": [
-        {"name": "Boys Town", "contact": "1-800-448-3000", "description": "24/7 teen help"},
-        {"name": "Teen Line", "contact": "1-800-852-8336", "description": "Teens helping teens"},
-        {"name": "Trevor Project", "contact": "1-866-488-7386", "description": "LGBTQ+ crisis support"}
+    {"category": "Youth", "items": [
+        {"name": "Boys Town", "contact": "1-800-448-3000", "description": "Teen help"},
+        {"name": "Trevor Project", "contact": "1-866-488-7386", "description": "LGBTQ+ support"}
     ]},
-    {"category": "Work Rights", "items": [
-        {"name": "DOL", "contact": "dol.gov", "description": "Workplace rights"},
-        {"name": "OSHA", "contact": "1-800-321-OSHA", "description": "Safety issues"},
-        {"name": "Wage Help", "contact": "1-866-487-9243", "description": "Wage theft"}
+    {"category": "Immigration", "items": [
+        {"name": "RAICES", "contact": "raicestexas.org", "description": "Immigration legal"},
+        {"name": "NILC", "contact": "nilc.org", "description": "Immigrant rights"},
+        {"name": "United We Dream", "contact": "unitedwedream.org", "description": "Undocumented youth"}
     ]},
-    {"category": "Housing", "items": [
-        {"name": "HUD", "contact": "hud.gov", "description": "Housing rights"},
-        {"name": "Rent Help", "contact": "consumerfinance.gov/renthelp", "description": "Rental assistance"}
-    ]},
-    {"category": "Online Safety", "items": [
-        {"name": "Cyber Civil Rights", "contact": "cybercivilrights.org", "description": "Image abuse help"},
-        {"name": "FBI IC3", "contact": "ic3.gov", "description": "Report internet crime"}
+    {"category": "Consumer", "items": [
+        {"name": "FTC", "contact": "ftc.gov", "description": "Report scams"},
+        {"name": "CFPB", "contact": "consumerfinance.gov", "description": "Financial complaints"},
+        {"name": "BBB", "contact": "bbb.org", "description": "Business complaints"}
     ]}
 ]
 
 US_STATES = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming", "District of Columbia"]
 
-# Routes
+# ROUTES
 @api_router.get("/")
 async def root():
-    return {"message": "Know Your Rights API", "version": "3.0.0"}
+    return {"message": "Know Your Rights API", "version": "4.0.0"}
 
 @api_router.get("/categories")
 async def get_categories():
@@ -439,14 +741,14 @@ async def get_categories():
 @api_router.get("/scenarios/{category_id}")
 async def get_scenarios_by_category(category_id: str):
     if category_id not in SCENARIOS:
-        raise HTTPException(status_code=404, detail="Category not found")
+        raise HTTPException(status_code=404, detail="Not found")
     all_scenarios = []
-    for subcategory_id, scenarios in SCENARIOS[category_id].items():
-        for scenario in scenarios:
-            scenario_copy = scenario.copy()
-            scenario_copy["subcategory"] = subcategory_id
-            scenario_copy["category"] = category_id
-            all_scenarios.append(scenario_copy)
+    for subcat_id, scenarios in SCENARIOS[category_id].items():
+        for s in scenarios:
+            sc = s.copy()
+            sc["subcategory"] = subcat_id
+            sc["category"] = category_id
+            all_scenarios.append(sc)
     return all_scenarios
 
 @api_router.get("/scenarios/{category_id}/{subcategory_id}")
@@ -457,19 +759,57 @@ async def get_scenarios_by_subcategory(category_id: str, subcategory_id: str):
 
 @api_router.get("/scenario/{scenario_id}")
 async def get_scenario_detail(scenario_id: str):
-    for cat_id, category_data in SCENARIOS.items():
-        for subcat_id, scenarios in category_data.items():
-            for scenario in scenarios:
-                if scenario["id"] == scenario_id:
-                    result = scenario.copy()
-                    result["category"] = cat_id
-                    result["subcategory"] = subcat_id
-                    return result
-    raise HTTPException(status_code=404, detail="Scenario not found")
+    for cat_id, cat_data in SCENARIOS.items():
+        for subcat_id, scenarios in cat_data.items():
+            for s in scenarios:
+                if s["id"] == scenario_id:
+                    r = s.copy()
+                    r["category"] = cat_id
+                    r["subcategory"] = subcat_id
+                    return r
+    raise HTTPException(status_code=404, detail="Not found")
 
 @api_router.get("/scripts/default")
 async def get_default_scripts():
     return DEFAULT_SCRIPTS
+
+@api_router.get("/scripts/by-category")
+async def get_scripts_by_category():
+    """Return all scripts extracted from scenarios, grouped by category."""
+    result = {}
+    for cat in CATEGORIES:
+        cat_id = cat["id"]
+        cat_name = cat["name"]
+        cat_icon = cat["icon"]
+        cat_color = cat["color"]
+        scripts_list = []
+        if cat_id in SCENARIOS:
+            for subcat_id, scenarios in SCENARIOS[cat_id].items():
+                # Find subcategory name
+                subcat_name = subcat_id
+                for sc in cat.get("subcategories", []):
+                    if sc["id"] == subcat_id:
+                        subcat_name = sc["name"]
+                        break
+                for s in scenarios:
+                    if s.get("script"):
+                        scripts_list.append({
+                            "id": s["id"],
+                            "title": s.get("question", "Script"),
+                            "content": s["script"],
+                            "category": cat_id,
+                            "category_name": cat_name,
+                            "subcategory": subcat_id,
+                            "subcategory_name": subcat_name,
+                        })
+        result[cat_id] = {
+            "name": cat_name,
+            "icon": cat_icon,
+            "color": cat_color,
+            "scripts": scripts_list,
+            "count": len(scripts_list),
+        }
+    return result
 
 @api_router.get("/resources")
 async def get_resources():
@@ -533,25 +873,10 @@ async def send_sms(request: SMSRequest):
 async def chat_with_ai(request: ChatRequest):
     if not EMERGENT_LLM_KEY:
         raise HTTPException(status_code=500, detail="AI not configured")
-    
     await db.chat_messages.insert_one(ChatMessage(device_id=request.device_id, session_id=request.session_id, role="user", content=request.message).dict())
     history = await db.chat_messages.find({"device_id": request.device_id, "session_id": request.session_id}).sort("timestamp", 1).to_list(20)
-    
-    state_ctx = f" User is in {request.user_state}." if request.user_state else " State unknown - give general US guidance, mention laws vary."
-    
-    system = f"""You help teens understand their rights. Keep it SHORT and REAL - no corporate speak.
-
-RULES:
-- 2-3 short paragraphs MAX
-- Talk like a helpful older friend, not a textbook
-- NEVER say you're a lawyer
-- Always say "get real legal help for serious stuff"
-- Be supportive, not preachy
-
-{state_ctx}
-
-Topics: school, work, housing, cops, online privacy, public spaces. This is info, not legal advice."""
-
+    state_ctx = f" User is in {request.user_state}." if request.user_state else " State unknown - give general US guidance."
+    system = f"""You help teens understand their rights. Keep it SHORT and REAL - no corporate speak. 2-3 paragraphs MAX. Talk like a helpful older friend. NEVER say you're a lawyer. Always say 'get real legal help for serious stuff.'{state_ctx} Topics: school, work, housing, cops, online, public, immigration, consumer rights. This is info, not legal advice."""
     try:
         chat = LlmChat(api_key=EMERGENT_LLM_KEY, session_id=f"kyr-{request.session_id}", system_message=system).with_model("anthropic", "claude-sonnet-4-5-20250929")
         context = "\n".join([f"{'User' if m['role']=='user' else 'You'}: {m['content']}" for m in history[-10:]])
