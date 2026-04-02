@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -33,39 +33,15 @@ interface Category {
 }
 
 const ICON_MAP: { [key: string]: keyof typeof Ionicons.glyphMap } = {
-  'school': 'school',
-  'briefcase': 'briefcase',
-  'home': 'home',
-  'shield': 'shield',
-  'lock': 'lock-closed',
-  'map-pin': 'location',
-  'search': 'search',
-  'warning': 'warning',
-  'time': 'time',
-  'megaphone': 'megaphone',
-  'people': 'people',
-  'shirt': 'shirt',
-  'cash': 'cash',
-  'shield-checkmark': 'shield-checkmark',
-  'alert-circle': 'alert-circle',
-  'exit': 'exit',
-  'eye-off': 'eye-off',
-  'key': 'key',
-  'construct': 'construct',
-  'log-out': 'log-out',
-  'document-text': 'document-text',
-  'hand-left': 'hand-left',
-  'lock-closed': 'lock-closed',
-  'videocam': 'videocam',
-  'share-social': 'share-social',
-  'analytics': 'analytics',
-  'images': 'images',
-  'eye': 'eye',
-  'camera': 'camera',
-  'storefront': 'storefront',
-  'bus': 'bus',
-  'leaf': 'leaf',
-  'moon': 'moon',
+  'school': 'school', 'briefcase': 'briefcase', 'home': 'home', 'shield': 'shield',
+  'lock': 'lock-closed', 'map-pin': 'location', 'search': 'search', 'warning': 'warning',
+  'time': 'time', 'megaphone': 'megaphone', 'people': 'people', 'shirt': 'shirt',
+  'cash': 'cash', 'shield-checkmark': 'shield-checkmark', 'alert-circle': 'alert-circle',
+  'exit': 'exit', 'eye-off': 'eye-off', 'key': 'key', 'construct': 'construct',
+  'log-out': 'log-out', 'document-text': 'document-text', 'hand-left': 'hand-left',
+  'lock-closed': 'lock-closed', 'videocam': 'videocam', 'share-social': 'share-social',
+  'analytics': 'analytics', 'images': 'images', 'eye': 'eye', 'camera': 'camera',
+  'storefront': 'storefront', 'bus': 'bus', 'leaf': 'leaf', 'moon': 'moon',
 };
 
 export default function SubcategoryScreen() {
@@ -74,6 +50,7 @@ export default function SubcategoryScreen() {
   const [category, setCategory] = useState<Category | null>(null);
   const [subcategory, setSubcategory] = useState<Subcategory | null>(null);
   const [scenarios, setScenarios] = useState<Scenario[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -107,6 +84,13 @@ export default function SubcategoryScreen() {
     return ICON_MAP[icon] || 'help-circle';
   };
 
+  const filteredScenarios = searchQuery.trim()
+    ? scenarios.filter(s =>
+        s.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        s.short_answer.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : scenarios;
+
   if (loading || !category || !subcategory) {
     return (
       <SafeAreaView style={styles.container}>
@@ -127,13 +111,31 @@ export default function SubcategoryScreen() {
         
         <View style={styles.headerContent}>
           <View style={[styles.subcategoryIcon, { backgroundColor: `${subcategory.color}20` }]}>
-            <Ionicons name={getIconName(subcategory.icon)} size={28} color={subcategory.color} />
+            <Ionicons name={getIconName(subcategory.icon)} size={26} color={subcategory.color} />
           </View>
           <View style={styles.headerText}>
             <Text style={styles.breadcrumb}>{category.name}</Text>
             <Text style={[styles.subcategoryName, { color: subcategory.color }]}>{subcategory.name}</Text>
-            <Text style={styles.questionCount}>{scenarios.length} questions</Text>
           </View>
+        </View>
+      </View>
+
+      {/* Search Bar */}
+      <View style={styles.searchContainer}>
+        <View style={[styles.searchBar, { borderColor: `${subcategory.color}30` }]}>
+          <Ionicons name="search" size={18} color="#6B7280" />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search questions..."
+            placeholderTextColor="#6B7280"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
+          {searchQuery.length > 0 && (
+            <TouchableOpacity onPress={() => setSearchQuery('')}>
+              <Ionicons name="close-circle" size={18} color="#6B7280" />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
 
@@ -142,13 +144,16 @@ export default function SubcategoryScreen() {
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
       >
-        <Text style={styles.sectionTitle}>Common Questions</Text>
+        <Text style={styles.sectionTitle}>
+          {filteredScenarios.length} question{filteredScenarios.length !== 1 ? 's' : ''}
+        </Text>
         
-        {scenarios.map((scenario, index) => (
+        {filteredScenarios.map((scenario, index) => (
           <Animated.View 
             key={scenario.id}
-            entering={FadeInUp.duration(400).delay(index * 60)}
+            entering={FadeInUp.duration(300).delay(index * 40)}
           >
             <TouchableOpacity
               style={[styles.scenarioCard, { borderLeftColor: subcategory.color }]}
@@ -156,39 +161,40 @@ export default function SubcategoryScreen() {
             >
               <View style={styles.scenarioContent}>
                 <Text style={styles.scenarioQuestion}>{scenario.question}</Text>
-                <Text style={styles.scenarioAnswer} numberOfLines={2}>
-                  {scenario.short_answer}
-                </Text>
+                <Text style={styles.scenarioAnswer} numberOfLines={2}>{scenario.short_answer}</Text>
               </View>
-              <View style={[styles.arrowCircle, { backgroundColor: `${subcategory.color}15` }]}>
-                <Ionicons name="chevron-forward" size={18} color={subcategory.color} />
+              <View style={[styles.arrowCircle, { backgroundColor: `${subcategory.color}12` }]}>
+                <Ionicons name="chevron-forward" size={16} color={subcategory.color} />
               </View>
             </TouchableOpacity>
           </Animated.View>
         ))}
 
-        {/* Ask AI Card */}
+        {filteredScenarios.length === 0 && searchQuery.trim() && (
+          <View style={styles.noResults}>
+            <Ionicons name="search-outline" size={40} color="#4B5563" />
+            <Text style={styles.noResultsText}>No matches found</Text>
+          </View>
+        )}
+
+        {/* Ask AI */}
         <TouchableOpacity 
           style={styles.askAiCard}
           onPress={() => router.push('/(tabs)/chat')}
         >
-          <View style={styles.askAiContent}>
-            <View style={styles.askAiIcon}>
-              <Ionicons name="chatbubbles" size={24} color="#3B82F6" />
-            </View>
-            <View style={styles.askAiText}>
-              <Text style={styles.askAiTitle}>Don't see your question?</Text>
-              <Text style={styles.askAiDesc}>Ask our AI assistant for help</Text>
-            </View>
+          <View style={styles.askAiIcon}>
+            <Ionicons name="chatbubbles" size={20} color="#3B82F6" />
           </View>
-          <Ionicons name="arrow-forward" size={20} color="#3B82F6" />
+          <View style={styles.askAiText}>
+            <Text style={styles.askAiTitle}>Don't see your question?</Text>
+            <Text style={styles.askAiDesc}>Ask AI for help</Text>
+          </View>
+          <Ionicons name="arrow-forward" size={16} color="#3B82F6" />
         </TouchableOpacity>
 
-        {/* Disclaimer */}
         <View style={styles.disclaimer}>
-          <Ionicons name="information-circle" size={16} color="#6B7280" />
           <Text style={styles.disclaimerText}>
-            Laws vary by state. This is educational information, not legal advice.
+            Laws vary by state. This is educational info, not legal advice.
           </Text>
         </View>
       </ScrollView>
@@ -197,155 +203,34 @@ export default function SubcategoryScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#0F0F0F',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loadingText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-  },
-  header: {
-    paddingHorizontal: 20,
-    paddingTop: 8,
-    paddingBottom: 20,
-    borderBottomWidth: 1,
-  },
-  backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#1A1A1A',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  headerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  subcategoryIcon: {
-    width: 60,
-    height: 60,
-    borderRadius: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 16,
-  },
-  headerText: {
-    flex: 1,
-  },
-  breadcrumb: {
-    fontSize: 13,
-    color: '#6B7280',
-    marginBottom: 4,
-  },
-  subcategoryName: {
-    fontSize: 22,
-    fontWeight: '700',
-  },
-  questionCount: {
-    fontSize: 13,
-    color: '#9CA3AF',
-    marginTop: 4,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    padding: 20,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#9CA3AF',
-    marginBottom: 16,
-  },
-  scenarioCard: {
-    backgroundColor: '#1A1A1A',
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 12,
-    borderLeftWidth: 4,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  scenarioContent: {
-    flex: 1,
-    marginRight: 12,
-  },
-  scenarioQuestion: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FFFFFF',
-    marginBottom: 8,
-    lineHeight: 22,
-  },
-  scenarioAnswer: {
-    fontSize: 14,
-    color: '#9CA3AF',
-    lineHeight: 20,
-  },
-  arrowCircle: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  askAiCard: {
-    backgroundColor: '#1A1A1A',
-    borderRadius: 16,
-    padding: 16,
-    marginTop: 8,
-    marginBottom: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#3B82F630',
-  },
-  askAiContent: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  askAiIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 12,
-    backgroundColor: '#3B82F620',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 14,
-  },
-  askAiText: {
-    flex: 1,
-  },
-  askAiTitle: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#FFFFFF',
-  },
-  askAiDesc: {
-    fontSize: 13,
-    color: '#9CA3AF',
-    marginTop: 2,
-  },
-  disclaimer: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    padding: 12,
-  },
-  disclaimerText: {
-    flex: 1,
-    fontSize: 12,
-    color: '#6B7280',
-    marginLeft: 8,
-    lineHeight: 16,
-  },
+  container: { flex: 1, backgroundColor: '#0F0F0F' },
+  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  loadingText: { color: '#FFFFFF', fontSize: 16 },
+  header: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 14, borderBottomWidth: 1 },
+  backButton: { width: 38, height: 38, borderRadius: 19, backgroundColor: '#1A1A1A', justifyContent: 'center', alignItems: 'center', marginBottom: 12 },
+  headerContent: { flexDirection: 'row', alignItems: 'center' },
+  subcategoryIcon: { width: 52, height: 52, borderRadius: 14, justifyContent: 'center', alignItems: 'center', marginRight: 14 },
+  headerText: { flex: 1 },
+  breadcrumb: { fontSize: 12, color: '#6B7280', marginBottom: 2 },
+  subcategoryName: { fontSize: 20, fontWeight: '700' },
+  searchContainer: { paddingHorizontal: 20, paddingVertical: 10 },
+  searchBar: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#1A1A1A', borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10, borderWidth: 1 },
+  searchInput: { flex: 1, fontSize: 14, color: '#FFFFFF', marginLeft: 8 },
+  scrollView: { flex: 1 },
+  scrollContent: { padding: 20, paddingTop: 6 },
+  sectionTitle: { fontSize: 13, fontWeight: '500', color: '#6B7280', marginBottom: 12 },
+  scenarioCard: { backgroundColor: '#1A1A1A', borderRadius: 14, padding: 14, marginBottom: 10, borderLeftWidth: 3, flexDirection: 'row', alignItems: 'center' },
+  scenarioContent: { flex: 1, marginRight: 10 },
+  scenarioQuestion: { fontSize: 15, fontWeight: '600', color: '#FFFFFF', marginBottom: 6, lineHeight: 20 },
+  scenarioAnswer: { fontSize: 13, color: '#9CA3AF', lineHeight: 18 },
+  arrowCircle: { width: 32, height: 32, borderRadius: 16, justifyContent: 'center', alignItems: 'center' },
+  noResults: { alignItems: 'center', paddingTop: 30 },
+  noResultsText: { fontSize: 15, color: '#6B7280', marginTop: 10 },
+  askAiCard: { backgroundColor: '#1A1A1A', borderRadius: 12, padding: 12, marginTop: 10, flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: '#3B82F620' },
+  askAiIcon: { width: 38, height: 38, borderRadius: 10, backgroundColor: '#3B82F612', justifyContent: 'center', alignItems: 'center', marginRight: 10 },
+  askAiText: { flex: 1 },
+  askAiTitle: { fontSize: 13, fontWeight: '600', color: '#FFFFFF' },
+  askAiDesc: { fontSize: 11, color: '#9CA3AF', marginTop: 1 },
+  disclaimer: { paddingTop: 16, paddingBottom: 8 },
+  disclaimerText: { fontSize: 11, color: '#4B5563', textAlign: 'center' },
 });
