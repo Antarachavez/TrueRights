@@ -689,6 +689,157 @@ SCENARIOS = {
     }
 }
 
+# Legal quotes mapped by scenario ID
+LEGAL_QUOTES = {
+    # SCHOOL - Searches
+    "sch-s1": [
+        {"source": "New Jersey v. T.L.O., 469 U.S. 325 (1985)", "text": "A search of a student by a school official is justified when there are reasonable grounds for suspecting that the search will turn up evidence that the student has violated either the law or the rules of the school.", "type": "Supreme Court"},
+        {"source": "4th Amendment, U.S. Constitution", "text": "The right of the people to be secure in their persons, houses, papers, and effects, against unreasonable searches and seizures, shall not be violated.", "type": "Constitution"},
+    ],
+    "sch-s2": [
+        {"source": "New Jersey v. T.L.O., 469 U.S. 325 (1985)", "text": "Students have legitimate expectations of privacy, though the school setting requires some easing of the restrictions to which searches by public authorities are ordinarily subject.", "type": "Supreme Court"},
+    ],
+    "sch-s5": [
+        {"source": "Safford Unified School Dist. v. Redding, 557 U.S. 364 (2009)", "text": "A student's subjective expectation of privacy against such a search is substantial, and the intrusiveness of the strip search here cannot be seen as justified.", "type": "Supreme Court"},
+        {"source": "4th Amendment, U.S. Constitution", "text": "No warrants shall issue, but upon probable cause, supported by oath or affirmation.", "type": "Constitution"},
+    ],
+    "sch-s6": [
+        {"source": "Riley v. California, 573 U.S. 373 (2014)", "text": "Modern cell phones are not just another technological convenience. They hold for many Americans the privacies of life.", "type": "Supreme Court"},
+    ],
+    # SCHOOL - Discipline
+    "sch-d1": [
+        {"source": "Goss v. Lopez, 419 U.S. 565 (1975)", "text": "Students facing suspension must be given some kind of notice and afforded some kind of hearing.", "type": "Supreme Court"},
+        {"source": "14th Amendment, U.S. Constitution", "text": "No State shall deprive any person of life, liberty, or property, without due process of law.", "type": "Constitution"},
+    ],
+    "sch-d2": [
+        {"source": "Goss v. Lopez, 419 U.S. 565 (1975)", "text": "Longer suspensions or expulsions may require more formal procedures, including the right to present witnesses and confront evidence.", "type": "Supreme Court"},
+    ],
+    # SCHOOL - Expression
+    "sch-e1": [
+        {"source": "Tinker v. Des Moines, 393 U.S. 503 (1969)", "text": "It can hardly be argued that either students or teachers shed their constitutional rights to freedom of speech or expression at the schoolhouse gate.", "type": "Supreme Court"},
+        {"source": "1st Amendment, U.S. Constitution", "text": "Congress shall make no law abridging the freedom of speech.", "type": "Constitution"},
+    ],
+    "sch-e2": [
+        {"source": "Tinker v. Des Moines, 393 U.S. 503 (1969)", "text": "Student expression may not be suppressed unless school officials reasonably conclude that it will materially and substantially disrupt the work and discipline of the school.", "type": "Supreme Court"},
+    ],
+    # SCHOOL - Special Ed
+    "sch-se1": [
+        {"source": "Individuals with Disabilities Education Act (IDEA), 20 U.S.C. \u00a7 1400", "text": "All children with disabilities have available to them a free appropriate public education that emphasizes special education and related services designed to meet their unique needs.", "type": "Federal Law"},
+    ],
+    # POLICE - Being Stopped
+    "pol-b1": [
+        {"source": "Terry v. Ohio, 392 U.S. 1 (1968)", "text": "An officer may, consistent with the Fourth Amendment, conduct a brief, investigatory stop when the officer has a reasonable, articulable suspicion that criminal activity is afoot.", "type": "Supreme Court"},
+        {"source": "4th Amendment, U.S. Constitution", "text": "The right of the people to be secure in their persons against unreasonable searches and seizures, shall not be violated.", "type": "Constitution"},
+    ],
+    "pol-b2": [
+        {"source": "5th Amendment, U.S. Constitution", "text": "No person shall be compelled in any criminal case to be a witness against himself.", "type": "Constitution"},
+        {"source": "Miranda v. Arizona, 384 U.S. 436 (1966)", "text": "The person in custody must, prior to interrogation, be clearly informed that he has the right to remain silent, and that anything he says will be used against him in court.", "type": "Supreme Court"},
+    ],
+    "pol-b3": [
+        {"source": "Hiibel v. Sixth Judicial Dist. Court, 542 U.S. 177 (2004)", "text": "A state law requiring a suspect to disclose his name during a valid Terry stop does not violate the Fourth Amendment.", "type": "Supreme Court"},
+    ],
+    # POLICE - Searches
+    "pol-s1": [
+        {"source": "Schneckloth v. Bustamonte, 412 U.S. 218 (1973)", "text": "When the subject of a search is not in custody and the State attempts to justify a search on the basis of his consent, the Fourth Amendment requires that it demonstrate that the consent was in fact voluntarily given.", "type": "Supreme Court"},
+        {"source": "4th Amendment, U.S. Constitution", "text": "No warrants shall issue, but upon probable cause, supported by oath or affirmation, and particularly describing the place to be searched, and the persons or things to be seized.", "type": "Constitution"},
+    ],
+    "pol-s2": [
+        {"source": "Arizona v. Gant, 556 U.S. 332 (2009)", "text": "Police may search a vehicle incident to a recent occupant's arrest only if the arrestee is within reaching distance of the passenger compartment or if the vehicle contains evidence of the offense of arrest.", "type": "Supreme Court"},
+    ],
+    # POLICE - Arrests
+    "pol-a1": [
+        {"source": "Miranda v. Arizona, 384 U.S. 436 (1966)", "text": "He must be warned prior to any questioning that he has the right to remain silent, that anything he says can be used against him in a court of law, that he has the right to the presence of an attorney.", "type": "Supreme Court"},
+        {"source": "6th Amendment, U.S. Constitution", "text": "In all criminal prosecutions, the accused shall have the right to have the Assistance of Counsel for his defence.", "type": "Constitution"},
+    ],
+    # WORK - Pay
+    "wrk-p1": [
+        {"source": "Fair Labor Standards Act, 29 U.S.C. \u00a7 206", "text": "Every employer shall pay to each of his employees wages at a rate not less than the federal minimum wage.", "type": "Federal Law"},
+    ],
+    "wrk-p2": [
+        {"source": "Fair Labor Standards Act, 29 U.S.C. \u00a7 207", "text": "No employer shall employ any of his employees for a workweek longer than forty hours unless such employee receives compensation at a rate not less than one and one-half times the regular rate.", "type": "Federal Law"},
+    ],
+    "wrk-p3": [
+        {"source": "Fair Labor Standards Act, 29 U.S.C. \u00a7 215(a)(3)", "text": "It shall be unlawful for any person to discharge or in any other manner discriminate against any employee because such employee has filed any complaint.", "type": "Federal Law"},
+    ],
+    # WORK - Harassment
+    "wrk-h1": [
+        {"source": "Title VII, Civil Rights Act of 1964, 42 U.S.C. \u00a7 2000e-2", "text": "It shall be an unlawful employment practice for an employer to discriminate against any individual with respect to compensation, terms, conditions, or privileges of employment, because of such individual's race, color, religion, sex, or national origin.", "type": "Federal Law"},
+    ],
+    # WORK - Safety
+    "wrk-sf1": [
+        {"source": "OSHA Act, 29 U.S.C. \u00a7 654(a)(1)", "text": "Each employer shall furnish to each of his employees employment and a place of employment which are free from recognized hazards that are causing or are likely to cause death or serious physical harm.", "type": "Federal Law"},
+        {"source": "OSHA Act, 29 U.S.C. \u00a7 660(c)", "text": "No person shall discharge or in any manner discriminate against any employee because such employee has filed any complaint under or related to this Act.", "type": "Federal Law"},
+    ],
+    # WORK - Minors
+    "wrk-m1": [
+        {"source": "Fair Labor Standards Act, 29 U.S.C. \u00a7 212", "text": "No employer shall employ oppressive child labor in commerce. Minors under 16 may not work during school hours, and minors under 18 may not work in hazardous occupations.", "type": "Federal Law"},
+    ],
+    # HOUSING - Eviction
+    "hsg-e1": [
+        {"source": "Most State Landlord-Tenant Laws", "text": "A landlord must provide written notice before beginning eviction proceedings. The notice period varies by state but is typically 30 days for month-to-month tenancies.", "type": "State Law"},
+        {"source": "14th Amendment, U.S. Constitution", "text": "No State shall deprive any person of life, liberty, or property, without due process of law.", "type": "Constitution"},
+    ],
+    "hsg-e3": [
+        {"source": "Fair Housing Act, 42 U.S.C. \u00a7 3604", "text": "It shall be unlawful to refuse to sell or rent, or to refuse to negotiate for sale or rental, or otherwise make unavailable or deny a dwelling to any person because of race, color, religion, sex, familial status, or national origin.", "type": "Federal Law"},
+    ],
+    # HOUSING - Repairs
+    "hsg-r1": [
+        {"source": "Implied Warranty of Habitability (Common Law)", "text": "Every residential lease contains an implied warranty that the landlord will maintain the premises in a habitable condition. Tenants may not be evicted in retaliation for requesting repairs.", "type": "Common Law"},
+    ],
+    # HOUSING - Privacy
+    "hsg-p1": [
+        {"source": "Most State Landlord-Tenant Laws", "text": "A landlord must give reasonable notice, typically 24-48 hours, before entering a tenant's dwelling, except in cases of emergency.", "type": "State Law"},
+    ],
+    # ONLINE - Privacy
+    "onl-p1": [
+        {"source": "Children's Online Privacy Protection Act (COPPA), 15 U.S.C. \u00a7 6501", "text": "It is unlawful for an operator of a website directed to children under 13 to collect personal information from a child without verifiable parental consent.", "type": "Federal Law"},
+    ],
+    "onl-p3": [
+        {"source": "1st Amendment, U.S. Constitution", "text": "Congress shall make no law abridging the freedom of speech, or of the press.", "type": "Constitution"},
+        {"source": "Reno v. ACLU, 521 U.S. 844 (1997)", "text": "The interest in encouraging freedom of expression in a democratic society outweighs any theoretical but unproven benefit of censorship.", "type": "Supreme Court"},
+    ],
+    # ONLINE - Cyberbullying
+    "onl-c1": [
+        {"source": "Various State Anti-Bullying Statutes", "text": "All 50 states have anti-bullying laws. Many specifically include cyberbullying and require schools to investigate and respond to reported incidents.", "type": "State Law"},
+    ],
+    # IMMIGRATION - Documentation
+    "imm-d1": [
+        {"source": "Zadvydas v. Davis, 533 U.S. 678 (2001)", "text": "The Due Process Clause applies to all persons within the United States, including aliens, whether their presence is lawful, unlawful, temporary, or permanent.", "type": "Supreme Court"},
+        {"source": "14th Amendment, U.S. Constitution", "text": "No State shall deny to any person within its jurisdiction the equal protection of the laws.", "type": "Constitution"},
+    ],
+    "imm-d2": [
+        {"source": "5th Amendment, U.S. Constitution", "text": "No person shall be compelled in any criminal case to be a witness against himself.", "type": "Constitution"},
+    ],
+    # IMMIGRATION - Police
+    "imm-pl1": [
+        {"source": "Zadvydas v. Davis, 533 U.S. 678 (2001)", "text": "Due process protections apply to all persons in the United States, regardless of immigration status.", "type": "Supreme Court"},
+        {"source": "4th Amendment, U.S. Constitution", "text": "The right of the people to be secure against unreasonable searches and seizures, shall not be violated.", "type": "Constitution"},
+    ],
+    # IMMIGRATION - Raids
+    "imm-rd1": [
+        {"source": "Payton v. New York, 445 U.S. 573 (1980)", "text": "The Fourth Amendment prohibits the police from making a warrantless and nonconsensual entry into a suspect's home in order to make a routine felony arrest.", "type": "Supreme Court"},
+    ],
+    # CONSUMER
+    "con-re1": [
+        {"source": "FTC Act, 15 U.S.C. \u00a7 45", "text": "Unfair or deceptive acts or practices in or affecting commerce are declared unlawful.", "type": "Federal Law"},
+    ],
+    "con-re2": [
+        {"source": "State Consumer Protection Statutes", "text": "Most states require businesses to accept returns of defective merchandise and provide refunds, exchanges, or store credit within a reasonable timeframe.", "type": "State Law"},
+    ],
+    "con-bi1": [
+        {"source": "Fair Debt Collection Practices Act, 15 U.S.C. \u00a7 1692", "text": "A debt collector may not use any false, deceptive, or misleading representation or means in connection with the collection of any debt.", "type": "Federal Law"},
+    ],
+    # PUBLIC SPACES
+    "pub-pr1": [
+        {"source": "1st Amendment, U.S. Constitution", "text": "Congress shall make no law abridging the freedom of speech, or the right of the people peaceably to assemble.", "type": "Constitution"},
+        {"source": "Hague v. CIO, 307 U.S. 496 (1939)", "text": "Streets and parks have been used for purposes of assembly, communicating thoughts between citizens, and discussing public questions. Such use has been held a privilege, immunity, right, or liberty of citizens.", "type": "Supreme Court"},
+    ],
+    "pub-pr3": [
+        {"source": "1st Amendment, U.S. Constitution", "text": "Congress shall make no law abridging the freedom of the press.", "type": "Constitution"},
+        {"source": "Glik v. Cunniffe, 655 F.3d 78 (1st Cir. 2011)", "text": "The filming of government officials engaged in their duties in a public place, including police officers performing their responsibilities, fits comfortably within the First Amendment.", "type": "Federal Court"},
+    ],
+}
+
 DEFAULT_SCRIPTS = [
     {"id": "ds1", "title": "Don't Consent", "content": "I don't consent to a search.", "category": "general"},
     {"id": "ds2", "title": "In Writing", "content": "Can I get that in writing?", "category": "general"},
@@ -766,6 +917,7 @@ async def get_scenario_detail(scenario_id: str):
                     r = s.copy()
                     r["category"] = cat_id
                     r["subcategory"] = subcat_id
+                    r["legal_quotes"] = LEGAL_QUOTES.get(scenario_id, [])
                     return r
     raise HTTPException(status_code=404, detail="Not found")
 

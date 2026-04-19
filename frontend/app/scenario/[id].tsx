@@ -6,10 +6,17 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import * as Haptics from 'expo-haptics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LinearGradient } from 'expo-linear-gradient';
 import axios from 'axios';
 import Animated, { FadeInUp, FadeIn } from 'react-native-reanimated';
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
+
+interface LegalQuote {
+  source: string;
+  text: string;
+  type: string;
+}
 
 interface ScenarioDetail {
   id: string;
@@ -19,15 +26,27 @@ interface ScenarioDetail {
   explanation: string;
   script: string;
   next_steps: string[];
+  legal_quotes?: LegalQuote[];
 }
 
 const CATEGORY_COLORS: { [key: string]: string } = {
-  school: '#3B82F6',
-  work: '#F97316',
-  housing: '#10B981',
-  police: '#EF4444',
-  online: '#8B5CF6',
-  public: '#14B8A6',
+  school: '#7DD3FC',
+  work: '#FCA5A5',
+  housing: '#86EFAC',
+  police: '#FDA4AF',
+  online: '#C4B5FD',
+  public: '#6EE7B7',
+  immigration: '#67E8F9',
+  consumer: '#FDBA74',
+};
+
+const QUOTE_TYPE_CONFIG: { [key: string]: { icon: string; gradient: string[] } } = {
+  'Constitution': { icon: 'shield-checkmark', gradient: ['#C4B5FD', '#DDD6FE'] },
+  'Supreme Court': { icon: 'hammer', gradient: ['#FDA4AF', '#FCA5A5'] },
+  'Federal Law': { icon: 'document-text', gradient: ['#7DD3FC', '#93C5FD'] },
+  'Federal Court': { icon: 'business', gradient: ['#86EFAC', '#6EE7B7'] },
+  'State Law': { icon: 'flag', gradient: ['#FDBA74', '#FCD34D'] },
+  'Common Law': { icon: 'book', gradient: ['#67E8F9', '#7DD3FC'] },
 };
 
 export default function ScenarioScreen() {
@@ -170,7 +189,7 @@ export default function ScenarioScreen() {
                 <Ionicons 
                   name={savedScript ? "bookmark" : "bookmark-outline"} 
                   size={18} 
-                  color={savedScript ? "#3B82F6" : "#FFFFFF"} 
+                  color={savedScript ? "#C4B5FD" : "#FFFFFF"} 
                 />
                 <Text style={[styles.scriptButtonText, savedScript && { color: '#3B82F6' }]}>
                   {savedScript ? 'Saved' : 'Save'}
@@ -198,6 +217,41 @@ export default function ScenarioScreen() {
           </View>
         </Animated.View>
 
+        {/* Legal Quotes */}
+        {scenario.legal_quotes && scenario.legal_quotes.length > 0 && (
+          <Animated.View entering={FadeInUp.duration(400).delay(450)} style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Ionicons name="book" size={20} color="#C4B5FD" />
+              <Text style={styles.sectionTitle}>What the Law Says</Text>
+            </View>
+            {scenario.legal_quotes.map((quote, index) => {
+              const config = QUOTE_TYPE_CONFIG[quote.type] || QUOTE_TYPE_CONFIG['Federal Law'];
+              return (
+                <View key={index} style={styles.legalQuoteCard}>
+                  <LinearGradient
+                    colors={[`${config.gradient[0]}15`, `${config.gradient[1]}08`]}
+                    style={styles.legalQuoteGradient}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                  >
+                    <View style={styles.legalQuoteHeader}>
+                      <View style={[styles.legalTypeBadge, { backgroundColor: `${config.gradient[0]}25` }]}>
+                        <Ionicons name={config.icon as any} size={12} color={config.gradient[0]} />
+                        <Text style={[styles.legalTypeText, { color: config.gradient[0] }]}>{quote.type}</Text>
+                      </View>
+                    </View>
+                    <Text style={styles.legalQuoteText}>{"\u201C"}{quote.text}{"\u201D"}</Text>
+                    <View style={styles.legalSourceRow}>
+                      <Ionicons name="link" size={12} color="#6B7280" />
+                      <Text style={styles.legalSourceText}>{quote.source}</Text>
+                    </View>
+                  </LinearGradient>
+                </View>
+              );
+            })}
+          </Animated.View>
+        )}
+
         {/* Disclaimer */}
         <Animated.View entering={FadeIn.duration(400).delay(500)} style={styles.disclaimerBox}>
           <Ionicons name="warning" size={20} color="#F59E0B" />
@@ -216,7 +270,7 @@ export default function ScenarioScreen() {
         >
           <Ionicons name="chatbubbles" size={20} color="#3B82F6" />
           <Text style={styles.askAiText}>Have more questions? Ask AI</Text>
-          <Ionicons name="arrow-forward" size={18} color="#3B82F6" />
+          <Ionicons name="arrow-forward" size={18} color="#C4B5FD" />
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
@@ -416,13 +470,61 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#3B82F630',
+    borderColor: '#C4B5FD30',
     marginBottom: 20,
   },
   askAiText: {
     fontSize: 15,
-    color: '#3B82F6',
+    color: '#C4B5FD',
     fontWeight: '500',
     marginHorizontal: 8,
+  },
+  // Legal Quotes
+  legalQuoteCard: {
+    borderRadius: 16,
+    overflow: 'hidden',
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#1E1E2E',
+  },
+  legalQuoteGradient: {
+    padding: 16,
+  },
+  legalQuoteHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  legalTypeBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 8,
+  },
+  legalTypeText: {
+    fontSize: 11,
+    fontWeight: '600',
+    marginLeft: 5,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  legalQuoteText: {
+    fontSize: 15,
+    color: '#E5E7EB',
+    lineHeight: 24,
+    fontStyle: 'italic',
+    marginBottom: 10,
+  },
+  legalSourceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  legalSourceText: {
+    fontSize: 12,
+    color: '#6B7280',
+    marginLeft: 6,
+    flex: 1,
+    fontWeight: '500',
   },
 });
