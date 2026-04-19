@@ -226,7 +226,7 @@ export default function ScenarioScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F0F0F',
+    backgroundColor: '#0D0D14',
   },
   loadingContainer: {
     flex: 1,
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#14141E',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   answerSection: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#14141E',
     borderRadius: 16,
     padding: 16,
     borderLeftWidth: 4,
@@ -316,11 +316,11 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   scriptContainer: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#14141E',
     borderRadius: 16,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#2D2D2D',
+    borderColor: '#1E1E2E',
   },
   scriptQuote: {
     fontSize: 17,
@@ -335,16 +335,16 @@ const styles = StyleSheet.create({
   scriptButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#2D2D2D',
+    backgroundColor: '#1E1E2E',
     paddingHorizontal: 14,
     paddingVertical: 10,
     borderRadius: 10,
     marginRight: 10,
   },
   scriptButtonActive: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#14141E',
     borderWidth: 1,
-    borderColor: '#2D2D2D',
+    borderColor: '#1E1E2E',
   },
   scriptButtonText: {
     fontSize: 14,
@@ -356,7 +356,7 @@ const styles = StyleSheet.create({
     color: '#10B981',
   },
   stepsList: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#14141E',
     borderRadius: 16,
     padding: 4,
   },
@@ -386,7 +386,7 @@ const styles = StyleSheet.create({
   disclaimerBox: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#14141E',
     borderRadius: 16,
     padding: 16,
     marginBottom: 20,
@@ -412,7 +412,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#14141E',
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,

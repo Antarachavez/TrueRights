@@ -87,7 +87,7 @@ class SMSRequest(BaseModel):
 
 # CATEGORIES - Now with 8 main categories
 CATEGORIES = [
-    {"id": "school", "name": "School", "icon": "school", "color": "#3B82F6", "description": "Know your rights at school",
+    {"id": "school", "name": "School", "icon": "school", "color": "#7DD3FC", "description": "Know your rights at school",
      "subcategories": [
          {"id": "searches", "name": "Searches & Privacy", "icon": "search", "color": "#3B82F6"},
          {"id": "discipline", "name": "Discipline & Suspension", "icon": "warning", "color": "#EF4444"},
@@ -101,7 +101,7 @@ CATEGORIES = [
          {"id": "safety", "name": "Safety & Health", "icon": "medkit", "color": "#DC2626"},
          {"id": "technology", "name": "Technology", "icon": "laptop", "color": "#0EA5E9"}
      ]},
-    {"id": "work", "name": "Work", "icon": "briefcase", "color": "#F97316", "description": "Workplace rights",
+    {"id": "work", "name": "Work", "icon": "briefcase", "color": "#FCA5A5", "description": "Workplace rights",
      "subcategories": [
          {"id": "pay", "name": "Pay & Wages", "icon": "cash", "color": "#10B981"},
          {"id": "hours", "name": "Hours & Breaks", "icon": "time", "color": "#F97316"},
@@ -115,7 +115,7 @@ CATEGORIES = [
          {"id": "contracts", "name": "Contracts", "icon": "document-text", "color": "#6366F1"},
          {"id": "discrimination", "name": "Discrimination", "icon": "ban", "color": "#EC4899"}
      ]},
-    {"id": "housing", "name": "Housing", "icon": "home", "color": "#10B981", "description": "Tenant rights",
+    {"id": "housing", "name": "Housing", "icon": "home", "color": "#86EFAC", "description": "Tenant rights",
      "subcategories": [
          {"id": "entry", "name": "Landlord Entry", "icon": "key", "color": "#F97316"},
          {"id": "repairs", "name": "Repairs", "icon": "construct", "color": "#3B82F6"},
@@ -129,7 +129,7 @@ CATEGORIES = [
          {"id": "discrimination", "name": "Discrimination", "icon": "ban", "color": "#DC2626"},
          {"id": "moving", "name": "Moving Out", "icon": "car", "color": "#0EA5E9"}
      ]},
-    {"id": "police", "name": "Police", "icon": "shield", "color": "#EF4444", "description": "Police interactions",
+    {"id": "police", "name": "Police", "icon": "shield", "color": "#FDA4AF", "description": "Police interactions",
      "subcategories": [
          {"id": "stops", "name": "Being Stopped", "icon": "hand-left", "color": "#F97316"},
          {"id": "searches", "name": "Searches", "icon": "search", "color": "#EF4444"},
@@ -143,7 +143,7 @@ CATEGORIES = [
          {"id": "witnesses", "name": "Being a Witness", "icon": "eye", "color": "#6366F1"},
          {"id": "after", "name": "After Arrest", "icon": "time", "color": "#EC4899"}
      ]},
-    {"id": "online", "name": "Online", "icon": "lock", "color": "#8B5CF6", "description": "Digital safety",
+    {"id": "online", "name": "Online", "icon": "lock", "color": "#C4B5FD", "description": "Digital safety",
      "subcategories": [
          {"id": "social", "name": "Social Media", "icon": "share-social", "color": "#3B82F6"},
          {"id": "data", "name": "Data & Tracking", "icon": "analytics", "color": "#10B981"},
@@ -157,7 +157,7 @@ CATEGORIES = [
          {"id": "copyright", "name": "Copyright", "icon": "document", "color": "#6366F1"},
          {"id": "ai", "name": "AI & Deepfakes", "icon": "hardware-chip", "color": "#0EA5E9"}
      ]},
-    {"id": "public", "name": "Public Spaces", "icon": "map-pin", "color": "#14B8A6", "description": "Public rights",
+    {"id": "public", "name": "Public Spaces", "icon": "map-pin", "color": "#6EE7B7", "description": "Public rights",
      "subcategories": [
          {"id": "filming", "name": "Filming", "icon": "camera", "color": "#3B82F6"},
          {"id": "protests", "name": "Protests", "icon": "megaphone", "color": "#EF4444"},
@@ -171,7 +171,7 @@ CATEGORIES = [
          {"id": "id", "name": "ID Requirements", "icon": "card", "color": "#DC2626"},
          {"id": "banned", "name": "Being Banned", "icon": "ban", "color": "#6B7280"}
      ]},
-    {"id": "immigration", "name": "Immigration", "icon": "globe", "color": "#0EA5E9", "description": "Immigration rights",
+    {"id": "immigration", "name": "Immigration", "icon": "globe", "color": "#67E8F9", "description": "Immigration rights",
      "subcategories": [
          {"id": "documents", "name": "Documents", "icon": "document-text", "color": "#3B82F6"},
          {"id": "police", "name": "Police & ICE", "icon": "shield", "color": "#EF4444"},
@@ -185,7 +185,7 @@ CATEGORIES = [
          {"id": "daca", "name": "DACA", "icon": "ribbon", "color": "#F59E0B"},
          {"id": "raids", "name": "Raids & Checkpoints", "icon": "warning", "color": "#6B7280"}
      ]},
-    {"id": "consumer", "name": "Customer Service", "icon": "cart", "color": "#EC4899", "description": "Consumer rights",
+    {"id": "consumer", "name": "Customer Service", "icon": "cart", "color": "#FDBA74", "description": "Consumer rights",
      "subcategories": [
          {"id": "returns", "name": "Returns & Refunds", "icon": "refresh", "color": "#10B981"},
          {"id": "warranties", "name": "Warranties", "icon": "shield-checkmark", "color": "#3B82F6"},

@@ -511,7 +511,7 @@ export default function ScriptsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F0F0F',
+    backgroundColor: '#0D0D14',
   },
   header: {
     paddingHorizontal: 20,
@@ -526,7 +526,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#14141E',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -548,7 +548,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#14141E',
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
@@ -578,12 +578,12 @@ const styles = StyleSheet.create({
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#14141E',
     borderRadius: 12,
     paddingHorizontal: 14,
     height: 44,
     borderWidth: 1,
-    borderColor: '#2D2D2D',
+    borderColor: '#1E1E2E',
   },
   searchInput: {
     flex: 1,
@@ -606,12 +606,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#14141E',
     borderRadius: 16,
     padding: 16,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: '#2D2D2D',
+    borderColor: '#1E1E2E',
   },
   savedBannerLeft: {
     flexDirection: 'row',
@@ -656,12 +656,12 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   categoryCard: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#14141E',
     borderRadius: 16,
     padding: 18,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#2D2D2D',
+    borderColor: '#1E1E2E',
     minHeight: 140,
     justifyContent: 'center',
   },
@@ -711,7 +711,7 @@ const styles = StyleSheet.create({
   subcategoryCount: {
     fontSize: 13,
     color: '#6B7280',
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#14141E',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 8,
@@ -719,12 +719,12 @@ const styles = StyleSheet.create({
   },
   // Script Card
   scriptCard: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#14141E',
     borderRadius: 14,
     padding: 14,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#2D2D2D',
+    borderColor: '#1E1E2E',
   },
   scriptHeader: {
     flexDirection: 'row',
@@ -785,7 +785,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   scriptContentContainer: {
-    backgroundColor: '#0F0F0F',
+    backgroundColor: '#0D0D14',
     borderRadius: 10,
     padding: 12,
     position: 'relative',

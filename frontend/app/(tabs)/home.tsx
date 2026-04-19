@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions, Refre
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { FadeInUp, FadeIn } from 'react-native-reanimated';
 import axios from 'axios';
 
@@ -24,6 +25,20 @@ const ICON_MAP: { [key: string]: keyof typeof Ionicons.glyphMap } = {
   'shield': 'shield',
   'lock': 'lock-closed',
   'map-pin': 'location',
+  'globe': 'globe',
+  'cart': 'cart',
+};
+
+// Pastel gradient pairs for each category
+const GRADIENT_MAP: { [key: string]: string[] } = {
+  school: ['#7DD3FC', '#93C5FD'],
+  work: ['#FCA5A5', '#FDBA74'],
+  housing: ['#86EFAC', '#6EE7B7'],
+  police: ['#FDA4AF', '#FCA5A5'],
+  online: ['#C4B5FD', '#DDD6FE'],
+  public: ['#6EE7B7', '#86EFAC'],
+  immigration: ['#67E8F9', '#7DD3FC'],
+  consumer: ['#FDBA74', '#FCD34D'],
 };
 
 export default function HomeScreen() {
@@ -54,6 +69,10 @@ export default function HomeScreen() {
     return ICON_MAP[icon] || 'help-circle';
   };
 
+  const getGradient = (id: string): string[] => {
+    return GRADIENT_MAP[id] || ['#C4B5FD', '#DDD6FE'];
+  };
+
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <ScrollView 
@@ -61,7 +80,7 @@ export default function HomeScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#3B82F6" />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#C4B5FD" />
         }
       >
         {/* Header */}
@@ -72,10 +91,17 @@ export default function HomeScreen() {
               <Text style={styles.subGreeting}>What do you need help with?</Text>
             </View>
             <TouchableOpacity 
-              style={styles.emergencyButton}
+              style={styles.emergencyButtonOuter}
               onPress={() => router.push('/emergency')}
             >
-              <Ionicons name="warning" size={20} color="#FFFFFF" />
+              <LinearGradient
+                colors={['#FDA4AF', '#FB7185']}
+                style={styles.emergencyButton}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+              >
+                <Ionicons name="warning" size={20} color="#FFFFFF" />
+              </LinearGradient>
             </TouchableOpacity>
           </View>
         </Animated.View>
@@ -83,43 +109,63 @@ export default function HomeScreen() {
         {/* Emergency Banner */}
         <Animated.View entering={FadeIn.duration(600).delay(200)}>
           <TouchableOpacity 
-            style={styles.emergencyBanner}
+            style={styles.emergencyBannerTouch}
             onPress={() => router.push('/emergency')}
+            activeOpacity={0.85}
           >
-            <View style={styles.emergencyBannerContent}>
-              <Ionicons name="alert-circle" size={24} color="#FFFFFF" />
-              <View style={styles.emergencyBannerText}>
-                <Text style={styles.emergencyBannerTitle}>Emergency Mode</Text>
-                <Text style={styles.emergencyBannerDesc}>Stay calm, get scripts, document events</Text>
+            <LinearGradient
+              colors={['#FB7185', '#F472B6', '#C084FC']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.emergencyBanner}
+            >
+              <View style={styles.emergencyBannerContent}>
+                <Ionicons name="alert-circle" size={24} color="#FFFFFF" />
+                <View style={styles.emergencyBannerText}>
+                  <Text style={styles.emergencyBannerTitle}>Emergency Mode</Text>
+                  <Text style={styles.emergencyBannerDesc}>Stay calm, get scripts, document events</Text>
+                </View>
               </View>
-            </View>
-            <Ionicons name="chevron-forward" size={24} color="#FFFFFF" />
+              <Ionicons name="chevron-forward" size={24} color="#FFFFFF" />
+            </LinearGradient>
           </TouchableOpacity>
         </Animated.View>
 
         {/* Categories Grid */}
         <View style={styles.categoriesSection}>
           <Text style={styles.sectionTitle}>Choose a Situation</Text>
-          <View style={styles.categoriesGrid}>
-            {categories.map((category, index) => (
-              <Animated.View 
-                key={category.id}
-                entering={FadeInUp.duration(500).delay(300 + index * 100)}
-                style={styles.categoryCardWrapper}
-              >
-                <TouchableOpacity
-                  style={[styles.categoryCard, { borderColor: category.color }]}
-                  onPress={() => router.push(`/category/${category.id}`)}
-                >
-                  <View style={[styles.categoryIcon, { backgroundColor: `${category.color}20` }]}>
-                    <Ionicons name={getIconName(category.icon)} size={28} color={category.color} />
+          {Array.from({ length: Math.ceil(categories.length / 2) }).map((_, rowIndex) => (
+            <View key={rowIndex} style={styles.categoryRow}>
+              {categories.slice(rowIndex * 2, rowIndex * 2 + 2).map((category) => {
+                const gradColors = getGradient(category.id);
+                return (
+                  <View key={category.id} style={styles.categoryCardOuter}>
+                    <TouchableOpacity
+                      style={styles.categoryCard}
+                      onPress={() => router.push(`/category/${category.id}`)}
+                      activeOpacity={0.8}
+                    >
+                      <LinearGradient
+                        colors={[`${gradColors[0]}18`, `${gradColors[1]}08`]}
+                        style={styles.categoryCardGradient}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 1 }}
+                      >
+                        <View style={[styles.categoryIcon, { backgroundColor: `${category.color}25` }]}>
+                          <Ionicons name={getIconName(category.icon)} size={28} color={category.color} />
+                        </View>
+                        <Text style={styles.categoryName}>{category.name}</Text>
+                        <Text style={styles.categoryDesc} numberOfLines={2}>{category.description}</Text>
+                      </LinearGradient>
+                    </TouchableOpacity>
                   </View>
-                  <Text style={styles.categoryName}>{category.name}</Text>
-                  <Text style={styles.categoryDesc} numberOfLines={2}>{category.description}</Text>
-                </TouchableOpacity>
-              </Animated.View>
-            ))}
-          </View>
+                );
+              })}
+              {categories.slice(rowIndex * 2, rowIndex * 2 + 2).length === 1 && (
+                <View style={styles.categoryCard} />
+              )}
+            </View>
+          ))}
         </View>
 
         {/* Quick Scripts */}
@@ -131,15 +177,22 @@ export default function HomeScreen() {
             </TouchableOpacity>
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.quickScriptsScroll}>
-            <TouchableOpacity style={styles.quickScriptCard}>
-              <Text style={styles.quickScriptText}>"I do not consent to a search."</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.quickScriptCard}>
-              <Text style={styles.quickScriptText}>"Am I free to go?"</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.quickScriptCard}>
-              <Text style={styles.quickScriptText}>"I'd like to contact a parent."</Text>
-            </TouchableOpacity>
+            {[
+              { text: '"I do not consent to a search."', colors: ['#FDA4AF', '#FCA5A5'] },
+              { text: '"Am I free to go?"', colors: ['#C4B5FD', '#DDD6FE'] },
+              { text: '"I\'d like to contact a parent."', colors: ['#7DD3FC', '#93C5FD'] },
+            ].map((script, i) => (
+              <TouchableOpacity key={i} style={styles.quickScriptCardTouch} activeOpacity={0.8}>
+                <LinearGradient
+                  colors={[`${script.colors[0]}15`, `${script.colors[1]}08`]}
+                  style={styles.quickScriptCard}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                >
+                  <Text style={styles.quickScriptText}>{script.text}</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            ))}
           </ScrollView>
         </Animated.View>
 
@@ -158,7 +211,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F0F0F',
+    backgroundColor: '#0D0D14',
   },
   scrollView: {
     flex: 1,
@@ -179,29 +232,35 @@ const styles = StyleSheet.create({
   greeting: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: '#F0F0F8',
   },
   subGreeting: {
     fontSize: 15,
     color: '#9CA3AF',
     marginTop: 4,
   },
+  emergencyButtonOuter: {
+    borderRadius: 22,
+    overflow: 'hidden',
+  },
   emergencyButton: {
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#EF4444',
     justifyContent: 'center',
     alignItems: 'center',
   },
+  emergencyBannerTouch: {
+    borderRadius: 18,
+    overflow: 'hidden',
+    marginBottom: 24,
+  },
   emergencyBanner: {
-    backgroundColor: '#DC2626',
-    borderRadius: 16,
     padding: 16,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 24,
+    borderRadius: 18,
   },
   emergencyBannerContent: {
     flexDirection: 'row',
@@ -218,7 +277,7 @@ const styles = StyleSheet.create({
   },
   emergencyBannerDesc: {
     fontSize: 13,
-    color: '#FCA5A5',
+    color: 'rgba(255,255,255,0.8)',
     marginTop: 2,
   },
   categoriesSection: {
@@ -227,29 +286,31 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: '#E5E7EB',
     marginBottom: 16,
   },
-  categoriesGrid: {
+  categoryRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
     justifyContent: 'space-between',
-  },
-  categoryCardWrapper: {
-    width: (width - 52) / 2,
     marginBottom: 12,
   },
+  categoryCardOuter: {
+    width: '48%',
+  },
   categoryCard: {
-    backgroundColor: '#1A1A1A',
-    borderRadius: 16,
-    padding: 16,
+    borderRadius: 18,
+    overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#2D2D2D',
+    borderColor: '#1E1E2E',
+  },
+  categoryCardGradient: {
+    padding: 16,
+    minHeight: 130,
   },
   categoryIcon: {
     width: 52,
     height: 52,
-    borderRadius: 14,
+    borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
@@ -257,7 +318,7 @@ const styles = StyleSheet.create({
   categoryName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: '#F0F0F8',
     marginBottom: 4,
   },
   categoryDesc: {
@@ -276,33 +337,38 @@ const styles = StyleSheet.create({
   },
   seeAllText: {
     fontSize: 14,
-    color: '#3B82F6',
+    color: '#C4B5FD',
     fontWeight: '500',
   },
   quickScriptsScroll: {
     marginHorizontal: -20,
     paddingHorizontal: 20,
   },
-  quickScriptCard: {
-    backgroundColor: '#1A1A1A',
-    borderRadius: 12,
-    padding: 16,
+  quickScriptCardTouch: {
     marginRight: 12,
+    borderRadius: 14,
+    overflow: 'hidden',
+  },
+  quickScriptCard: {
+    borderRadius: 14,
+    padding: 16,
     minWidth: 200,
     borderWidth: 1,
-    borderColor: '#2D2D2D',
+    borderColor: '#1E1E2E',
   },
   quickScriptText: {
     fontSize: 14,
-    color: '#FFFFFF',
+    color: '#E5E7EB',
     fontStyle: 'italic',
   },
   disclaimerContainer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#1A1A1A',
-    borderRadius: 12,
+    backgroundColor: '#14141E',
+    borderRadius: 14,
     padding: 12,
+    borderWidth: 1,
+    borderColor: '#1E1E2E',
   },
   disclaimerText: {
     flex: 1,

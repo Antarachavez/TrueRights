@@ -184,7 +184,7 @@ export default function ResourcesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F0F0F',
+    backgroundColor: '#0D0D14',
   },
   header: {
     paddingHorizontal: 20,
@@ -209,12 +209,12 @@ const styles = StyleSheet.create({
     paddingTop: 4,
   },
   categoryContainer: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#14141E',
     borderRadius: 16,
     marginBottom: 12,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#2D2D2D',
+    borderColor: '#1E1E2E',
   },
   categoryHeader: {
     flexDirection: 'row',
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
   },
   resourceItem: {
-    backgroundColor: '#0F0F0F',
+    backgroundColor: '#0D0D14',
     borderRadius: 12,
     padding: 14,
     marginBottom: 8,
@@ -280,12 +280,12 @@ const styles = StyleSheet.create({
   helpTip: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#14141E',
     borderRadius: 12,
     padding: 14,
     marginTop: 8,
     borderWidth: 1,
-    borderColor: '#2D2D2D',
+    borderColor: '#1E1E2E',
   },
   helpTipText: {
     flex: 1,

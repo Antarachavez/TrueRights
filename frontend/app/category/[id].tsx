@@ -253,7 +253,7 @@ export default function CategoryScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F0F0F',
+    backgroundColor: '#0D0D14',
   },
   loadingContainer: {
     flex: 1,
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#14141E',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
@@ -311,12 +311,12 @@ const styles = StyleSheet.create({
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#14141E',
     borderRadius: 12,
     paddingHorizontal: 14,
     paddingVertical: 12,
     borderWidth: 1,
-    borderColor: '#2D2D2D',
+    borderColor: '#1E1E2E',
   },
   searchInput: {
     flex: 1,
@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   subcategoryCard: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#14141E',
     borderRadius: 14,
     padding: 14,
     borderWidth: 1,
@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   searchResultCard: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#14141E',
     borderRadius: 14,
     padding: 14,
     marginBottom: 10,
@@ -421,7 +421,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   askAiCard: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#14141E',
     borderRadius: 14,
     padding: 14,
     marginTop: 8,
