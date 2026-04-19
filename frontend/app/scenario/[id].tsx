@@ -159,46 +159,6 @@ export default function ScenarioScreen() {
           <Text style={styles.explanation}>{scenario.explanation}</Text>
         </Animated.View>
 
-        {/* Script */}
-        <Animated.View entering={FadeInUp.duration(400).delay(300)} style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Ionicons name="chatbubble-ellipses" size={20} color="#9CA3AF" />
-            <Text style={styles.sectionTitle}>What You Can Say</Text>
-          </View>
-          <View style={styles.scriptContainer}>
-            <Text style={styles.scriptQuote}>"{scenario.script}"</Text>
-            <View style={styles.scriptActions}>
-              <TouchableOpacity 
-                style={[styles.scriptButton, copiedScript && styles.scriptButtonActive]}
-                onPress={copyScript}
-              >
-                <Ionicons 
-                  name={copiedScript ? "checkmark" : "copy-outline"} 
-                  size={18} 
-                  color={copiedScript ? "#10B981" : "#FFFFFF"} 
-                />
-                <Text style={[styles.scriptButtonText, copiedScript && styles.scriptButtonTextActive]}>
-                  {copiedScript ? 'Copied!' : 'Copy'}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity 
-                style={[styles.scriptButton, savedScript && styles.scriptButtonActive]}
-                onPress={saveScript}
-                disabled={savedScript}
-              >
-                <Ionicons 
-                  name={savedScript ? "bookmark" : "bookmark-outline"} 
-                  size={18} 
-                  color={savedScript ? "#C4B5FD" : "#FFFFFF"} 
-                />
-                <Text style={[styles.scriptButtonText, savedScript && { color: '#3B82F6' }]}>
-                  {savedScript ? 'Saved' : 'Save'}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Animated.View>
-
         {/* Next Steps */}
         <Animated.View entering={FadeInUp.duration(400).delay(400)} style={styles.section}>
           <View style={styles.sectionHeader}>
