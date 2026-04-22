@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions, TextInput, ActivityIndicator, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import axios from 'axios';
 import Animated, { FadeInUp } from 'react-native-reanimated';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
 const { width } = Dimensions.get('window');
@@ -77,21 +79,36 @@ export default function CategoryScreen() {
   const [scenarioCounts, setScenarioCounts] = useState<{ [key: string]: number }>({});
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
+  const [generating, setGenerating] = useState(false);
+  const [generatedScenarios, setGeneratedScenarios] = useState<any[]>([]);
+  const [deviceId, setDeviceId] = useState('');
 
   useEffect(() => {
-    fetchData();
+    initAndFetch();
   }, [id]);
+
+  const initAndFetch = async () => {
+    let storedDeviceId = await AsyncStorage.getItem('device_id');
+    if (!storedDeviceId) {
+      storedDeviceId = `device_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      await AsyncStorage.setItem('device_id', storedDeviceId);
+    }
+    setDeviceId(storedDeviceId);
+    await fetchData();
+  };
 
   const fetchData = async () => {
     try {
-      const [categoriesRes, scenariosRes] = await Promise.all([
+      const [categoriesRes, scenariosRes, genRes] = await Promise.all([
         axios.get(`${BACKEND_URL}/api/categories`),
-        axios.get(`${BACKEND_URL}/api/scenarios/${id}`)
+        axios.get(`${BACKEND_URL}/api/scenarios/${id}`),
+        axios.get(`${BACKEND_URL}/api/scenarios/generated/${id}`),
       ]);
       
       const foundCategory = categoriesRes.data.find((c: Category) => c.id === id);
       setCategory(foundCategory);
       setAllScenarios(scenariosRes.data);
+      setGeneratedScenarios(genRes.data || []);
       
       const counts: { [key: string]: number } = {};
       scenariosRes.data.forEach((scenario: any) => {
@@ -102,6 +119,29 @@ export default function CategoryScreen() {
       console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const generateWithAI = async () => {
+    if (!searchQuery.trim()) return;
+    setGenerating(true);
+    try {
+      const response = await axios.post(`${BACKEND_URL}/api/scenarios/generate`, {
+        question: searchQuery.trim(),
+        category: id,
+        device_id: deviceId,
+      });
+      const generated = response.data;
+      // Navigate to the generated scenario detail
+      router.push(`/scenario/generated/${generated.id}`);
+      // Refresh generated scenarios list
+      const genRes = await axios.get(`${BACKEND_URL}/api/scenarios/generated/${id}`);
+      setGeneratedScenarios(genRes.data || []);
+    } catch (error) {
+      console.error('Error generating:', error);
+      Alert.alert('Error', 'Could not generate answer. Please try again.');
+    } finally {
+      setGenerating(false);
     }
   };
 
@@ -194,8 +234,33 @@ export default function CategoryScreen() {
             {searchResults.length === 0 && (
               <View style={styles.noResults}>
                 <Ionicons name="search-outline" size={48} color="#4B5563" />
-                <Text style={styles.noResultsText}>No questions found</Text>
-                <Text style={styles.noResultsHint}>Try different keywords</Text>
+                <Text style={styles.noResultsText}>No pre-loaded answers found</Text>
+                <Text style={styles.noResultsHint}>Want AI to research this for you?</Text>
+                <TouchableOpacity
+                  style={styles.generateButton}
+                  onPress={generateWithAI}
+                  disabled={generating}
+                  activeOpacity={0.8}
+                >
+                  <LinearGradient
+                    colors={['#C4B5FD', '#A78BFA']}
+                    style={styles.generateGradient}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                  >
+                    {generating ? (
+                      <>
+                        <ActivityIndicator size="small" color="#FFFFFF" />
+                        <Text style={styles.generateText}>AI is researching...</Text>
+                      </>
+                    ) : (
+                      <>
+                        <Ionicons name="sparkles" size={18} color="#FFFFFF" />
+                        <Text style={styles.generateText}>Generate with AI</Text>
+                      </>
+                    )}
+                  </LinearGradient>
+                </TouchableOpacity>
               </View>
             )}
           </>
@@ -229,20 +294,51 @@ export default function CategoryScreen() {
               ))}
             </View>
 
-            {/* Ask AI */}
+            {/* Ask AI / Generate */}
             <TouchableOpacity 
               style={styles.askAiCard}
-              onPress={() => router.push('/(tabs)/chat')}
+              onPress={() => {/* focus search */}}
             >
               <View style={styles.askAiIcon}>
-                <Ionicons name="chatbubbles" size={22} color="#3B82F6" />
+                <Ionicons name="sparkles" size={22} color="#C4B5FD" />
               </View>
               <View style={styles.askAiText}>
                 <Text style={styles.askAiTitle}>Can't find your question?</Text>
-                <Text style={styles.askAiDesc}>Ask our AI for help</Text>
+                <Text style={styles.askAiDesc}>Search above and AI will generate an answer</Text>
               </View>
-              <Ionicons name="arrow-forward" size={18} color="#3B82F6" />
+              <Ionicons name="arrow-forward" size={18} color="#C4B5FD" />
             </TouchableOpacity>
+
+            {/* Previously Generated by AI */}
+            {generatedScenarios.length > 0 && (
+              <>
+                <View style={styles.generatedHeader}>
+                  <Ionicons name="sparkles" size={16} color="#C4B5FD" />
+                  <Text style={styles.generatedTitle}>AI Generated</Text>
+                  <Text style={styles.generatedCount}>{generatedScenarios.length}</Text>
+                </View>
+                {generatedScenarios.map((scenario: any, index: number) => (
+                  <Animated.View key={scenario.id} entering={FadeInUp.duration(300).delay(index * 50)}>
+                    <TouchableOpacity
+                      style={[styles.searchResultCard, { borderLeftColor: '#C4B5FD' }]}
+                      onPress={() => router.push(`/scenario/generated/${scenario.id}`)}
+                    >
+                      <View style={styles.searchResultContent}>
+                        <View style={styles.aiBadgeRow}>
+                          <View style={styles.aiBadge}>
+                            <Ionicons name="sparkles" size={10} color="#C4B5FD" />
+                            <Text style={styles.aiBadgeText}>AI Generated</Text>
+                          </View>
+                        </View>
+                        <Text style={styles.searchResultQuestion}>{scenario.question}</Text>
+                        <Text style={styles.searchResultAnswer} numberOfLines={2}>{scenario.short_answer}</Text>
+                      </View>
+                      <Ionicons name="chevron-forward" size={18} color="#6B7280" />
+                    </TouchableOpacity>
+                  </Animated.View>
+                ))}
+              </>
+            )}
           </>
         )}
       </ScrollView>
@@ -428,13 +524,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#3B82F625',
+    borderColor: '#C4B5FD25',
   },
   askAiIcon: {
     width: 44,
     height: 44,
     borderRadius: 12,
-    backgroundColor: '#3B82F615',
+    backgroundColor: '#C4B5FD15',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -451,5 +547,65 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#9CA3AF',
     marginTop: 2,
+  },
+  generateButton: {
+    marginTop: 20,
+    borderRadius: 14,
+    overflow: 'hidden',
+    width: '80%',
+  },
+  generateGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    borderRadius: 14,
+    gap: 8,
+  },
+  generateText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  generatedHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 24,
+    marginBottom: 12,
+    gap: 8,
+  },
+  generatedTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#C4B5FD',
+    flex: 1,
+  },
+  generatedCount: {
+    fontSize: 13,
+    color: '#6B7280',
+    backgroundColor: '#14141E',
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  aiBadgeRow: {
+    flexDirection: 'row',
+    marginBottom: 6,
+  },
+  aiBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#C4B5FD15',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 6,
+    gap: 4,
+  },
+  aiBadgeText: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: '#C4B5FD',
   },
 });

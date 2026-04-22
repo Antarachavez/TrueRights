@@ -68,6 +68,11 @@ class ChatRequest(BaseModel):
     message: str
     user_state: Optional[str] = None
 
+class GenerateScenarioRequest(BaseModel):
+    question: str
+    category: str = "general"
+    device_id: str = ""
+
 class EmergencyNote(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     device_id: str
@@ -1068,6 +1073,156 @@ async def root():
 @api_router.get("/categories")
 async def get_categories():
     return CATEGORIES
+
+# === AI-Generated Scenario Routes (must be before parameterized routes) ===
+
+@api_router.post("/scenarios/generate")
+async def generate_scenario(request: GenerateScenarioRequest):
+    """Use AI to generate a scenario for a question not in the pre-loaded data."""
+    if not EMERGENT_LLM_KEY:
+        raise HTTPException(status_code=500, detail="AI not configured")
+
+    # Check if already generated before
+    existing = await db.generated_scenarios.find_one({
+        "question": {"$regex": f"^{request.question.strip()}$", "$options": "i"}
+    })
+    if existing:
+        existing["_id"] = str(existing["_id"])
+        return existing
+
+    # Find category name for context
+    cat_name = request.category
+    for c in CATEGORIES:
+        if c["id"] == request.category:
+            cat_name = c["name"]
+            break
+
+    system = f"""You generate structured rights information for teens. Category: {cat_name}.
+Return ONLY valid JSON (no markdown, no backticks) with this exact structure:
+{{
+  "short_answer": "1-2 sentence direct answer",
+  "explanation": "2-3 paragraph plain English explanation. Be real and direct, not corporate.",
+  "next_steps": ["Step 1", "Step 2", "Step 3", "Step 4"],
+  "legal_quotes": [
+    {{"source": "Law name and citation", "text": "Exact or close quote from the law", "type": "Constitution|Supreme Court|Federal Law|State Law"}},
+    {{"source": "Another law", "text": "Quote", "type": "type"}}
+  ]
+}}
+Rules:
+- short_answer: Direct, teen-friendly, 1-2 sentences max
+- explanation: Concise, real talk. No legalese. Like an older friend explaining.
+- next_steps: 3-5 practical action items
+- legal_quotes: 1-3 REAL laws, amendments, or court cases. Use actual citations.
+- NEVER make up fake laws. If unsure, cite the most relevant Constitutional amendment.
+- This is educational info, NOT legal advice."""
+
+    try:
+        import json as json_module
+        chat = LlmChat(
+            api_key=EMERGENT_LLM_KEY,
+            session_id=f"kyr-gen-{uuid.uuid4()}",
+            system_message=system
+        ).with_model("anthropic", "claude-sonnet-4-5-20250929")
+
+        response = await chat.send_message(
+            UserMessage(text=f"Generate rights info for this question: {request.question}")
+        )
+
+        # Parse the JSON response - clean up markdown if present
+        cleaned = response.strip()
+        if cleaned.startswith("```"):
+            cleaned = cleaned.split("\n", 1)[1] if "\n" in cleaned else cleaned[3:]
+        if cleaned.endswith("```"):
+            cleaned = cleaned[:-3]
+        cleaned = cleaned.strip()
+
+        parsed = json_module.loads(cleaned)
+
+        # Build the generated scenario document
+        gen_id = f"gen-{uuid.uuid4().hex[:8]}"
+        scenario_doc = {
+            "id": gen_id,
+            "question": request.question.strip(),
+            "short_answer": parsed.get("short_answer", ""),
+            "explanation": parsed.get("explanation", ""),
+            "script": "",
+            "next_steps": parsed.get("next_steps", []),
+            "legal_quotes": parsed.get("legal_quotes", []),
+            "category": request.category,
+            "category_name": cat_name,
+            "generated": True,
+            "generated_at": datetime.utcnow().isoformat(),
+            "device_id": request.device_id,
+        }
+
+        await db.generated_scenarios.insert_one(scenario_doc.copy())
+        return scenario_doc
+
+    except Exception as e:
+        logging.error(f"Generate error: {e}")
+        raise HTTPException(status_code=500, detail="AI generation failed")
+
+
+@api_router.get("/scenarios/generated/{category_id}")
+async def get_generated_scenarios(category_id: str):
+    """Get all AI-generated scenarios for a category."""
+    scenarios = await db.generated_scenarios.find(
+        {"category": category_id}
+    ).sort("generated_at", -1).to_list(100)
+    for s in scenarios:
+        s["_id"] = str(s["_id"])
+    return scenarios
+
+
+@api_router.get("/scenarios/generated")
+async def get_all_generated_scenarios():
+    """Get all AI-generated scenarios."""
+    scenarios = await db.generated_scenarios.find().sort("generated_at", -1).to_list(200)
+    for s in scenarios:
+        s["_id"] = str(s["_id"])
+    return scenarios
+
+
+@api_router.get("/scenario/generated/{scenario_id}")
+async def get_generated_scenario_detail(scenario_id: str):
+    """Get a specific AI-generated scenario."""
+    scenario = await db.generated_scenarios.find_one({"id": scenario_id})
+    if not scenario:
+        raise HTTPException(status_code=404, detail="Not found")
+    scenario["_id"] = str(scenario["_id"])
+    return scenario
+
+
+@api_router.get("/scenarios/search-all/{query}")
+async def search_all_scenarios(query: str):
+    """Search across both pre-loaded and AI-generated scenarios."""
+    results = []
+    q = query.lower().strip()
+
+    for cat_id, cat_data in SCENARIOS.items():
+        for subcat_id, scenarios in cat_data.items():
+            for s in scenarios:
+                if q in s["question"].lower() or q in s["short_answer"].lower():
+                    r = s.copy()
+                    r["category"] = cat_id
+                    r["subcategory"] = subcat_id
+                    r["generated"] = False
+                    results.append(r)
+
+    generated = await db.generated_scenarios.find({
+        "$or": [
+            {"question": {"$regex": q, "$options": "i"}},
+            {"short_answer": {"$regex": q, "$options": "i"}},
+        ]
+    }).to_list(50)
+    for g in generated:
+        g["_id"] = str(g["_id"])
+        g["generated"] = True
+        results.append(g)
+
+    return results
+
+# === Pre-loaded scenario routes ===
 
 @api_router.get("/scenarios/{category_id}")
 async def get_scenarios_by_category(category_id: str):
