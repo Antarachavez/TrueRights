@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert, Switch, Platform, Modal, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert, Platform, Modal, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -24,7 +24,6 @@ export default function SettingsScreen() {
 
   const initializeSettings = async () => {
     try {
-      // Get device ID
       let storedDeviceId = await AsyncStorage.getItem('device_id');
       if (!storedDeviceId) {
         storedDeviceId = `device_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -32,7 +31,6 @@ export default function SettingsScreen() {
       }
       setDeviceId(storedDeviceId);
 
-      // Load saved settings
       const savedState = await AsyncStorage.getItem('user_state');
       const savedName = await AsyncStorage.getItem('emergency_name');
       const savedPhone = await AsyncStorage.getItem('emergency_phone');
@@ -41,7 +39,6 @@ export default function SettingsScreen() {
       if (savedName) setEmergencyName(savedName);
       if (savedPhone) setEmergencyPhone(savedPhone);
 
-      // Fetch states list
       const response = await axios.get(`${BACKEND_URL}/api/states`);
       setStates(response.data);
     } catch (error) {
@@ -82,12 +79,10 @@ export default function SettingsScreen() {
   const saveSettings = async () => {
     setSaving(true);
     try {
-      // Save locally
       if (selectedState) await AsyncStorage.setItem('user_state', selectedState);
       if (emergencyName) await AsyncStorage.setItem('emergency_name', emergencyName);
       if (emergencyPhone) await AsyncStorage.setItem('emergency_phone', emergencyPhone);
 
-      // Save to backend
       await axios.post(`${BACKEND_URL}/api/preferences`, {
         device_id: deviceId,
         state: selectedState,
@@ -160,7 +155,7 @@ export default function SettingsScreen() {
                 {selectedState || 'Select your state'}
               </Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="#6B7280" />
+            <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
           </TouchableOpacity>
 
           <TouchableOpacity 
@@ -191,7 +186,7 @@ export default function SettingsScreen() {
             <TextInput
               style={styles.textInput}
               placeholder="e.g., Mom, Dad, Trusted Adult"
-              placeholderTextColor="#6B7280"
+              placeholderTextColor="#94A3B8"
               value={emergencyName}
               onChangeText={setEmergencyName}
             />
@@ -202,7 +197,7 @@ export default function SettingsScreen() {
             <TextInput
               style={styles.textInput}
               placeholder="e.g., 555-123-4567"
-              placeholderTextColor="#6B7280"
+              placeholderTextColor="#94A3B8"
               value={emergencyPhone}
               onChangeText={setEmergencyPhone}
               keyboardType="phone-pad"
@@ -261,7 +256,7 @@ export default function SettingsScreen() {
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Select Your State</Text>
               <TouchableOpacity onPress={() => setShowStateModal(false)}>
-                <Ionicons name="close" size={24} color="#FFFFFF" />
+                <Ionicons name="close" size={24} color="#374151" />
               </TouchableOpacity>
             </View>
             <ScrollView style={styles.statesList}>
@@ -297,7 +292,7 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F0F0F',
+    backgroundColor: '#FAFAFE',
   },
   header: {
     paddingHorizontal: 20,
@@ -307,11 +302,11 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: '#1E1B4B',
   },
   headerSubtitle: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: '#64748B',
     marginTop: 4,
   },
   scrollView: {
@@ -327,12 +322,12 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: '#1E1B4B',
     marginBottom: 8,
   },
   sectionDescription: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: '#64748B',
     marginBottom: 16,
     lineHeight: 18,
   },
@@ -340,11 +335,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#2D2D2D',
+    borderColor: '#F1F1F5',
   },
   stateSelectorContent: {
     flexDirection: 'row',
@@ -352,7 +347,7 @@ const styles = StyleSheet.create({
   },
   stateSelectorText: {
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#1E1B4B',
     marginLeft: 12,
   },
   detectButton: {
@@ -372,20 +367,20 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: '#64748B',
     marginBottom: 8,
   },
   textInput: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
-    color: '#FFFFFF',
+    color: '#1E1B4B',
     fontSize: 15,
     borderWidth: 1,
-    borderColor: '#2D2D2D',
+    borderColor: '#F1F1F5',
   },
   saveButton: {
-    backgroundColor: '#3B82F6',
+    backgroundColor: '#8B5CF6',
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
@@ -400,7 +395,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
@@ -415,44 +410,45 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#2D2D2D',
+    borderColor: '#F1F1F5',
   },
   aboutLabel: {
     fontSize: 15,
-    color: '#9CA3AF',
+    color: '#64748B',
   },
   aboutValue: {
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#1E1B4B',
+    fontWeight: '500',
   },
   disclaimerBox: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#F59E0B30',
+    borderColor: '#F1F1F5',
   },
   disclaimerText: {
     flex: 1,
     fontSize: 13,
-    color: '#9CA3AF',
+    color: '#64748B',
     marginLeft: 12,
     lineHeight: 18,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.8)',
+    backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#FFFFFF',
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '70%',
@@ -463,12 +459,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#2D2D2D',
+    borderBottomColor: '#F1F1F5',
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: '#1E1B4B',
   },
   statesList: {
     padding: 8,
@@ -481,11 +477,11 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   stateItemSelected: {
-    backgroundColor: '#3B82F620',
+    backgroundColor: '#3B82F610',
   },
   stateItemText: {
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#374151',
   },
   stateItemTextSelected: {
     color: '#3B82F6',

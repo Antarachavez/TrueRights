@@ -61,7 +61,7 @@ export default function EmergencyScreen() {
   useEffect(() => {
     if (timerRunning) {
       pulseValue.value = withRepeat(
-        withTiming(1.1, { duration: 1000 }),
+        withTiming(1.05, { duration: 1000 }),
         -1,
         true
       );
@@ -195,7 +195,7 @@ export default function EmergencyScreen() {
           style={styles.closeButton}
           onPress={() => router.back()}
         >
-          <Ionicons name="close" size={24} color="#FFFFFF" />
+          <Ionicons name="close" size={24} color="#374151" />
         </TouchableOpacity>
         <View style={styles.headerCenter}>
           <Text style={styles.headerTitle}>Emergency Mode</Text>
@@ -233,21 +233,21 @@ export default function EmergencyScreen() {
           style={[styles.tab, activeTab === 'scripts' && styles.activeTab]}
           onPress={() => setActiveTab('scripts')}
         >
-          <Ionicons name="document-text" size={18} color={activeTab === 'scripts' ? '#FFFFFF' : '#6B7280'} />
+          <Ionicons name="document-text" size={18} color={activeTab === 'scripts' ? '#FFFFFF' : '#94A3B8'} />
           <Text style={[styles.tabText, activeTab === 'scripts' && styles.activeTabText]}>Scripts</Text>
         </TouchableOpacity>
         <TouchableOpacity 
           style={[styles.tab, activeTab === 'notes' && styles.activeTab]}
           onPress={() => setActiveTab('notes')}
         >
-          <Ionicons name="create" size={18} color={activeTab === 'notes' ? '#FFFFFF' : '#6B7280'} />
+          <Ionicons name="create" size={18} color={activeTab === 'notes' ? '#FFFFFF' : '#94A3B8'} />
           <Text style={[styles.tabText, activeTab === 'notes' && styles.activeTabText]}>Notes</Text>
         </TouchableOpacity>
         <TouchableOpacity 
           style={[styles.tab, activeTab === 'timer' && styles.activeTab]}
           onPress={() => setActiveTab('timer')}
         >
-          <Ionicons name="time" size={18} color={activeTab === 'timer' ? '#FFFFFF' : '#6B7280'} />
+          <Ionicons name="time" size={18} color={activeTab === 'timer' ? '#FFFFFF' : '#94A3B8'} />
           <Text style={[styles.tabText, activeTab === 'timer' && styles.activeTabText]}>Log</Text>
         </TouchableOpacity>
       </View>
@@ -271,7 +271,7 @@ export default function EmergencyScreen() {
                   <View style={styles.scriptNumber}>
                     <Text style={styles.scriptNumberText}>{index + 1}</Text>
                   </View>
-                  <View style={styles.scriptContent}>
+                  <View style={styles.scriptContentView}>
                     <Text style={styles.scriptTitle}>{script.title}</Text>
                     <Text style={styles.scriptText}>"{script.content}"</Text>
                   </View>
@@ -290,7 +290,7 @@ export default function EmergencyScreen() {
               <TextInput
                 style={styles.noteInput}
                 placeholder="What's happening? Who's involved? What time is it?"
-                placeholderTextColor="#6B7280"
+                placeholderTextColor="#94A3B8"
                 value={notes}
                 onChangeText={setNotes}
                 multiline
@@ -337,7 +337,7 @@ export default function EmergencyScreen() {
               </View>
             ) : (
               <View style={styles.emptyLog}>
-                <Ionicons name="time-outline" size={32} color="#4B5563" />
+                <Ionicons name="time-outline" size={32} color="#94A3B8" />
                 <Text style={styles.emptyLogText}>No events logged yet</Text>
               </View>
             )}
@@ -351,13 +351,13 @@ export default function EmergencyScreen() {
           <TouchableOpacity style={styles.emergencyBarContent} onPress={sendEmergencyAlert}>
             <Ionicons name="call" size={20} color="#EF4444" />
             <Text style={styles.emergencyBarText}>Alert {emergencyContact.name}</Text>
-            <Ionicons name="chevron-forward" size={18} color="#6B7280" />
+            <Ionicons name="chevron-forward" size={18} color="#94A3B8" />
           </TouchableOpacity>
         ) : (
           <TouchableOpacity style={styles.emergencyBarContent} onPress={() => router.push('/(tabs)/settings')}>
-            <Ionicons name="person-add" size={20} color="#9CA3AF" />
+            <Ionicons name="person-add" size={20} color="#64748B" />
             <Text style={styles.emergencyBarText}>Set up emergency contact</Text>
-            <Ionicons name="chevron-forward" size={18} color="#6B7280" />
+            <Ionicons name="chevron-forward" size={18} color="#94A3B8" />
           </TouchableOpacity>
         )}
       </View>
@@ -368,7 +368,7 @@ export default function EmergencyScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0A0A0A',
+    backgroundColor: '#FAFAFE',
   },
   header: {
     flexDirection: 'row',
@@ -381,9 +381,11 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#F1F1F5',
   },
   headerCenter: {
     alignItems: 'center',
@@ -391,11 +393,11 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: '#1E1B4B',
   },
   headerSubtitle: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: '#64748B',
     marginTop: 2,
   },
   alertButton: {
@@ -410,16 +412,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 24,
     marginHorizontal: 20,
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     borderRadius: 20,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#1E1E2E',
+    borderColor: '#F1F1F5',
   },
   timerText: {
     fontSize: 48,
     fontWeight: '300',
-    color: '#FFFFFF',
+    color: '#1E1B4B',
     fontVariant: ['tabular-nums'],
   },
   timerControls: {
@@ -455,15 +457,18 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 12,
     marginHorizontal: 4,
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#F1F1F5',
   },
   activeTab: {
-    backgroundColor: '#1E1E2E',
+    backgroundColor: '#8B5CF6',
+    borderColor: '#8B5CF6',
   },
   tabText: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#6B7280',
+    color: '#94A3B8',
     marginLeft: 6,
   },
   activeTabText: {
@@ -477,29 +482,29 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: '#1E1B4B',
     marginBottom: 4,
   },
   sectionDesc: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: '#64748B',
     marginBottom: 16,
   },
   scriptCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     borderRadius: 14,
     padding: 14,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#1E1E2E',
+    borderColor: '#F1F1F5',
   },
   scriptNumber: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#3B82F620',
+    backgroundColor: '#EF444420',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 14,
@@ -507,33 +512,33 @@ const styles = StyleSheet.create({
   scriptNumberText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#3B82F6',
+    color: '#EF4444',
   },
-  scriptContent: {
+  scriptContentView: {
     flex: 1,
   },
   scriptTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: '#1E1B4B',
     marginBottom: 4,
   },
   scriptText: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: '#64748B',
     fontStyle: 'italic',
   },
   noteInputContainer: {
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     borderRadius: 14,
     padding: 14,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#1E1E2E',
+    borderColor: '#F1F1F5',
   },
   noteInput: {
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#1E1B4B',
     minHeight: 100,
     textAlignVertical: 'top',
   },
@@ -547,7 +552,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   addNoteButtonDisabled: {
-    backgroundColor: '#1F2937',
+    backgroundColor: '#E2E8F0',
   },
   addNoteButtonText: {
     fontSize: 15,
@@ -558,16 +563,16 @@ const styles = StyleSheet.create({
   tipBox: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#F59E0B30',
+    borderColor: '#F1F1F5',
   },
   tipText: {
     flex: 1,
     fontSize: 13,
-    color: '#9CA3AF',
+    color: '#64748B',
     marginLeft: 10,
     lineHeight: 18,
   },
@@ -587,16 +592,18 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   eventsList: {
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     borderRadius: 14,
     padding: 4,
+    borderWidth: 1,
+    borderColor: '#F1F1F5',
   },
   eventItem: {
     flexDirection: 'row',
     paddingVertical: 12,
     paddingHorizontal: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#1E1E2E',
+    borderBottomColor: '#F1F1F5',
   },
   eventTime: {
     fontSize: 13,
@@ -607,7 +614,7 @@ const styles = StyleSheet.create({
   eventNote: {
     flex: 1,
     fontSize: 14,
-    color: '#D1D5DB',
+    color: '#374151',
   },
   emptyLog: {
     alignItems: 'center',
@@ -615,26 +622,28 @@ const styles = StyleSheet.create({
   },
   emptyLogText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: '#94A3B8',
     marginTop: 12,
   },
   emergencyBar: {
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderTopWidth: 1,
-    borderTopColor: '#14141E',
+    borderTopColor: '#F1F1F5',
   },
   emergencyBarContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 14,
+    borderWidth: 1,
+    borderColor: '#F1F1F5',
   },
   emergencyBarText: {
     flex: 1,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: '#1E1B4B',
     marginLeft: 12,
   },
 });

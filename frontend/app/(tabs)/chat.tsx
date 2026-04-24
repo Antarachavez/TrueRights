@@ -137,7 +137,7 @@ export default function ChatScreen() {
             <Text style={styles.headerSubtitle}>Rights education assistant</Text>
           </View>
           <TouchableOpacity style={styles.clearButton} onPress={clearChat}>
-            <Ionicons name="refresh" size={20} color="#9CA3AF" />
+            <Ionicons name="refresh" size={20} color="#64748B" />
           </TouchableOpacity>
         </View>
 
@@ -194,7 +194,7 @@ export default function ChatScreen() {
           <TextInput
             style={styles.textInput}
             placeholder="Ask about your rights..."
-            placeholderTextColor="#6B7280"
+            placeholderTextColor="#94A3B8"
             value={inputText}
             onChangeText={setInputText}
             multiline
@@ -221,7 +221,7 @@ export default function ChatScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0D0D14',
+    backgroundColor: '#FAFAFE',
   },
   keyboardView: {
     flex: 1,
@@ -233,23 +233,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#14141E',
+    borderBottomColor: '#F1F1F5',
   },
   headerTitle: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: "#1E1B4B",
   },
   headerSubtitle: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: '#64748B',
     marginTop: 2,
   },
   clearButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -271,11 +271,11 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 4,
   },
   assistantBubble: {
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     alignSelf: 'flex-start',
     borderBottomLeftRadius: 4,
     borderWidth: 1,
-    borderColor: '#1E1E2E',
+    borderColor: '#F1F1F5',
   },
   assistantIcon: {
     width: 24,
@@ -291,13 +291,13 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   userText: {
-    color: '#1E1B2E',
+    color: "#FFFFFF",
   },
   assistantText: {
-    color: '#E5E7EB',
+    color: '#374151',
   },
   thinkingText: {
-    color: '#9CA3AF',
+    color: '#64748B',
     marginLeft: 8,
     fontSize: 14,
   },
@@ -306,19 +306,19 @@ const styles = StyleSheet.create({
   },
   quickQuestionsTitle: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: '#64748B',
     marginBottom: 12,
   },
   quickQuestion: {
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 14,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: '#1E1E2E',
+    borderColor: '#F1F1F5',
   },
   quickQuestionText: {
-    color: '#E5E7EB',
+    color: '#374151',
     fontSize: 14,
   },
   inputContainer: {
@@ -327,21 +327,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderTopWidth: 1,
-    borderTopColor: '#14141E',
-    backgroundColor: '#0D0D14',
+    borderTopColor: '#F1F1F5',
+    backgroundColor: '#FAFAFE',
   },
   textInput: {
     flex: 1,
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 12,
-    color: '#FFFFFF',
+    color: '#1E1B4B',
     fontSize: 15,
     maxHeight: 100,
     marginRight: 12,
     borderWidth: 1,
-    borderColor: '#1E1E2E',
+    borderColor: '#F1F1F5',
   },
   sendButton: {
     width: 44,
@@ -352,15 +352,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   sendButtonDisabled: {
-    backgroundColor: '#1F2937',
+    backgroundColor: '#E2E8F0',
   },
   disclaimerBar: {
     paddingVertical: 8,
     alignItems: 'center',
-    backgroundColor: '#0D0D14',
+    backgroundColor: '#FAFAFE',
   },
   disclaimerText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: '#94A3B8',
   },
 });

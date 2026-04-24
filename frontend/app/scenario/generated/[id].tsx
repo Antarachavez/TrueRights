@@ -69,18 +69,18 @@ export default function GeneratedScenarioScreen() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+          <Ionicons name="arrow-back" size={24} color="#1E1B4B" />
         </TouchableOpacity>
         <View style={styles.headerActions}>
           <TouchableOpacity style={styles.actionBtn} onPress={shareScenario}>
-            <Ionicons name="share-outline" size={20} color="#FFFFFF" />
+            <Ionicons name="share-outline" size={20} color="#1E1B4B" />
           </TouchableOpacity>
         </View>
       </View>
 
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* AI Generated Badge */}
-        <Animated.View entering={FadeInUp.duration(400)}>
+        <View>
           <View style={styles.aiBadge}>
             <LinearGradient
               colors={['#C4B5FD', '#A78BFA']}
@@ -97,15 +97,15 @@ export default function GeneratedScenarioScreen() {
               </View>
             )}
           </View>
-        </Animated.View>
+        </View>
 
         {/* Question */}
-        <Animated.View entering={FadeInUp.duration(400).delay(100)}>
+        <View>
           <Text style={styles.question}>{scenario.question}</Text>
-        </Animated.View>
+        </View>
 
         {/* Quick Answer */}
-        <Animated.View entering={FadeInUp.duration(400).delay(150)} style={styles.section}>
+        <View>
           <View style={styles.sectionHeader}>
             <Ionicons name="flash" size={20} color="#FDBA74" />
             <Text style={styles.sectionTitle}>Quick Answer</Text>
@@ -113,22 +113,22 @@ export default function GeneratedScenarioScreen() {
           <View style={[styles.answerCard, { borderLeftColor: '#C4B5FD' }]}>
             <Text style={styles.shortAnswer}>{scenario.short_answer}</Text>
           </View>
-        </Animated.View>
+        </View>
 
         {/* Explanation */}
-        <Animated.View entering={FadeInUp.duration(400).delay(200)} style={styles.section}>
+        <View>
           <View style={styles.sectionHeader}>
-            <Ionicons name="information-circle" size={20} color="#9CA3AF" />
+            <Ionicons name="information-circle" size={20} color="#64748B" />
             <Text style={styles.sectionTitle}>What This Usually Means</Text>
           </View>
           <Text style={styles.explanation}>{scenario.explanation}</Text>
-        </Animated.View>
+        </View>
 
         {/* Next Steps */}
         {scenario.next_steps && scenario.next_steps.length > 0 && (
-          <Animated.View entering={FadeInUp.duration(400).delay(300)} style={styles.section}>
+          <View>
             <View style={styles.sectionHeader}>
-              <Ionicons name="footsteps" size={20} color="#9CA3AF" />
+              <Ionicons name="footsteps" size={20} color="#64748B" />
               <Text style={styles.sectionTitle}>Next Steps</Text>
             </View>
             <View style={styles.stepsList}>
@@ -141,12 +141,12 @@ export default function GeneratedScenarioScreen() {
                 </View>
               ))}
             </View>
-          </Animated.View>
+          </View>
         )}
 
         {/* Legal Quotes */}
         {scenario.legal_quotes && scenario.legal_quotes.length > 0 && (
-          <Animated.View entering={FadeInUp.duration(400).delay(400)} style={styles.section}>
+          <View>
             <View style={styles.sectionHeader}>
               <Ionicons name="book" size={20} color="#C4B5FD" />
               <Text style={styles.sectionTitle}>What the Law Says</Text>
@@ -169,19 +169,19 @@ export default function GeneratedScenarioScreen() {
                     </View>
                     <Text style={styles.legalQuoteText}>{"\u201C"}{quote.text}{"\u201D"}</Text>
                     <View style={styles.legalSourceRow}>
-                      <Ionicons name="link" size={12} color="#6B7280" />
+                      <Ionicons name="link" size={12} color="#94A3B8" />
                       <Text style={styles.legalSourceText}>{quote.source}</Text>
                     </View>
                   </LinearGradient>
                 </View>
               );
             })}
-          </Animated.View>
+          </View>
         )}
 
         {/* Disclaimer */}
         <View style={styles.disclaimer}>
-          <Ionicons name="information-circle" size={14} color="#6B7280" />
+          <Ionicons name="information-circle" size={14} color="#94A3B8" />
           <Text style={styles.disclaimerText}>
             AI-generated content. This is educational info, not legal advice. Laws vary by state.
           </Text>
@@ -192,9 +192,9 @@ export default function GeneratedScenarioScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0D0D14' },
+  container: { flex: 1, backgroundColor: '#FAFAFE' },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  loadingText: { color: '#9CA3AF', fontSize: 14, marginTop: 12 },
+  loadingText: { color: '#64748B', fontSize: 14, marginTop: 12 },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -205,13 +205,13 @@ const styles = StyleSheet.create({
   },
   backButton: {
     width: 40, height: 40, borderRadius: 20,
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     justifyContent: 'center', alignItems: 'center',
   },
   headerActions: { flexDirection: 'row', gap: 8 },
   actionBtn: {
     width: 40, height: 40, borderRadius: 20,
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     justifyContent: 'center', alignItems: 'center',
   },
   scrollView: { flex: 1 },
@@ -223,19 +223,19 @@ const styles = StyleSheet.create({
   },
   aiBadgeText: { color: '#FFFFFF', fontSize: 12, fontWeight: '600' },
   categoryBadge: {
-    backgroundColor: '#1E1E2E', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8,
+    backgroundColor: '#F1F1F5', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8,
   },
-  categoryBadgeText: { color: '#9CA3AF', fontSize: 12, fontWeight: '500' },
-  question: { fontSize: 22, fontWeight: '700', color: '#F0F0F8', lineHeight: 30, marginBottom: 20 },
+  categoryBadgeText: { color: '#64748B', fontSize: 12, fontWeight: '500' },
+  question: { fontSize: 22, fontWeight: '700', color: '#1E1B4B', lineHeight: 30, marginBottom: 20 },
   section: { marginBottom: 20 },
   sectionHeader: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 12 },
-  sectionTitle: { fontSize: 16, fontWeight: '600', color: '#E5E7EB' },
+  sectionTitle: { fontSize: 16, fontWeight: '600', color: '#374151' },
   answerCard: {
-    backgroundColor: '#14141E', borderRadius: 14, padding: 16,
-    borderLeftWidth: 3, borderWidth: 1, borderColor: '#1E1E2E',
+    backgroundColor: '#FFFFFF', borderRadius: 14, padding: 16,
+    borderLeftWidth: 3, borderWidth: 1, borderColor: '#F1F1F5',
   },
-  shortAnswer: { fontSize: 16, color: '#F0F0F8', lineHeight: 24, fontWeight: '500' },
-  explanation: { fontSize: 15, color: '#D1D5DB', lineHeight: 24 },
+  shortAnswer: { fontSize: 16, color: '#1E1B4B', lineHeight: 24, fontWeight: '500' },
+  explanation: { fontSize: 15, color: '#64748B', lineHeight: 24 },
   stepsList: { gap: 10 },
   stepItem: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   stepNumber: {
@@ -244,8 +244,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center', alignItems: 'center',
   },
   stepNumberText: { color: '#C4B5FD', fontSize: 13, fontWeight: '600' },
-  stepText: { flex: 1, fontSize: 14, color: '#D1D5DB', lineHeight: 20 },
-  legalQuoteCard: { borderRadius: 16, overflow: 'hidden', marginBottom: 12, borderWidth: 1, borderColor: '#1E1E2E' },
+  stepText: { flex: 1, fontSize: 14, color: '#64748B', lineHeight: 20 },
+  legalQuoteCard: { borderRadius: 16, overflow: 'hidden', marginBottom: 12, borderWidth: 1, borderColor: '#F1F1F5' },
   legalQuoteGradient: { padding: 16 },
   legalQuoteHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
   legalTypeBadge: {
@@ -253,13 +253,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8,
   },
   legalTypeText: { fontSize: 11, fontWeight: '600', marginLeft: 5, textTransform: 'uppercase', letterSpacing: 0.5 },
-  legalQuoteText: { fontSize: 15, color: '#E5E7EB', lineHeight: 24, fontStyle: 'italic', marginBottom: 10 },
+  legalQuoteText: { fontSize: 15, color: '#374151', lineHeight: 24, fontStyle: 'italic', marginBottom: 10 },
   legalSourceRow: { flexDirection: 'row', alignItems: 'center' },
-  legalSourceText: { fontSize: 12, color: '#6B7280', marginLeft: 6, flex: 1, fontWeight: '500' },
+  legalSourceText: { fontSize: 12, color: '#94A3B8', marginLeft: 6, flex: 1, fontWeight: '500' },
   disclaimer: {
     flexDirection: 'row', alignItems: 'flex-start',
-    backgroundColor: '#14141E', borderRadius: 12, padding: 12,
-    borderWidth: 1, borderColor: '#1E1E2E', marginTop: 8,
+    backgroundColor: '#FFFFFF', borderRadius: 12, padding: 12,
+    borderWidth: 1, borderColor: '#F1F1F5', marginTop: 8,
   },
-  disclaimerText: { flex: 1, fontSize: 12, color: '#6B7280', marginLeft: 8, lineHeight: 18 },
+  disclaimerText: { flex: 1, fontSize: 12, color: '#94A3B8', marginLeft: 8, lineHeight: 18 },
 });

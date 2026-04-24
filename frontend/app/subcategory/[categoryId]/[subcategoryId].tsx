@@ -106,7 +106,7 @@ export default function SubcategoryScreen() {
       {/* Header */}
       <View style={[styles.header, { borderBottomColor: `${subcategory.color}30` }]}>
         <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+          <Ionicons name="arrow-back" size={24} color="#1E1B4B" />
         </TouchableOpacity>
         
         <View style={styles.headerContent}>
@@ -123,17 +123,17 @@ export default function SubcategoryScreen() {
       {/* Search Bar */}
       <View style={styles.searchContainer}>
         <View style={[styles.searchBar, { borderColor: `${subcategory.color}30` }]}>
-          <Ionicons name="search" size={18} color="#6B7280" />
+          <Ionicons name="search" size={18} color="#94A3B8" />
           <TextInput
             style={styles.searchInput}
             placeholder="Search questions..."
-            placeholderTextColor="#6B7280"
+            placeholderTextColor="#94A3B8"
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
           {searchQuery.length > 0 && (
             <TouchableOpacity onPress={() => setSearchQuery('')}>
-              <Ionicons name="close-circle" size={18} color="#6B7280" />
+              <Ionicons name="close-circle" size={18} color="#94A3B8" />
             </TouchableOpacity>
           )}
         </View>
@@ -172,7 +172,7 @@ export default function SubcategoryScreen() {
 
         {filteredScenarios.length === 0 && searchQuery.trim() && (
           <View style={styles.noResults}>
-            <Ionicons name="search-outline" size={40} color="#4B5563" />
+            <Ionicons name="search-outline" size={40} color="#64748B" />
             <Text style={styles.noResultsText}>No matches found</Text>
           </View>
         )}
@@ -203,34 +203,34 @@ export default function SubcategoryScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0D0D14' },
+  container: { flex: 1, backgroundColor: '#FAFAFE' },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  loadingText: { color: '#FFFFFF', fontSize: 16 },
+  loadingText: { color: '#1E1B4B', fontSize: 16 },
   header: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 14, borderBottomWidth: 1 },
-  backButton: { width: 38, height: 38, borderRadius: 19, backgroundColor: '#14141E', justifyContent: 'center', alignItems: 'center', marginBottom: 12 },
+  backButton: { width: 38, height: 38, borderRadius: 19, backgroundColor: '#FFFFFF', justifyContent: 'center', alignItems: 'center', marginBottom: 12 },
   headerContent: { flexDirection: 'row', alignItems: 'center' },
   subcategoryIcon: { width: 52, height: 52, borderRadius: 14, justifyContent: 'center', alignItems: 'center', marginRight: 14 },
   headerText: { flex: 1 },
-  breadcrumb: { fontSize: 12, color: '#6B7280', marginBottom: 2 },
+  breadcrumb: { fontSize: 12, color: '#94A3B8', marginBottom: 2 },
   subcategoryName: { fontSize: 20, fontWeight: '700' },
   searchContainer: { paddingHorizontal: 20, paddingVertical: 10 },
-  searchBar: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#14141E', borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10, borderWidth: 1 },
-  searchInput: { flex: 1, fontSize: 14, color: '#FFFFFF', marginLeft: 8 },
+  searchBar: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#FFFFFF', borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10, borderWidth: 1 },
+  searchInput: { flex: 1, fontSize: 14, color: "#1E1B4B", marginLeft: 8 },
   scrollView: { flex: 1 },
   scrollContent: { padding: 20, paddingTop: 6 },
-  sectionTitle: { fontSize: 13, fontWeight: '500', color: '#6B7280', marginBottom: 12 },
-  scenarioCard: { backgroundColor: '#14141E', borderRadius: 14, padding: 14, marginBottom: 10, borderLeftWidth: 3, flexDirection: 'row', alignItems: 'center' },
+  sectionTitle: { fontSize: 13, fontWeight: '500', color: '#94A3B8', marginBottom: 12 },
+  scenarioCard: { backgroundColor: '#FFFFFF', borderRadius: 14, padding: 14, marginBottom: 10, borderLeftWidth: 3, flexDirection: 'row', alignItems: 'center' },
   scenarioContent: { flex: 1, marginRight: 10 },
-  scenarioQuestion: { fontSize: 15, fontWeight: '600', color: '#FFFFFF', marginBottom: 6, lineHeight: 20 },
-  scenarioAnswer: { fontSize: 13, color: '#9CA3AF', lineHeight: 18 },
+  scenarioQuestion: { fontSize: 15, fontWeight: '600', color: "#1E1B4B", marginBottom: 6, lineHeight: 20 },
+  scenarioAnswer: { fontSize: 13, color: '#64748B', lineHeight: 18 },
   arrowCircle: { width: 32, height: 32, borderRadius: 16, justifyContent: 'center', alignItems: 'center' },
   noResults: { alignItems: 'center', paddingTop: 30 },
-  noResultsText: { fontSize: 15, color: '#6B7280', marginTop: 10 },
-  askAiCard: { backgroundColor: '#14141E', borderRadius: 12, padding: 12, marginTop: 10, flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: '#3B82F620' },
+  noResultsText: { fontSize: 15, color: '#94A3B8', marginTop: 10 },
+  askAiCard: { backgroundColor: '#FFFFFF', borderRadius: 12, padding: 12, marginTop: 10, flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: '#3B82F620' },
   askAiIcon: { width: 38, height: 38, borderRadius: 10, backgroundColor: '#3B82F612', justifyContent: 'center', alignItems: 'center', marginRight: 10 },
   askAiText: { flex: 1 },
-  askAiTitle: { fontSize: 13, fontWeight: '600', color: '#FFFFFF' },
-  askAiDesc: { fontSize: 11, color: '#9CA3AF', marginTop: 1 },
+  askAiTitle: { fontSize: 13, fontWeight: '600', color: '#1E1B4B' },
+  askAiDesc: { fontSize: 11, color: '#64748B', marginTop: 1 },
   disclaimer: { paddingTop: 16, paddingBottom: 8 },
-  disclaimerText: { fontSize: 11, color: '#4B5563', textAlign: 'center' },
+  disclaimerText: { fontSize: 11, color: '#64748B', textAlign: 'center' },
 });

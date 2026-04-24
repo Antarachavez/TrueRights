@@ -77,10 +77,15 @@ export default function ResourcesScreen() {
   const getCategoryIcon = (category: string): keyof typeof Ionicons.glyphMap => {
     const icons: { [key: string]: keyof typeof Ionicons.glyphMap } = {
       'Emergency Hotlines': 'call',
+      'Emergency': 'call',
       'Legal Aid': 'briefcase',
+      'Legal': 'briefcase',
       'Youth Support': 'heart',
+      'Youth': 'heart',
       'Worker Rights': 'construct',
-      'Housing Help': 'home'
+      'Immigration': 'globe',
+      'Housing Help': 'home',
+      'Consumer': 'cart',
     };
     return icons[category] || 'help-buoy';
   };
@@ -88,12 +93,17 @@ export default function ResourcesScreen() {
   const getCategoryColor = (category: string): string => {
     const colors: { [key: string]: string } = {
       'Emergency Hotlines': '#EF4444',
+      'Emergency': '#EF4444',
       'Legal Aid': '#3B82F6',
+      'Legal': '#3B82F6',
       'Youth Support': '#EC4899',
+      'Youth': '#EC4899',
       'Worker Rights': '#F97316',
-      'Housing Help': '#10B981'
+      'Immigration': '#06B6D4',
+      'Housing Help': '#10B981',
+      'Consumer': '#F59E0B',
     };
-    return colors[category] || '#6B7280';
+    return colors[category] || '#94A3B8';
   };
 
   return (
@@ -136,7 +146,7 @@ export default function ResourcesScreen() {
                 <Ionicons 
                   name={isExpanded ? "chevron-up" : "chevron-down"} 
                   size={20} 
-                  color="#9CA3AF" 
+                  color="#64748B" 
                 />
               </TouchableOpacity>
 
@@ -184,7 +194,7 @@ export default function ResourcesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0D0D14',
+    backgroundColor: '#FAFAFE',
   },
   header: {
     paddingHorizontal: 20,
@@ -194,11 +204,11 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: '#1E1B4B',
   },
   headerSubtitle: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: '#64748B',
     marginTop: 4,
   },
   scrollView: {
@@ -209,12 +219,12 @@ const styles = StyleSheet.create({
     paddingTop: 4,
   },
   categoryContainer: {
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     marginBottom: 12,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#1E1E2E',
+    borderColor: '#F1F1F5',
   },
   categoryHeader: {
     flexDirection: 'row',
@@ -237,14 +247,14 @@ const styles = StyleSheet.create({
   categoryTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: '#1E1B4B',
   },
   itemsContainer: {
     paddingHorizontal: 16,
     paddingBottom: 16,
   },
   resourceItem: {
-    backgroundColor: '#0D0D14',
+    backgroundColor: '#FAFAFE',
     borderRadius: 12,
     padding: 14,
     marginBottom: 8,
@@ -255,12 +265,12 @@ const styles = StyleSheet.create({
   resourceName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: '#1E1B4B',
     marginBottom: 4,
   },
   resourceDescription: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: '#64748B',
   },
   contactBadge: {
     flexDirection: 'row',
@@ -280,17 +290,17 @@ const styles = StyleSheet.create({
   helpTip: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 14,
     marginTop: 8,
     borderWidth: 1,
-    borderColor: '#1E1E2E',
+    borderColor: '#F1F1F5',
   },
   helpTipText: {
     flex: 1,
     fontSize: 13,
-    color: '#9CA3AF',
+    color: '#64748B',
     marginLeft: 10,
     lineHeight: 18,
   },

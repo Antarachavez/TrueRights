@@ -6,11 +6,11 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 export default function RootLayout() {
   return (
     <SafeAreaProvider>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       <Stack
         screenOptions={{
           headerShown: false,
-          contentStyle: { backgroundColor: '#0F0F0F' },
+          contentStyle: { backgroundColor: '#FAFAFE' },
           animation: 'slide_from_right',
         }}
       >
@@ -19,6 +19,7 @@ export default function RootLayout() {
         <Stack.Screen name="category/[id]" />
         <Stack.Screen name="subcategory/[categoryId]/[subcategoryId]" />
         <Stack.Screen name="scenario/[id]" />
+        <Stack.Screen name="scenario/generated/[id]" />
         <Stack.Screen 
           name="emergency" 
           options={{ 

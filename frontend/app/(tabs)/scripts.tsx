@@ -240,7 +240,7 @@ export default function ScriptsScreen() {
               <Ionicons
                 name={isCopied ? "checkmark" : "copy-outline"}
                 size={18}
-                color={isCopied ? "#10B981" : "#9CA3AF"}
+                color={isCopied ? "#10B981" : "#64748B"}
               />
             </TouchableOpacity>
             {!isSaved ? (
@@ -249,7 +249,7 @@ export default function ScriptsScreen() {
                 onPress={() => saveScript(script as Script)}
                 activeOpacity={0.7}
               >
-                <Ionicons name="bookmark-outline" size={18} color="#9CA3AF" />
+                <Ionicons name="bookmark-outline" size={18} color="#64748B" />
               </TouchableOpacity>
             ) : (
               <TouchableOpacity
@@ -276,11 +276,11 @@ export default function ScriptsScreen() {
   const SearchBar = ({ placeholder }: { placeholder: string }) => (
     <View style={styles.searchContainer}>
       <View style={styles.searchBar}>
-        <Ionicons name="search" size={18} color="#6B7280" />
+        <Ionicons name="search" size={18} color="#94A3B8" />
         <TextInput
           style={styles.searchInput}
           placeholder={placeholder}
-          placeholderTextColor="#6B7280"
+          placeholderTextColor="#94A3B8"
           value={searchQuery}
           onChangeText={setSearchQuery}
           autoCorrect={false}
@@ -288,7 +288,7 @@ export default function ScriptsScreen() {
         />
         {searchQuery.length > 0 && (
           <TouchableOpacity onPress={() => setSearchQuery('')} activeOpacity={0.7}>
-            <Ionicons name="close-circle" size={18} color="#6B7280" />
+            <Ionicons name="close-circle" size={18} color="#94A3B8" />
           </TouchableOpacity>
         )}
       </View>
@@ -320,7 +320,7 @@ export default function ScriptsScreen() {
             <Text style={styles.savedBannerCount}>{savedScripts.length} saved</Text>
           </View>
         </View>
-        <Ionicons name="chevron-forward" size={20} color="#6B7280" />
+        <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
       </TouchableOpacity>
 
       {/* Category Grid */}
@@ -349,7 +349,7 @@ export default function ScriptsScreen() {
 
       {filteredCategories.length === 0 && searchQuery.length > 0 && (
         <View style={styles.emptyState}>
-          <Ionicons name="search-outline" size={44} color="#4B5563" />
+          <Ionicons name="search-outline" size={44} color="#64748B" />
           <Text style={styles.emptyTitle}>No results for "{searchQuery}"</Text>
           <Text style={styles.emptyText}>Try a different search term</Text>
         </View>
@@ -394,7 +394,7 @@ export default function ScriptsScreen() {
 
         {filteredCategoryScripts.length === 0 && searchQuery.length > 0 && (
           <View style={styles.emptyState}>
-            <Ionicons name="search-outline" size={44} color="#4B5563" />
+            <Ionicons name="search-outline" size={44} color="#64748B" />
             <Text style={styles.emptyTitle}>No scripts match "{searchQuery}"</Text>
             <Text style={styles.emptyText}>Try a different search term</Text>
           </View>
@@ -419,13 +419,13 @@ export default function ScriptsScreen() {
         ))
       ) : savedScripts.length === 0 ? (
         <View style={styles.emptyState}>
-          <Ionicons name="bookmark-outline" size={48} color="#4B5563" />
+          <Ionicons name="bookmark-outline" size={48} color="#64748B" />
           <Text style={styles.emptyTitle}>No saved scripts yet</Text>
           <Text style={styles.emptyText}>Tap the bookmark icon on any script to save it here</Text>
         </View>
       ) : (
         <View style={styles.emptyState}>
-          <Ionicons name="search-outline" size={44} color="#4B5563" />
+          <Ionicons name="search-outline" size={44} color="#64748B" />
           <Text style={styles.emptyTitle}>No results for "{searchQuery}"</Text>
           <Text style={styles.emptyText}>Try a different search term</Text>
         </View>
@@ -473,7 +473,7 @@ export default function ScriptsScreen() {
               onPress={goBack}
               activeOpacity={0.7}
             >
-              <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+              <Ionicons name="arrow-back" size={24} color="#1E1B4B" />
             </TouchableOpacity>
           )}
           <View style={styles.headerTextContainer}>
@@ -511,7 +511,7 @@ export default function ScriptsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0D0D14',
+    backgroundColor: '#FAFAFE',
   },
   header: {
     paddingHorizontal: 20,
@@ -526,7 +526,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -537,18 +537,18 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 26,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: "#1E1B4B",
   },
   headerSubtitle: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: '#64748B',
     marginTop: 2,
   },
   savedButton: {
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
@@ -578,16 +578,16 @@ const styles = StyleSheet.create({
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     paddingHorizontal: 14,
     height: 44,
     borderWidth: 1,
-    borderColor: '#1E1E2E',
+    borderColor: '#F1F1F5',
   },
   searchInput: {
     flex: 1,
-    color: '#FFFFFF',
+    color: "#1E1B4B",
     fontSize: 15,
     marginLeft: 10,
     paddingVertical: 0,
@@ -606,12 +606,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 16,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: '#1E1E2E',
+    borderColor: '#F1F1F5',
   },
   savedBannerLeft: {
     flexDirection: 'row',
@@ -629,18 +629,18 @@ const styles = StyleSheet.create({
   savedBannerTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: "#1E1B4B",
   },
   savedBannerCount: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: '#64748B',
     marginTop: 2,
   },
   // Section
   sectionLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#9CA3AF',
+    color: '#64748B',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
     marginBottom: 14,
@@ -656,12 +656,12 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   categoryCard: {
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 18,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#1E1E2E',
+    borderColor: '#F1F1F5',
     minHeight: 140,
     justifyContent: 'center',
   },
@@ -676,12 +676,12 @@ const styles = StyleSheet.create({
   categoryCardName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: '#1E1B4B',
     textAlign: 'center',
   },
   categoryCardCount: {
     fontSize: 12,
-    color: '#6B7280',
+    color: '#94A3B8',
     marginTop: 4,
   },
   // Subcategory sections
@@ -694,7 +694,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingBottom: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#1F1F1F',
+    borderBottomColor: '#F1F1F5',
   },
   subcategoryDot: {
     width: 8,
@@ -705,13 +705,13 @@ const styles = StyleSheet.create({
   subcategoryTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#E5E7EB',
+    color: '#374151',
     flex: 1,
   },
   subcategoryCount: {
     fontSize: 13,
-    color: '#6B7280',
-    backgroundColor: '#14141E',
+    color: '#94A3B8',
+    backgroundColor: '#FFFFFF',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 8,
@@ -719,12 +719,12 @@ const styles = StyleSheet.create({
   },
   // Script Card
   scriptCard: {
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     borderRadius: 14,
     padding: 14,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#1E1E2E',
+    borderColor: '#F1F1F5',
   },
   scriptHeader: {
     flexDirection: 'row',
@@ -755,12 +755,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
-    backgroundColor: '#252525',
+    backgroundColor: '#F1F1F5',
   },
   subBadgeText: {
     fontSize: 11,
     fontWeight: '500',
-    color: '#9CA3AF',
+    color: '#64748B',
   },
   scriptActions: {
     flexDirection: 'row',
@@ -771,7 +771,7 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
     borderRadius: 17,
-    backgroundColor: '#252525',
+    backgroundColor: '#F1F1F5',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -781,32 +781,32 @@ const styles = StyleSheet.create({
   scriptTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#D1D5DB',
+    color: '#64748B',
     marginBottom: 8,
   },
   scriptContentContainer: {
-    backgroundColor: '#0D0D14',
+    backgroundColor: '#FAFAFE',
     borderRadius: 10,
     padding: 12,
     position: 'relative',
   },
   quoteIcon: {
     fontSize: 22,
-    color: '#4B5563',
+    color: '#64748B',
     position: 'absolute',
     top: 2,
     left: 6,
   },
   quoteIconEnd: {
     fontSize: 22,
-    color: '#4B5563',
+    color: '#64748B',
     position: 'absolute',
     bottom: -4,
     right: 6,
   },
   scriptContent: {
     fontSize: 15,
-    color: '#E5E7EB',
+    color: '#374151',
     lineHeight: 22,
     paddingHorizontal: 14,
     fontStyle: 'italic',
@@ -820,12 +820,12 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: "#1E1B4B",
     marginTop: 16,
   },
   emptyText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: '#94A3B8',
     textAlign: 'center',
     marginTop: 8,
     paddingHorizontal: 40,

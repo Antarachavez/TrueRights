@@ -1,56 +1,50 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Animated, { FadeIn, FadeInUp, FadeInDown } from 'react-native-reanimated';
-
-const { width, height } = Dimensions.get('window');
+import { LinearGradient } from 'expo-linear-gradient';
+import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 
 export default function WelcomeScreen() {
   const router = useRouter();
   const [checking, setChecking] = useState(true);
 
-  useEffect(() => {
-    checkOnboarding();
-  }, []);
+  useEffect(() => { checkOnboarding(); }, []);
 
   const checkOnboarding = async () => {
     try {
       const completed = await AsyncStorage.getItem('onboarding_completed');
-      if (completed === 'true') {
-        router.replace('/(tabs)/home');
-      } else {
-        setChecking(false);
-      }
-    } catch (e) {
-      setChecking(false);
-    }
+      if (completed === 'true') router.replace('/(tabs)/home');
+      else setChecking(false);
+    } catch (e) { setChecking(false); }
   };
 
   const handleGetStarted = async () => {
-    await AsyncStorage.setItem('onboarding_completed', 'true');
+    try {
+      await AsyncStorage.setItem('onboarding_completed', 'true');
+    } catch (e) {
+      console.error('Error saving onboarding state:', e);
+    }
     router.replace('/(tabs)/home');
   };
 
-  if (checking) {
-    return (
-      <View style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <Ionicons name="shield-checkmark" size={60} color="#3B82F6" />
-        </View>
+  if (checking) return (
+    <View style={styles.container}>
+      <View style={styles.loadingContainer}>
+        <Ionicons name="shield-checkmark" size={48} color="#8B5CF6" />
       </View>
-    );
-  }
+    </View>
+  );
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <Animated.View entering={FadeInUp.duration(800).delay(200)} style={styles.logoContainer}>
-          <View style={styles.logoCircle}>
-            <Ionicons name="shield-checkmark" size={60} color="#FFFFFF" />
-          </View>
+          <LinearGradient colors={['#8B5CF6', '#A78BFA']} style={styles.logoCircle} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+            <Ionicons name="shield-checkmark" size={48} color="#FFFFFF" />
+          </LinearGradient>
         </Animated.View>
 
         <Animated.View entering={FadeInUp.duration(800).delay(400)} style={styles.textContainer}>
@@ -59,153 +53,55 @@ export default function WelcomeScreen() {
         </Animated.View>
 
         <Animated.View entering={FadeIn.duration(800).delay(600)} style={styles.featuresContainer}>
-          <View style={styles.featureRow}>
-            <View style={[styles.featureIcon, { backgroundColor: '#3B82F620' }]}>
-              <Ionicons name="flash" size={24} color="#3B82F6" />
+          {[
+            { icon: 'flash', color: '#8B5CF6', bg: '#8B5CF608', title: 'Fast Answers', desc: 'Get quick guidance when you need it most' },
+            { icon: 'document-text', color: '#34D399', bg: '#34D39908', title: 'Ready Scripts', desc: 'Words you can say in stressful moments' },
+            { icon: 'alert-circle', color: '#FB7185', bg: '#FB718508', title: 'Emergency Mode', desc: 'Stay calm and document what happens' },
+          ].map((f, i) => (
+            <View key={i} style={styles.featureRow}>
+              <View style={[styles.featureIcon, { backgroundColor: f.bg }]}>
+                <Ionicons name={f.icon as any} size={22} color={f.color} />
+              </View>
+              <View style={styles.featureText}>
+                <Text style={styles.featureTitle}>{f.title}</Text>
+                <Text style={styles.featureDesc}>{f.desc}</Text>
+              </View>
             </View>
-            <View style={styles.featureText}>
-              <Text style={styles.featureTitle}>Fast Answers</Text>
-              <Text style={styles.featureDesc}>Get quick guidance when you need it most</Text>
-            </View>
-          </View>
-
-          <View style={styles.featureRow}>
-            <View style={[styles.featureIcon, { backgroundColor: '#10B98120' }]}>
-              <Ionicons name="document-text" size={24} color="#10B981" />
-            </View>
-            <View style={styles.featureText}>
-              <Text style={styles.featureTitle}>Ready Scripts</Text>
-              <Text style={styles.featureDesc}>Words you can say in stressful moments</Text>
-            </View>
-          </View>
-
-          <View style={styles.featureRow}>
-            <View style={[styles.featureIcon, { backgroundColor: '#EF444420' }]}>
-              <Ionicons name="alert-circle" size={24} color="#EF4444" />
-            </View>
-            <View style={styles.featureText}>
-              <Text style={styles.featureTitle}>Emergency Mode</Text>
-              <Text style={styles.featureDesc}>Stay calm and document what happens</Text>
-            </View>
-          </View>
+          ))}
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.duration(800).delay(800)} style={styles.bottomContainer}>
-          <TouchableOpacity style={styles.startButton} onPress={handleGetStarted}>
-            <Text style={styles.startButtonText}>Get Started</Text>
-            <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
+        <View style={styles.bottomContainer}>
+          <TouchableOpacity style={styles.startButtonOuter} onPress={handleGetStarted} activeOpacity={0.85}>
+            <LinearGradient colors={['#8B5CF6', '#7C3AED']} style={styles.startButton} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
+              <Text style={styles.startButtonText}>Get Started</Text>
+              <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
+            </LinearGradient>
           </TouchableOpacity>
-
-          <Text style={styles.disclaimer}>
-            This app provides educational information only.{"\n"}It is not legal advice.
-          </Text>
-        </Animated.View>
+          <Text style={styles.disclaimer}>This app provides educational information only.{"\n"}It is not legal advice.</Text>
+        </View>
       </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#0F0F0F',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 40,
-  },
-  logoContainer: {
-    alignItems: 'center',
-    marginBottom: 32,
-  },
-  logoCircle: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: '#3B82F6',
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#3B82F6',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.4,
-    shadowRadius: 16,
-    elevation: 10,
-  },
-  textContainer: {
-    alignItems: 'center',
-    marginBottom: 40,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: '700',
-    color: '#FFFFFF',
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#9CA3AF',
-    textAlign: 'center',
-  },
-  featuresContainer: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  featureRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 24,
-    paddingHorizontal: 8,
-  },
-  featureIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 16,
-  },
-  featureText: {
-    flex: 1,
-  },
-  featureTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FFFFFF',
-    marginBottom: 4,
-  },
-  featureDesc: {
-    fontSize: 14,
-    color: '#9CA3AF',
-  },
-  bottomContainer: {
-    paddingBottom: 20,
-  },
-  startButton: {
-    backgroundColor: '#3B82F6',
-    paddingVertical: 16,
-    borderRadius: 16,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  startButtonText: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: '600',
-    marginRight: 8,
-  },
-  disclaimer: {
-    fontSize: 12,
-    color: '#6B7280',
-    textAlign: 'center',
-    lineHeight: 18,
-  },
+  container: { flex: 1, backgroundColor: '#FAFAFE' },
+  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  content: { flex: 1, paddingHorizontal: 28, paddingTop: 48 },
+  logoContainer: { alignItems: 'center', marginBottom: 32 },
+  logoCircle: { width: 96, height: 96, borderRadius: 48, justifyContent: 'center', alignItems: 'center' },
+  textContainer: { alignItems: 'center', marginBottom: 40 },
+  title: { fontSize: 30, fontWeight: '700', color: '#1E1B4B', marginBottom: 8, textAlign: 'center', letterSpacing: -0.5 },
+  subtitle: { fontSize: 16, color: '#64748B', textAlign: 'center' },
+  featuresContainer: { flex: 1, justifyContent: 'center' },
+  featureRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 24, paddingHorizontal: 4 },
+  featureIcon: { width: 44, height: 44, borderRadius: 12, justifyContent: 'center', alignItems: 'center', marginRight: 16 },
+  featureText: { flex: 1 },
+  featureTitle: { fontSize: 16, fontWeight: '600', color: '#1E1B4B', marginBottom: 2 },
+  featureDesc: { fontSize: 14, color: '#94A3B8' },
+  bottomContainer: { paddingBottom: 20 },
+  startButtonOuter: { borderRadius: 16, overflow: 'hidden', marginBottom: 16 },
+  startButton: { paddingVertical: 16, borderRadius: 16, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 8 },
+  startButtonText: { color: '#FFFFFF', fontSize: 17, fontWeight: '600' },
+  disclaimer: { fontSize: 12, color: '#94A3B8', textAlign: 'center', lineHeight: 18 },
 });

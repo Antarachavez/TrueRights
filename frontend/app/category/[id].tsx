@@ -172,7 +172,7 @@ export default function CategoryScreen() {
       {/* Header */}
       <View style={[styles.header, { borderBottomColor: `${category.color}30` }]}>
         <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+          <Ionicons name="arrow-back" size={24} color="#1E1B4B" />
         </TouchableOpacity>
         
         <View style={styles.headerContent}>
@@ -189,17 +189,17 @@ export default function CategoryScreen() {
       {/* Search Bar */}
       <View style={styles.searchContainer}>
         <View style={styles.searchBar}>
-          <Ionicons name="search" size={20} color="#6B7280" />
+          <Ionicons name="search" size={20} color="#94A3B8" />
           <TextInput
             style={styles.searchInput}
             placeholder={`Search ${category.name.toLowerCase()} questions...`}
-            placeholderTextColor="#6B7280"
+            placeholderTextColor="#94A3B8"
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
           {searchQuery.length > 0 && (
             <TouchableOpacity onPress={() => setSearchQuery('')}>
-              <Ionicons name="close-circle" size={20} color="#6B7280" />
+              <Ionicons name="close-circle" size={20} color="#94A3B8" />
             </TouchableOpacity>
           )}
         </View>
@@ -227,13 +227,13 @@ export default function CategoryScreen() {
                     <Text style={styles.searchResultQuestion}>{scenario.question}</Text>
                     <Text style={styles.searchResultAnswer} numberOfLines={2}>{scenario.short_answer}</Text>
                   </View>
-                  <Ionicons name="chevron-forward" size={18} color="#6B7280" />
+                  <Ionicons name="chevron-forward" size={18} color="#94A3B8" />
                 </TouchableOpacity>
               </Animated.View>
             ))}
             {searchResults.length === 0 && (
               <View style={styles.noResults}>
-                <Ionicons name="search-outline" size={48} color="#4B5563" />
+                <Ionicons name="search-outline" size={48} color="#64748B" />
                 <Text style={styles.noResultsText}>No pre-loaded answers found</Text>
                 <Text style={styles.noResultsHint}>Want AI to research this for you?</Text>
                 <TouchableOpacity
@@ -333,7 +333,7 @@ export default function CategoryScreen() {
                         <Text style={styles.searchResultQuestion}>{scenario.question}</Text>
                         <Text style={styles.searchResultAnswer} numberOfLines={2}>{scenario.short_answer}</Text>
                       </View>
-                      <Ionicons name="chevron-forward" size={18} color="#6B7280" />
+                      <Ionicons name="chevron-forward" size={18} color="#94A3B8" />
                     </TouchableOpacity>
                   </Animated.View>
                 ))}
@@ -349,7 +349,7 @@ export default function CategoryScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0D0D14',
+    backgroundColor: '#FAFAFE',
   },
   loadingContainer: {
     flex: 1,
@@ -357,7 +357,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loadingText: {
-    color: '#FFFFFF',
+    color: '#1E1B4B',
     fontSize: 16,
   },
   header: {
@@ -370,7 +370,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
@@ -393,11 +393,11 @@ const styles = StyleSheet.create({
   categoryName: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: '#1E1B4B',
   },
   categoryDesc: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: '#64748B',
     marginTop: 2,
   },
   searchContainer: {
@@ -407,17 +407,17 @@ const styles = StyleSheet.create({
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     paddingHorizontal: 14,
     paddingVertical: 12,
     borderWidth: 1,
-    borderColor: '#1E1E2E',
+    borderColor: '#F1F1F5',
   },
   searchInput: {
     flex: 1,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: "#1E1B4B",
     marginLeft: 10,
   },
   scrollView: {
@@ -430,7 +430,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#9CA3AF',
+    color: '#64748B',
     marginBottom: 14,
   },
   subcategoriesGrid: {
@@ -443,7 +443,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   subcategoryCard: {
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     borderRadius: 14,
     padding: 14,
     borderWidth: 1,
@@ -460,12 +460,12 @@ const styles = StyleSheet.create({
   subcategoryName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: "#1E1B4B",
     marginBottom: 4,
   },
   subcategoryCount: {
     fontSize: 12,
-    color: '#6B7280',
+    color: '#94A3B8',
   },
   arrowCircle: {
     position: 'absolute',
@@ -478,7 +478,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   searchResultCard: {
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     borderRadius: 14,
     padding: 14,
     marginBottom: 10,
@@ -493,12 +493,12 @@ const styles = StyleSheet.create({
   searchResultQuestion: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: '#1E1B4B',
     marginBottom: 6,
   },
   searchResultAnswer: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: '#64748B',
     lineHeight: 18,
   },
   noResults: {
@@ -508,16 +508,16 @@ const styles = StyleSheet.create({
   noResultsText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: '#1E1B4B',
     marginTop: 12,
   },
   noResultsHint: {
     fontSize: 14,
-    color: '#6B7280',
+    color: '#94A3B8',
     marginTop: 4,
   },
   askAiCard: {
-    backgroundColor: '#14141E',
+    backgroundColor: '#FFFFFF',
     borderRadius: 14,
     padding: 14,
     marginTop: 8,
@@ -541,11 +541,11 @@ const styles = StyleSheet.create({
   askAiTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: "#1E1B4B",
   },
   askAiDesc: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: '#64748B',
     marginTop: 2,
   },
   generateButton: {
@@ -583,8 +583,8 @@ const styles = StyleSheet.create({
   },
   generatedCount: {
     fontSize: 13,
-    color: '#6B7280',
-    backgroundColor: '#14141E',
+    color: '#94A3B8',
+    backgroundColor: '#FFFFFF',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 8,
