@@ -218,18 +218,17 @@ export default function CategoryScreen() {
               {searchResults.length} result{searchResults.length !== 1 ? 's' : ''} found
             </Text>
             {searchResults.map((scenario, index) => (
-              <Animated.View key={scenario.id} entering={FadeInUp.duration(300).delay(index * 50)}>
-                <TouchableOpacity
-                  style={[styles.searchResultCard, { borderLeftColor: category.color }]}
-                  onPress={() => router.push(`/scenario/${scenario.id}`)}
-                >
-                  <View style={styles.searchResultContent}>
-                    <Text style={styles.searchResultQuestion}>{scenario.question}</Text>
-                    <Text style={styles.searchResultAnswer} numberOfLines={2}>{scenario.short_answer}</Text>
-                  </View>
-                  <Ionicons name="chevron-forward" size={18} color="#94A3B8" />
-                </TouchableOpacity>
-              </Animated.View>
+              <TouchableOpacity
+                key={scenario.id}
+                style={[styles.searchResultCard, { borderLeftColor: category.color }]}
+                onPress={() => router.push(`/scenario/${scenario.id}`)}
+              >
+                <View style={styles.searchResultContent}>
+                  <Text style={styles.searchResultQuestion}>{scenario.question}</Text>
+                  <Text style={styles.searchResultAnswer} numberOfLines={2}>{scenario.short_answer}</Text>
+                </View>
+                <Ionicons name="chevron-forward" size={18} color="#94A3B8" />
+              </TouchableOpacity>
             ))}
             {searchResults.length === 0 && (
               <View style={styles.noResults}>

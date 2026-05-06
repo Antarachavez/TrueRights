@@ -216,7 +216,7 @@ export default function ScriptsScreen() {
     const catData = categoriesData[script.category];
 
     return (
-      <Animated.View entering={FadeInUp.delay(Math.min(index * 40, 300)).duration(350)} style={styles.scriptCard}>
+      <View style={styles.scriptCard} key={script.id}>
         <View style={styles.scriptHeader}>
           <View style={styles.scriptBadges}>
             <View style={[styles.categoryBadge, { backgroundColor: `${color}20` }]}>
@@ -268,7 +268,7 @@ export default function ScriptsScreen() {
           <Text style={styles.scriptContent}>{script.content}</Text>
           <Text style={styles.quoteIconEnd}>{"\u201D"}</Text>
         </View>
-      </Animated.View>
+      </View>
     );
   };
 
@@ -375,6 +375,7 @@ export default function ScriptsScreen() {
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={catData.color} />
         }
@@ -498,7 +499,25 @@ export default function ScriptsScreen() {
       </View>
 
       {/* Search */}
-      <SearchBar placeholder={headerInfo.searchPlaceholder} />
+      <View style={styles.searchContainer}>
+        <View style={styles.searchBar}>
+          <Ionicons name="search" size={18} color="#94A3B8" />
+          <TextInput
+            style={styles.searchInput}
+            placeholder={headerInfo.searchPlaceholder}
+            placeholderTextColor="#94A3B8"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            autoCorrect={false}
+            returnKeyType="search"
+          />
+          {searchQuery.length > 0 && (
+            <TouchableOpacity onPress={() => setSearchQuery('')} activeOpacity={0.7}>
+              <Ionicons name="close-circle" size={18} color="#94A3B8" />
+            </TouchableOpacity>
+          )}
+        </View>
+      </View>
 
       {/* Content */}
       {viewMode === 'categories' && renderCategoriesView()}

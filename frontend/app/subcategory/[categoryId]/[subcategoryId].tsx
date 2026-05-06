@@ -151,11 +151,8 @@ export default function SubcategoryScreen() {
         </Text>
         
         {filteredScenarios.map((scenario, index) => (
-          <Animated.View 
-            key={scenario.id}
-            entering={FadeInUp.duration(300).delay(index * 40)}
-          >
             <TouchableOpacity
+              key={scenario.id}
               style={[styles.scenarioCard, { borderLeftColor: subcategory.color }]}
               onPress={() => router.push(`/scenario/${scenario.id}`)}
             >
@@ -167,7 +164,6 @@ export default function SubcategoryScreen() {
                 <Ionicons name="chevron-forward" size={16} color={subcategory.color} />
               </View>
             </TouchableOpacity>
-          </Animated.View>
         ))}
 
         {filteredScenarios.length === 0 && searchQuery.trim() && (
