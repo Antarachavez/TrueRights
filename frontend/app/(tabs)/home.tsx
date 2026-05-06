@@ -84,7 +84,7 @@ export default function HomeScreen() {
               <View key={cat.id} style={styles.categoryCardOuter}>
                 <TouchableOpacity style={styles.categoryCard} onPress={() => router.push(`/category/${cat.id}`)} activeOpacity={0.7}>
                   <View style={[styles.categoryIcon, { backgroundColor: `${cat.color}10` }]}>
-                    <Ionicons name={getIconName(cat.icon)} size={24} color={cat.color} />
+                    <Ionicons name={getIconName(cat.icon)} size={20} color={cat.color} />
                   </View>
                   <Text style={styles.categoryName}>{cat.name}</Text>
                   <Text style={styles.categoryDesc} numberOfLines={2}>{cat.description}</Text>
@@ -109,24 +109,24 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#FAFAFE' },
   scrollView: { flex: 1 },
   scrollContent: { paddingHorizontal: 20, paddingBottom: 24 },
-  header: { marginTop: 16, marginBottom: 20, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  greeting: { fontSize: 26, fontWeight: '700', color: '#1E1B4B', letterSpacing: -0.5 },
-  subGreeting: { fontSize: 15, color: '#64748B', marginTop: 4 },
-  emergencyBtn: { borderRadius: 20, overflow: 'hidden' },
-  emergencyBtnGrad: { width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center' },
-  emergencyBanner: { borderRadius: 16, overflow: 'hidden', marginBottom: 24 },
-  emergencyBannerGrad: { padding: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  header: { marginTop: 12, marginBottom: 14, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  greeting: { fontSize: 22, fontWeight: '700', color: '#1E1B4B', letterSpacing: -0.5 },
+  subGreeting: { fontSize: 13, color: '#64748B', marginTop: 2 },
+  emergencyBtn: { borderRadius: 18, overflow: 'hidden' },
+  emergencyBtnGrad: { width: 36, height: 36, borderRadius: 18, justifyContent: 'center', alignItems: 'center' },
+  emergencyBanner: { borderRadius: 14, overflow: 'hidden', marginBottom: 16 },
+  emergencyBannerGrad: { padding: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   emergencyBannerContent: { flexDirection: 'row', alignItems: 'center', flex: 1 },
   emergencyBannerText: { marginLeft: 12 },
   emergencyBannerTitle: { fontSize: 16, fontWeight: '600', color: '#FFFFFF' },
   emergencyBannerDesc: { fontSize: 13, color: 'rgba(255,255,255,0.8)', marginTop: 1 },
-  sectionTitle: { fontSize: 16, fontWeight: '600', color: '#1E1B4B', marginBottom: 14 },
-  categoryRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 },
+  sectionTitle: { fontSize: 14, fontWeight: '600', color: '#1E1B4B', marginBottom: 10 },
+  categoryRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
   categoryCardOuter: { width: '48%' },
-  categoryCard: { backgroundColor: '#FFFFFF', borderRadius: 16, padding: 16, minHeight: 120, borderWidth: 1, borderColor: '#F1F1F5' },
-  categoryIcon: { width: 44, height: 44, borderRadius: 12, justifyContent: 'center', alignItems: 'center', marginBottom: 10 },
-  categoryName: { fontSize: 15, fontWeight: '600', color: '#1E1B4B', marginBottom: 3 },
-  categoryDesc: { fontSize: 12, color: '#94A3B8', lineHeight: 16 },
+  categoryCard: { backgroundColor: '#FFFFFF', borderRadius: 14, padding: 12, minHeight: 90, borderWidth: 1, borderColor: '#F1F1F5' },
+  categoryIcon: { width: 36, height: 36, borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginBottom: 8 },
+  categoryName: { fontSize: 13, fontWeight: '600', color: '#1E1B4B', marginBottom: 2 },
+  categoryDesc: { fontSize: 11, color: '#94A3B8', lineHeight: 14 },
   disclaimer: { flexDirection: 'row', alignItems: 'flex-start', backgroundColor: '#FFFFFF', borderRadius: 12, padding: 12, marginTop: 12, borderWidth: 1, borderColor: '#F1F1F5' },
   disclaimerText: { flex: 1, fontSize: 12, color: '#94A3B8', marginLeft: 8, lineHeight: 18 },
 });
