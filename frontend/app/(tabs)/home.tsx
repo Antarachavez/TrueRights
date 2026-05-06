@@ -69,7 +69,6 @@ export default function HomeScreen() {
               <Ionicons name="alert-circle" size={22} color="#FFFFFF" />
               <View style={styles.emergencyBannerText}>
                 <Text style={styles.emergencyBannerTitle}>Emergency Mode</Text>
-                <Text style={styles.emergencyBannerDesc}>Scripts, timer, and documentation tools</Text>
               </View>
             </View>
             <Ionicons name="chevron-forward" size={20} color="rgba(255,255,255,0.7)" />
