@@ -10,6 +10,7 @@ import * as Haptics from 'expo-haptics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Animated, { FadeInUp, FadeIn } from 'react-native-reanimated';
+import { fuzzySearchScripts } from '../../utils/fuzzySearch';
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
 
@@ -148,23 +149,18 @@ export default function ScriptsScreen() {
     if (!selectedCategory || !categoriesData[selectedCategory]) return [];
     const scripts = categoriesData[selectedCategory].scripts;
     if (!searchQuery.trim()) return scripts;
-    const q = searchQuery.toLowerCase();
-    return scripts.filter(s =>
-      s.title.toLowerCase().includes(q) ||
-      s.content.toLowerCase().includes(q) ||
-      (s.subcategory_name || '').toLowerCase().includes(q)
-    );
+    // Use fuzzy search for better matching
+    return fuzzySearchScripts(searchQuery, scripts.map(s => ({...s, question: s.title})))
+      .map(result => scripts.find(s => s.id === result.id)!)
+      .filter(Boolean);
   }, [selectedCategory, categoriesData, searchQuery]);
 
   // Filtered saved scripts
   const filteredSavedScripts = useMemo(() => {
     if (!searchQuery.trim()) return savedScripts;
-    const q = searchQuery.toLowerCase();
-    return savedScripts.filter(s =>
-      s.title.toLowerCase().includes(q) ||
-      s.content.toLowerCase().includes(q) ||
-      s.category.toLowerCase().includes(q)
-    );
+    return fuzzySearchScripts(searchQuery, savedScripts.map(s => ({...s, question: s.title})))
+      .map(result => savedScripts.find(s => s.id === result.id)!)
+      .filter(Boolean);
   }, [savedScripts, searchQuery]);
 
   // Filtered categories for category grid view
@@ -172,12 +168,10 @@ export default function ScriptsScreen() {
     const entries = Object.entries(categoriesData);
     if (!searchQuery.trim()) return entries;
     const q = searchQuery.toLowerCase();
+    // Show category if its name matches OR any of its scripts match fuzzy search
     return entries.filter(([_, data]) =>
       data.name.toLowerCase().includes(q) ||
-      data.scripts.some(s =>
-        s.title.toLowerCase().includes(q) ||
-        s.content.toLowerCase().includes(q)
-      )
+      fuzzySearchScripts(searchQuery, data.scripts.map(s => ({...s, question: s.title}))).length > 0
     );
   }, [categoriesData, searchQuery]);
 

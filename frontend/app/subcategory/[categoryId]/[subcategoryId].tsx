@@ -5,6 +5,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import Animated, { FadeInUp } from 'react-native-reanimated';
+import { fuzzySearch } from '../../../utils/fuzzySearch';
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
 
@@ -85,10 +86,7 @@ export default function SubcategoryScreen() {
   };
 
   const filteredScenarios = searchQuery.trim()
-    ? scenarios.filter(s =>
-        s.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        s.short_answer.toLowerCase().includes(searchQuery.toLowerCase())
-      )
+    ? fuzzySearch(searchQuery, scenarios)
     : scenarios;
 
   if (loading || !category || !subcategory) {

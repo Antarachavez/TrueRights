@@ -7,6 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import axios from 'axios';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { fuzzySearch } from '../../utils/fuzzySearch';
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
 const { width } = Dimensions.get('window');
@@ -149,12 +150,9 @@ export default function CategoryScreen() {
     return ICON_MAP[icon] || 'help-circle';
   };
 
-  // Filter scenarios based on search
+  // Filter scenarios based on search - uses fuzzy matching for similar meanings
   const searchResults = searchQuery.trim() 
-    ? allScenarios.filter(s => 
-        s.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        s.short_answer.toLowerCase().includes(searchQuery.toLowerCase())
-      )
+    ? fuzzySearch(searchQuery, allScenarios)
     : [];
 
   if (loading || !category) {
