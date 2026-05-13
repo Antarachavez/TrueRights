@@ -83,7 +83,7 @@ export default function HomeScreen() {
               <View key={cat.id} style={styles.categoryCardOuter}>
                 <TouchableOpacity style={styles.categoryCard} onPress={() => router.push(`/category/${cat.id}`)} activeOpacity={0.7}>
                   <View style={[styles.categoryIcon, { backgroundColor: `${cat.color}10` }]}>
-                    <Ionicons name={getIconName(cat.icon)} size={20} color={cat.color} />
+                    <Ionicons name={getIconName(cat.icon)} size={22} color={cat.color} />
                   </View>
                   <Text style={styles.categoryName}>{cat.name}</Text>
                   <Text style={styles.categoryDesc} numberOfLines={2}>{cat.description}</Text>
@@ -120,12 +120,12 @@ const styles = StyleSheet.create({
   emergencyBannerTitle: { fontSize: 16, fontWeight: '600', color: '#FFFFFF' },
   emergencyBannerDesc: { fontSize: 13, color: 'rgba(255,255,255,0.8)', marginTop: 1 },
   sectionTitle: { fontSize: 14, fontWeight: '600', color: '#1E1B4B', marginBottom: 10 },
-  categoryRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
+  categoryRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 },
   categoryCardOuter: { width: '48%' },
-  categoryCard: { backgroundColor: '#FFFFFF', borderRadius: 14, padding: 12, minHeight: 90, borderWidth: 1, borderColor: '#F1F1F5' },
-  categoryIcon: { width: 36, height: 36, borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginBottom: 8 },
-  categoryName: { fontSize: 13, fontWeight: '600', color: '#1E1B4B', marginBottom: 2 },
-  categoryDesc: { fontSize: 11, color: '#94A3B8', lineHeight: 14 },
+  categoryCard: { backgroundColor: '#FFFFFF', borderRadius: 14, padding: 14, minHeight: 100, borderWidth: 1, borderColor: '#F1F1F5' },
+  categoryIcon: { width: 40, height: 40, borderRadius: 11, justifyContent: 'center', alignItems: 'center', marginBottom: 10 },
+  categoryName: { fontSize: 14, fontWeight: '600', color: '#1E1B4B', marginBottom: 2 },
+  categoryDesc: { fontSize: 11, color: '#94A3B8', lineHeight: 15 },
   disclaimer: { flexDirection: 'row', alignItems: 'flex-start', backgroundColor: '#FFFFFF', borderRadius: 12, padding: 12, marginTop: 12, borderWidth: 1, borderColor: '#F1F1F5' },
   disclaimerText: { flex: 1, fontSize: 12, color: '#94A3B8', marginLeft: 8, lineHeight: 18 },
 });
