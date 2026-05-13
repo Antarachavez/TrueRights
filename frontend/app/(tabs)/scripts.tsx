@@ -175,6 +175,19 @@ export default function ScriptsScreen() {
     );
   }, [categoriesData, searchQuery]);
 
+  // Global search across ALL scripts (for categories view search)
+  const globalSearchResults = useMemo(() => {
+    if (!searchQuery.trim() || viewMode !== 'categories') return [];
+    const allScripts: Script[] = [];
+    Object.values(categoriesData).forEach(catData => {
+      catData.scripts.forEach(script => allScripts.push(script));
+    });
+    return fuzzySearchScripts(searchQuery, allScripts.map(s => ({...s, question: s.title})))
+      .map(result => allScripts.find(s => s.id === result.id)!)
+      .filter(Boolean)
+      .slice(0, 30);
+  }, [categoriesData, searchQuery, viewMode]);
+
   const totalScripts = useMemo(() => {
     return Object.values(categoriesData).reduce((sum, cat) => sum + cat.count, 0);
   }, [categoriesData]);
@@ -289,64 +302,75 @@ export default function ScriptsScreen() {
     </View>
   );
 
-  // CATEGORY GRID VIEW
+  // CATEGORY GRID VIEW (with global search results)
   const renderCategoriesView = () => (
     <ScrollView
       style={styles.scrollView}
       contentContainerStyle={styles.scrollContent}
       showsVerticalScrollIndicator={false}
+      keyboardShouldPersistTaps="handled"
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#3B82F6" />
       }
     >
-      {/* Saved Scripts Quick Access */}
-      <TouchableOpacity
-        style={styles.savedBanner}
-        onPress={goToSaved}
-        activeOpacity={0.7}
-      >
-        <View style={styles.savedBannerLeft}>
-          <View style={styles.savedIconContainer}>
-            <Ionicons name="bookmark" size={20} color="#F59E0B" />
-          </View>
-          <View>
-            <Text style={styles.savedBannerTitle}>My Saved Scripts</Text>
-            <Text style={styles.savedBannerCount}>{savedScripts.length} saved</Text>
-          </View>
-        </View>
-        <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
-      </TouchableOpacity>
-
-      {/* Category Grid */}
-      <Text style={styles.sectionLabel}>Browse by Category</Text>
-      <View style={styles.categoryGrid}>
-        {filteredCategories.map(([catId, catData], index) => (
-          <Animated.View
-            key={catId}
-            entering={FadeInUp.delay(index * 60).duration(400)}
-            style={styles.categoryCardWrapper}
-          >
-            <TouchableOpacity
-              style={styles.categoryCard}
-              onPress={() => openCategory(catId)}
-              activeOpacity={0.7}
-            >
-              <View style={[styles.categoryIconCircle, { backgroundColor: `${catData.color}20` }]}>
-                <Ionicons name={catData.icon as any} size={28} color={catData.color} />
-              </View>
-              <Text style={styles.categoryCardName}>{catData.name}</Text>
-              <Text style={styles.categoryCardCount}>{catData.count} scripts</Text>
-            </TouchableOpacity>
-          </Animated.View>
-        ))}
-      </View>
-
-      {filteredCategories.length === 0 && searchQuery.length > 0 && (
+      {/* Show global search results when searching */}
+      {searchQuery.trim() && globalSearchResults.length > 0 ? (
+        <>
+          <Text style={styles.sectionLabel}>{globalSearchResults.length} scripts found</Text>
+          {globalSearchResults.map((script, index) => (
+            <ScriptCard key={script.id} script={script} index={index} />
+          ))}
+        </>
+      ) : searchQuery.trim() && globalSearchResults.length === 0 ? (
         <View style={styles.emptyState}>
           <Ionicons name="search-outline" size={44} color="#64748B" />
-          <Text style={styles.emptyTitle}>No results for "{searchQuery}"</Text>
-          <Text style={styles.emptyText}>Try a different search term</Text>
+          <Text style={styles.emptyTitle}>No scripts match "{searchQuery}"</Text>
+          <Text style={styles.emptyText}>Try different words or check spelling</Text>
         </View>
+      ) : (
+        <>
+          {/* Saved Scripts Quick Access */}
+          <TouchableOpacity
+            style={styles.savedBanner}
+            onPress={goToSaved}
+            activeOpacity={0.7}
+          >
+            <View style={styles.savedBannerLeft}>
+              <View style={styles.savedIconContainer}>
+                <Ionicons name="bookmark" size={20} color="#F59E0B" />
+              </View>
+              <View>
+                <Text style={styles.savedBannerTitle}>My Saved Scripts</Text>
+                <Text style={styles.savedBannerCount}>{savedScripts.length} saved</Text>
+              </View>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
+          </TouchableOpacity>
+
+          {/* Category Grid */}
+          <Text style={styles.sectionLabel}>Browse by Category</Text>
+          <View style={styles.categoryGrid}>
+            {filteredCategories.map(([catId, catData], index) => (
+              <Animated.View
+                key={catId}
+                entering={FadeInUp.delay(index * 60).duration(400)}
+                style={styles.categoryCardWrapper}
+              >
+                <TouchableOpacity
+                  style={styles.categoryCard}
+                  onPress={() => openCategory(catId)}
+                  activeOpacity={0.7}
+                >
+                  <View style={[styles.categoryIconCircle, { backgroundColor: `${catData.color}20` }]}>
+                    <Ionicons name={catData.icon as any} size={28} color={catData.color} />
+                  </View>
+                  <Text style={styles.categoryCardName}>{catData.name}</Text>
+                  <Text style={styles.categoryCardCount}>{catData.count} scripts</Text>
+                </TouchableOpacity>
+              </Animated.View>
+            ))}
+          </View>
+        </>
       )}
     </ScrollView>
   );
