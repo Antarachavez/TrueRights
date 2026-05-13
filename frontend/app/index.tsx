@@ -102,7 +102,7 @@ export default function OnboardingScreen() {
                 <Ionicons name="shield-checkmark" size={32} color="#FFFFFF" />
               </LinearGradient>
             </View>
-            <Text style={styles.title}>Know Your Rights</Text>
+            <Text style={styles.title}>True Rights</Text>
             <Text style={styles.subtitle}>Let's set up a few things so the app works best for you</Text>
           </View>
 

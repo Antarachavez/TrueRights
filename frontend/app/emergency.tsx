@@ -171,8 +171,8 @@ export default function EmergencyScreen() {
             try {
               await axios.post(`${BACKEND_URL}/api/sms/send`, {
                 to_phone: emergencyContact.phone,
-                message: "EMERGENCY ALERT: I may need help. Please check on me or call me. This message was sent from the Know Your Rights app.",
-                from_name: "Know Your Rights App"
+                message: "EMERGENCY ALERT: I may need help. Please check on me or call me. This message was sent from the True Rights app.",
+                from_name: "True Rights App"
               });
               Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
               logEvent(`Alert sent to ${emergencyContact.name}`);

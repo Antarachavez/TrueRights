@@ -108,7 +108,7 @@ class SMSRequest(BaseModel):
 # ROUTES
 @api_router.get("/")
 async def root():
-    return {"message": "Know Your Rights API", "version": "5.0.0"}
+    return {"message": "True Rights API", "version": "5.0.0"}
 
 @api_router.get("/categories")
 async def get_categories():

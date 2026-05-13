@@ -52,7 +52,7 @@ export default function HomeScreen() {
         {/* Header */}
         <View style={styles.header}>
           <View>
-            <Text style={styles.greeting}>Know Your Rights</Text>
+            <Text style={styles.greeting}>True Rights</Text>
             <Text style={styles.subGreeting}>What do you need help with?</Text>
           </View>
           <TouchableOpacity style={styles.emergencyBtn} onPress={() => router.push('/emergency')} activeOpacity={0.8}>
