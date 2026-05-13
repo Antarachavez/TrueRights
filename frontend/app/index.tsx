@@ -98,7 +98,7 @@ export default function OnboardingScreen() {
           {/* Header */}
           <View style={styles.headerSection}>
             <View style={styles.logoRow}>
-              <LinearGradient colors={['#8B5CF6', '#A78BFA']} style={styles.logoCircle} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+              <LinearGradient colors={['#3B82F6', '#2563EB']} style={styles.logoCircle} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
                 <Ionicons name="shield-checkmark" size={32} color="#FFFFFF" />
               </LinearGradient>
             </View>
@@ -167,7 +167,7 @@ export default function OnboardingScreen() {
         {/* Continue Button */}
         <View style={styles.bottomContainer}>
           <TouchableOpacity style={styles.continueButton} onPress={handleContinue} activeOpacity={0.85}>
-            <LinearGradient colors={['#8B5CF6', '#7C3AED']} style={styles.continueGradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
+            <LinearGradient colors={['#3B82F6', '#2563EB']} style={styles.continueGradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
               <Text style={styles.continueText}>Continue</Text>
               <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
             </LinearGradient>
