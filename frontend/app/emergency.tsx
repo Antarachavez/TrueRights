@@ -188,7 +188,9 @@ export default function EmergencyScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
+      {/* Extra spacing for notch/Dynamic Island */}
+      <View style={{ height: 12 }} />
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity 
@@ -375,7 +377,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 14,
   },
   closeButton: {
     width: 40,
