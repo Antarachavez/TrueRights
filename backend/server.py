@@ -106,13 +106,227 @@ class SMSRequest(BaseModel):
 # Data loaded from data.json above
 
 # ROUTES
+
+# Translation map for category/subcategory names
+CATEGORY_TRANSLATIONS = {
+    "es": {
+        "School": "Escuela", "Work": "Trabajo", "Housing": "Vivienda", "Police": "Policía",
+        "Online": "En Línea", "Public Spaces": "Espacios Públicos", "Immigration": "Inmigración", "Customer Service": "Servicio al Cliente",
+        "Searches & Privacy": "Búsquedas y Privacidad", "Discipline & Suspension": "Disciplina y Suspensión",
+        "Attendance": "Asistencia", "Free Speech": "Libertad de Expresión", "Administration": "Administración",
+        "Personal Property": "Propiedad Personal", "Grades": "Calificaciones", "Sports": "Deportes",
+        "Special Education": "Educación Especial", "Safety": "Seguridad", "Technology": "Tecnología",
+        "Pay & Wages": "Pago y Salarios", "Hours & Breaks": "Horas y Descansos", "Workplace Safety": "Seguridad Laboral",
+        "Harassment": "Acoso", "Firing & Quitting": "Despido y Renuncia", "Privacy": "Privacidad",
+        "Teen Workers": "Trabajadores Menores", "Scheduling": "Horarios", "Tips & Gratuities": "Propinas",
+        "Contracts": "Contratos", "Discrimination": "Discriminación",
+        "Landlord Entry": "Entrada del Propietario", "Repairs": "Reparaciones", "Eviction": "Desalojo",
+        "Security Deposits": "Depósitos de Seguridad", "Lease": "Contrato de Alquiler", "Roommates": "Compañeros de Cuarto",
+        "Utilities": "Servicios", "Pets": "Mascotas", "Noise": "Ruido", "Moving": "Mudanza",
+        "Being Stopped": "Ser Detenido", "Searches": "Búsquedas", "Arrests": "Arrestos",
+        "Your Rights": "Tus Derechos", "Recording Police": "Grabar a la Policía", "Complaints": "Quejas",
+        "Minors & Police": "Menores y Policía", "Traffic Stops": "Paradas de Tráfico", "Home & Warrants": "Hogar y Órdenes",
+        "Witnesses": "Testigos", "After Arrest": "Después del Arresto",
+        "Social Media": "Redes Sociales", "Data Privacy": "Privacidad de Datos", "Online Harassment": "Acoso en Línea",
+        "Photos & Images": "Fotos e Imágenes", "Accounts": "Cuentas", "School Devices": "Dispositivos Escolares",
+        "Scams": "Estafas", "Gaming": "Videojuegos", "Online Shopping": "Compras en Línea",
+        "Copyright": "Derechos de Autor", "AI & Technology": "IA y Tecnología",
+        "Filming": "Filmación", "Protests": "Protestas", "Stores": "Tiendas",
+        "Transportation": "Transporte", "Parks": "Parques", "Curfew": "Toque de Queda",
+        "Malls": "Centros Comerciales", "Events": "Eventos", "Restaurants": "Restaurantes",
+        "ID Requirements": "Requisitos de ID", "Being Banned": "Ser Vetado",
+        "Documents": "Documentos", "Police & ICE": "Policía e ICE", "Work Rights": "Derechos Laborales",
+        "School Rights": "Derechos Escolares", "Travel": "Viaje", "Healthcare": "Salud",
+        "Detention": "Detención", "Family": "Familia", "DACA": "DACA", "Raids": "Redadas",
+        "Returns": "Devoluciones", "Warranties": "Garantías", "Billing": "Facturación",
+        "Debt": "Deudas", "Online Purchases": "Compras en Línea",
+    },
+    "fr": {
+        "School": "École", "Work": "Travail", "Housing": "Logement", "Police": "Police",
+        "Online": "En Ligne", "Public Spaces": "Espaces Publics", "Immigration": "Immigration", "Customer Service": "Service Client",
+        "Searches & Privacy": "Fouilles et Vie Privée", "Discipline & Suspension": "Discipline et Suspension",
+        "Attendance": "Présence", "Free Speech": "Liberté d'Expression", "Administration": "Administration",
+        "Personal Property": "Biens Personnels", "Grades": "Notes", "Sports": "Sports",
+        "Special Education": "Éducation Spécialisée", "Safety": "Sécurité", "Technology": "Technologie",
+        "Pay & Wages": "Salaire et Rémunération", "Hours & Breaks": "Heures et Pauses", "Workplace Safety": "Sécurité au Travail",
+        "Harassment": "Harcèlement", "Firing & Quitting": "Licenciement et Démission", "Privacy": "Vie Privée",
+        "Teen Workers": "Travailleurs Mineurs", "Scheduling": "Horaires", "Tips & Gratuities": "Pourboires",
+        "Contracts": "Contrats", "Discrimination": "Discrimination",
+        "Landlord Entry": "Entrée du Propriétaire", "Repairs": "Réparations", "Eviction": "Expulsion",
+        "Security Deposits": "Dépôts de Garantie", "Lease": "Bail", "Roommates": "Colocataires",
+        "Utilities": "Services", "Pets": "Animaux", "Noise": "Bruit", "Moving": "Déménagement",
+        "Being Stopped": "Être Arrêté", "Searches": "Fouilles", "Arrests": "Arrestations",
+        "Your Rights": "Vos Droits", "Recording Police": "Filmer la Police", "Complaints": "Plaintes",
+        "Minors & Police": "Mineurs et Police", "Traffic Stops": "Contrôles Routiers", "Home & Warrants": "Domicile et Mandats",
+        "Witnesses": "Témoins", "After Arrest": "Après l'Arrestation",
+        "Social Media": "Réseaux Sociaux", "Data Privacy": "Protection des Données", "Online Harassment": "Harcèlement en Ligne",
+        "Photos & Images": "Photos et Images", "Accounts": "Comptes", "School Devices": "Appareils Scolaires",
+        "Scams": "Arnaques", "Gaming": "Jeux Vidéo", "Online Shopping": "Achats en Ligne",
+        "Copyright": "Droits d'Auteur", "AI & Technology": "IA et Technologie",
+        "Filming": "Filmer", "Protests": "Manifestations", "Stores": "Magasins",
+        "Transportation": "Transport", "Parks": "Parcs", "Curfew": "Couvre-feu",
+        "Malls": "Centres Commerciaux", "Events": "Événements", "Restaurants": "Restaurants",
+        "ID Requirements": "Pièces d'Identité", "Being Banned": "Être Banni",
+        "Documents": "Documents", "Police & ICE": "Police et ICE", "Work Rights": "Droits au Travail",
+        "School Rights": "Droits Scolaires", "Travel": "Voyage", "Healthcare": "Santé",
+        "Detention": "Détention", "Family": "Famille", "DACA": "DACA", "Raids": "Raids",
+        "Returns": "Retours", "Warranties": "Garanties", "Billing": "Facturation",
+        "Debt": "Dettes", "Online Purchases": "Achats en Ligne",
+    },
+    "zh": {
+        "School": "学校", "Work": "工作", "Housing": "住房", "Police": "警察",
+        "Online": "网络", "Public Spaces": "公共场所", "Immigration": "移民", "Customer Service": "消费权益",
+        "Searches & Privacy": "搜查与隐私", "Discipline & Suspension": "纪律与停学",
+        "Attendance": "出勤", "Free Speech": "言论自由", "Administration": "行政管理",
+        "Personal Property": "个人财物", "Grades": "成绩", "Sports": "体育运动",
+        "Special Education": "特殊教育", "Safety": "安全", "Technology": "科技",
+        "Pay & Wages": "薪资", "Hours & Breaks": "工时与休息", "Workplace Safety": "工作场所安全",
+        "Harassment": "骚扰", "Firing & Quitting": "解雇与辞职", "Privacy": "隐私",
+        "Teen Workers": "未成年工人", "Scheduling": "排班", "Tips & Gratuities": "小费",
+        "Contracts": "合同", "Discrimination": "歧视",
+        "Landlord Entry": "房东进入", "Repairs": "维修", "Eviction": "驱逐",
+        "Security Deposits": "押金", "Lease": "租约", "Roommates": "室友",
+        "Utilities": "水电", "Pets": "宠物", "Noise": "噪音", "Moving": "搬家",
+        "Being Stopped": "被拦下", "Searches": "搜查", "Arrests": "逮捕",
+        "Your Rights": "你的权利", "Recording Police": "录像取证", "Complaints": "投诉",
+        "Minors & Police": "未成年与警察", "Traffic Stops": "交通拦截", "Home & Warrants": "住宅与搜查令",
+        "Witnesses": "目击者", "After Arrest": "逮捕之后",
+        "Social Media": "社交媒体", "Data Privacy": "数据隐私", "Online Harassment": "网络骚扰",
+        "Photos & Images": "照片与图像", "Accounts": "账户", "School Devices": "学校设备",
+        "Scams": "诈骗", "Gaming": "游戏", "Online Shopping": "网购",
+        "Copyright": "版权", "AI & Technology": "AI与科技",
+        "Filming": "拍摄", "Protests": "抗议", "Stores": "商店",
+        "Transportation": "交通", "Parks": "公园", "Curfew": "宵禁",
+        "Malls": "商场", "Events": "活动", "Restaurants": "餐厅",
+        "ID Requirements": "身份证件", "Being Banned": "被禁止入内",
+        "Documents": "证件", "Police & ICE": "警察与移民局", "Work Rights": "工作权利",
+        "School Rights": "受教育权", "Travel": "旅行", "Healthcare": "医疗",
+        "Detention": "拘留", "Family": "家庭", "DACA": "DACA", "Raids": "突击搜查",
+        "Returns": "退货", "Warranties": "保修", "Billing": "账单",
+        "Debt": "债务", "Online Purchases": "网上购物",
+    }
+}
+
+def translate_categories(categories, lang):
+    """Translate category and subcategory names."""
+    if lang == "en" or lang not in CATEGORY_TRANSLATIONS:
+        return categories
+    trans = CATEGORY_TRANSLATIONS[lang]
+    result = []
+    for cat in categories:
+        cat_copy = dict(cat)
+        cat_copy["name"] = trans.get(cat["name"], cat["name"])
+        cat_copy["description"] = trans.get(cat.get("description", ""), cat.get("description", ""))
+        if "subcategories" in cat_copy:
+            cat_copy["subcategories"] = [
+                {**sub, "name": trans.get(sub["name"], sub["name"])}
+                for sub in cat_copy["subcategories"]
+            ]
+        result.append(cat_copy)
+    return result
+
 @api_router.get("/")
 async def root():
     return {"message": "True Rights API", "version": "5.0.0"}
 
 @api_router.get("/categories")
-async def get_categories():
-    return CATEGORIES
+async def get_categories(lang: str = "en"):
+    return translate_categories(CATEGORIES, lang)
+
+# === Translation endpoint - translates scenario content using AI ===
+@api_router.get("/translate/{scenario_id}")
+async def translate_scenario(scenario_id: str, lang: str = "en"):
+    """Translate a scenario into the requested language. Caches results in MongoDB."""
+    if lang == "en":
+        # Find original scenario
+        for cat_id, subcats in SCENARIOS.items():
+            for sub_id, scenarios in subcats.items():
+                for s in scenarios:
+                    if s["id"] == scenario_id:
+                        return s
+        raise HTTPException(status_code=404, detail="Scenario not found")
+
+    # Check cache first
+    cached = await db.translations.find_one({"scenario_id": scenario_id, "lang": lang})
+    if cached:
+        cached["_id"] = str(cached["_id"])
+        return cached
+
+    # Find original scenario
+    original = None
+    for cat_id, subcats in SCENARIOS.items():
+        for sub_id, scenarios in subcats.items():
+            for s in scenarios:
+                if s["id"] == scenario_id:
+                    original = s
+                    break
+
+    if not original:
+        raise HTTPException(status_code=404, detail="Scenario not found")
+
+    # Translate using AI
+    lang_names = {"es": "Spanish", "fr": "French", "zh": "Mandarin Chinese"}
+    target_lang = lang_names.get(lang, "English")
+
+    try:
+        from emergentintegrations.llm.chat import chat, UserMessage
+        response = await chat(
+            api_key=EMERGENT_LLM_KEY,
+            model="claude-sonnet-4-20250514",
+            messages=[UserMessage(content=f"""Translate this legal rights scenario into {target_lang}. Return ONLY a JSON object with these exact fields translated. Keep the same structure. Do not add commentary.
+
+{{
+  "id": "{original['id']}",
+  "question": "{original['question']}",
+  "short_answer": "{original['short_answer']}",
+  "explanation": "{original['explanation']}",
+  "script": "{original.get('script', '')}",
+  "next_steps": {json_module.dumps(original.get('next_steps', []))}
+}}""")]
+        )
+        import json as j
+        text = response.content.strip()
+        if text.startswith("```"):
+            text = text.split("\n", 1)[1].rsplit("```", 1)[0]
+        translated = j.loads(text)
+        translated["scenario_id"] = scenario_id
+        translated["lang"] = lang
+        await db.translations.insert_one(translated)
+        translated.pop("_id", None)
+        return translated
+    except Exception as e:
+        # Return original with a translation note if AI fails
+        return {**original, "translation_note": f"Translation to {target_lang} unavailable"}
+
+# === Batch translate scenarios for a category ===
+@api_router.get("/scenarios/{category_id}/translated")
+async def get_translated_scenarios(category_id: str, lang: str = "en"):
+    """Get all scenarios for a category, translated if needed."""
+    if category_id not in SCENARIOS:
+        raise HTTPException(status_code=404, detail="Category not found")
+
+    all_scenarios = []
+    for sub_id, scenarios in SCENARIOS[category_id].items():
+        for s in scenarios:
+            all_scenarios.append(s)
+
+    if lang == "en":
+        return all_scenarios
+
+    # Check cache for batch
+    cached_ids = set()
+    results = []
+    async for doc in db.translations.find({"lang": lang, "scenario_id": {"$in": [s["id"] for s in all_scenarios]}}):
+        doc["_id"] = str(doc["_id"])
+        results.append(doc)
+        cached_ids.add(doc["scenario_id"])
+
+    # Return cached + untranslated originals
+    for s in all_scenarios:
+        if s["id"] not in cached_ids:
+            results.append(s)
+
+    return results
 
 # === AI-Generated Scenario Routes (must be before parameterized routes) ===
 

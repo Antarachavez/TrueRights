@@ -5,10 +5,13 @@ import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
 import axios from 'axios';
+import { useLanguage } from '../../utils/LanguageContext';
+import { LANGUAGES, Language } from '../../utils/i18n';
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
 
 export default function SettingsScreen() {
+  const { lang, setLanguage, t } = useLanguage();
   const [deviceId, setDeviceId] = useState('');
   const [selectedState, setSelectedState] = useState<string | null>(null);
   const [emergencyName, setEmergencyName] = useState('');
@@ -129,8 +132,8 @@ export default function SettingsScreen() {
     <SafeAreaView style={styles.container} edges={['top']}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Settings</Text>
-        <Text style={styles.headerSubtitle}>Customize your experience</Text>
+        <Text style={styles.headerTitle}>{t('settings.title')}</Text>
+        <Text style={styles.headerSubtitle}>{t('settings.subtitle')}</Text>
       </View>
 
       <ScrollView 
@@ -138,11 +141,31 @@ export default function SettingsScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
+        {/* Language Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>{t('settings.language')}</Text>
+          <View style={{ gap: 8 }}>
+            {LANGUAGES.map((language) => (
+              <TouchableOpacity
+                key={language.code}
+                style={[styles.stateSelector, lang === language.code && { borderColor: '#1B2A4A', borderWidth: 1.5 }]}
+                onPress={() => setLanguage(language.code)}
+              >
+                <View style={styles.stateSelectorContent}>
+                  <Text style={{ fontSize: 22, marginRight: 4 }}>{language.flag}</Text>
+                  <Text style={styles.stateSelectorText}>{language.nativeName}</Text>
+                </View>
+                {lang === language.code && <Ionicons name="checkmark-circle" size={22} color="#1B2A4A" />}
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
         {/* Location Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Your Location</Text>
+          <Text style={styles.sectionTitle}>{t('settings.yourLocation')}</Text>
           <Text style={styles.sectionDescription}>
-            Laws vary by state. Setting your location helps us give more accurate information.
+            {t('settings.locationDesc')}
           </Text>
           
           <TouchableOpacity 
@@ -176,7 +199,7 @@ export default function SettingsScreen() {
 
         {/* Emergency Contact Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Emergency Contact</Text>
+          <Text style={styles.sectionTitle}>{t('settings.emergencyContact')}</Text>
           <Text style={styles.sectionDescription}>
             This contact can be quickly notified in Emergency Mode.
           </Text>
@@ -214,25 +237,25 @@ export default function SettingsScreen() {
           {saving ? (
             <ActivityIndicator size="small" color="#FFFFFF" />
           ) : (
-            <Text style={styles.saveButtonText}>Save Settings</Text>
+            <Text style={styles.saveButtonText}>{t('settings.saveSettings')}</Text>
           )}
         </TouchableOpacity>
 
         {/* Data & Privacy Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Data & Privacy</Text>
+          <Text style={styles.sectionTitle}>{t('settings.dataPrivacy')}</Text>
           
           <TouchableOpacity style={styles.dangerButton} onPress={clearAllData}>
             <Ionicons name="trash-outline" size={20} color="#EF4444" />
-            <Text style={styles.dangerButtonText}>Clear All Data</Text>
+            <Text style={styles.dangerButtonText}>{t('settings.clearAll')}</Text>
           </TouchableOpacity>
         </View>
 
         {/* About Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>About</Text>
+          <Text style={styles.sectionTitle}>{t('settings.about')}</Text>
           <View style={styles.aboutItem}>
-            <Text style={styles.aboutLabel}>Version</Text>
+            <Text style={styles.aboutLabel}>{t('settings.version')}</Text>
             <Text style={styles.aboutValue}>1.0.0</Text>
           </View>
           <View style={styles.disclaimerBox}>

@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import axios from 'axios';
+import { useLanguage } from '../../utils/LanguageContext';
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
 
@@ -23,14 +24,15 @@ const ICON_MAP: { [key: string]: keyof typeof Ionicons.glyphMap } = {
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { lang, t } = useLanguage();
   const [categories, setCategories] = useState<Category[]>([]);
   const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => { fetchCategories(); }, []);
+  useEffect(() => { fetchCategories(); }, [lang]);
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(`${BACKEND_URL}/api/categories`);
+      const response = await axios.get(`${BACKEND_URL}/api/categories?lang=${lang}`);
       setCategories(response.data);
     } catch (error) { console.error('Error:', error); }
   };
@@ -52,8 +54,8 @@ export default function HomeScreen() {
         {/* Header */}
         <View style={styles.header}>
           <View>
-            <Text style={styles.greeting}>True Rights</Text>
-            <Text style={styles.subGreeting}>What do you need help with?</Text>
+            <Text style={styles.greeting}>{t('home.greeting')}</Text>
+            <Text style={styles.subGreeting}>{t('home.subGreeting')}</Text>
           </View>
           <TouchableOpacity style={styles.emergencyBtn} onPress={() => router.push('/emergency')} activeOpacity={0.8}>
             <View style={styles.emergencyBtnGrad}>
@@ -70,7 +72,7 @@ export default function HomeScreen() {
                 <Ionicons name="alert-circle" size={20} color="#FFFFFF" />
               </View>
               <View style={styles.emergencyBannerText}>
-                <Text style={styles.emergencyBannerTitle}>Emergency Mode</Text>
+                <Text style={styles.emergencyBannerTitle}>{t('home.emergency')}</Text>
               </View>
             </View>
             <Ionicons name="chevron-forward" size={20} color="rgba(255,255,255,0.7)" />
