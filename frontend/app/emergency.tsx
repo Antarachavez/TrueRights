@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Alert, Dimensions, Vibration } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Alert, Dimensions, Vibration, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
 import Animated, { FadeIn, FadeInUp, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 
-const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
 const { width } = Dimensions.get('window');
 
 const EMERGENCY_SCRIPTS = [
@@ -127,26 +125,15 @@ export default function EmergencyScreen() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
-  const addNote = async () => {
+  const addNote = () => {
     if (!notes.trim()) return;
     
     logEvent(notes.trim());
-    
-    try {
-      await axios.post(`${BACKEND_URL}/api/emergency/notes`, {
-        device_id: deviceId,
-        content: notes.trim(),
-        event_time: new Date().toISOString()
-      });
-    } catch (error) {
-      console.error('Error saving note:', error);
-    }
-    
     setNotes('');
     Alert.alert('Note Saved', 'Your note has been recorded.');
   };
 
-  const sendEmergencyAlert = async () => {
+  const callEmergencyContact = () => {
     if (!emergencyContact) {
       Alert.alert(
         'No Emergency Contact',
@@ -160,27 +147,34 @@ export default function EmergencyScreen() {
     }
 
     Alert.alert(
-      'Send Alert',
-      `Send emergency alert to ${emergencyContact.name}?`,
+      'Call Contact',
+      `Call ${emergencyContact.name}?`,
       [
         { text: 'Cancel', style: 'cancel' },
         {
-          text: 'Send',
+          text: 'Call',
+          onPress: () => {
+            Linking.openURL(`tel:${emergencyContact.phone}`);
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+            logEvent(`Called ${emergencyContact.name}`);
+          }
+        }
+      ]
+    );
+  };
+
+  const call911 = () => {
+    Alert.alert(
+      'Call 911',
+      'This will open your phone dialer to call 911.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Call 911',
           style: 'destructive',
-          onPress: async () => {
-            try {
-              await axios.post(`${BACKEND_URL}/api/sms/send`, {
-                to_phone: emergencyContact.phone,
-                message: "EMERGENCY ALERT: I may need help. Please check on me or call me. This message was sent from the True Rights app.",
-                from_name: "True Rights App"
-              });
-              Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-              logEvent(`Alert sent to ${emergencyContact.name}`);
-              Alert.alert('Alert Sent', `Emergency alert sent to ${emergencyContact.name}. (Note: This is a demo - actual SMS requires Twilio setup)`);
-            } catch (error) {
-              console.error('Error sending alert:', error);
-              Alert.alert('Demo Mode', 'SMS would be sent in production with Twilio integration.');
-            }
+          onPress: () => {
+            Linking.openURL('tel:911');
+            logEvent('Called 911');
           }
         }
       ]
@@ -205,9 +199,9 @@ export default function EmergencyScreen() {
         </View>
         <TouchableOpacity 
           style={styles.alertButton}
-          onPress={sendEmergencyAlert}
+          onPress={call911}
         >
-          <Ionicons name="notifications" size={20} color="#FFFFFF" />
+          <Ionicons name="call" size={20} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
 
@@ -347,19 +341,21 @@ export default function EmergencyScreen() {
         )}
       </ScrollView>
 
-      {/* Emergency Contact Bar */}
+      {/* Emergency Call Bar */}
       <View style={styles.emergencyBar}>
+        <TouchableOpacity style={styles.call911Button} onPress={call911}>
+          <Ionicons name="call" size={20} color="#FFFFFF" />
+          <Text style={styles.call911Text}>Call 911</Text>
+        </TouchableOpacity>
         {emergencyContact ? (
-          <TouchableOpacity style={styles.emergencyBarContent} onPress={sendEmergencyAlert}>
-            <Ionicons name="call" size={20} color="#EF4444" />
-            <Text style={styles.emergencyBarText}>Alert {emergencyContact.name}</Text>
-            <Ionicons name="chevron-forward" size={18} color="#94A3B8" />
+          <TouchableOpacity style={styles.callContactButton} onPress={callEmergencyContact}>
+            <Ionicons name="person" size={18} color="#1B2A4A" />
+            <Text style={styles.callContactText}>Call {emergencyContact.name}</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity style={styles.emergencyBarContent} onPress={() => router.push('/(tabs)/settings')}>
-            <Ionicons name="person-add" size={20} color="#5E6E7D" />
-            <Text style={styles.emergencyBarText}>Set up emergency contact</Text>
-            <Ionicons name="chevron-forward" size={18} color="#94A3B8" />
+          <TouchableOpacity style={styles.callContactButton} onPress={() => router.push('/(tabs)/settings')}>
+            <Ionicons name="person-add" size={18} color="#5E6E7D" />
+            <Text style={styles.callContactText}>Set up emergency contact</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -632,20 +628,35 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderTopWidth: 1,
     borderTopColor: '#EDE9E3',
+    gap: 8,
   },
-  emergencyBarContent: {
+  call911Button: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFDF9',
+    justifyContent: 'center',
+    backgroundColor: '#C45C5C',
     borderRadius: 12,
     padding: 14,
+  },
+  call911Text: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    marginLeft: 8,
+  },
+  callContactButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFDF9',
+    borderRadius: 12,
+    padding: 12,
     borderWidth: 1,
     borderColor: '#EDE9E3',
   },
-  emergencyBarText: {
-    flex: 1,
+  callContactText: {
     fontSize: 14,
     color: '#1B2A4A',
-    marginLeft: 12,
+    marginLeft: 8,
   },
 });
