@@ -11,67 +11,67 @@
           "id": "searches",
           "name": "Searches & Privacy",
           "icon": "search",
-          "color": "#3B82F6"
+          "color": "#5B8DAF"
         },
         {
           "id": "discipline",
           "name": "Discipline & Suspension",
           "icon": "warning",
-          "color": "#EF4444"
+          "color": "#4A7A9E"
         },
         {
           "id": "attendance",
           "name": "Attendance",
           "icon": "time",
-          "color": "#F59E0B"
+          "color": "#6D9DBD"
         },
         {
           "id": "expression",
           "name": "Free Speech",
           "icon": "megaphone",
-          "color": "#8B5CF6"
+          "color": "#3D6D8F"
         },
         {
           "id": "administration",
           "name": "Teachers & Admin",
           "icon": "people",
-          "color": "#10B981"
+          "color": "#7EADC8"
         },
         {
           "id": "personal",
           "name": "Personal Items",
           "icon": "shirt",
-          "color": "#EC4899"
+          "color": "#4E8BAD"
         },
         {
           "id": "grades",
           "name": "Grades & Testing",
           "icon": "document-text",
-          "color": "#14B8A6"
+          "color": "#5990B2"
         },
         {
           "id": "sports",
           "name": "Sports & Activities",
           "icon": "football",
-          "color": "#F97316"
+          "color": "#3B7999"
         },
         {
           "id": "special-ed",
           "name": "Special Education",
           "icon": "accessibility",
-          "color": "#6366F1"
+          "color": "#6BA3C0"
         },
         {
           "id": "safety",
           "name": "Safety & Health",
           "icon": "medkit",
-          "color": "#DC2626"
+          "color": "#78B0C5"
         },
         {
           "id": "technology",
           "name": "Technology",
           "icon": "laptop",
-          "color": "#0EA5E9"
+          "color": "#527F9A"
         }
       ]
     },
@@ -86,67 +86,67 @@
           "id": "pay",
           "name": "Pay & Wages",
           "icon": "cash",
-          "color": "#10B981"
+          "color": "#B87878"
         },
         {
           "id": "hours",
           "name": "Hours & Breaks",
           "icon": "time",
-          "color": "#F97316"
+          "color": "#A56A6A"
         },
         {
           "id": "safety",
           "name": "Safety",
           "icon": "shield-checkmark",
-          "color": "#EF4444"
+          "color": "#C48888"
         },
         {
           "id": "harassment",
           "name": "Harassment",
           "icon": "alert-circle",
-          "color": "#DC2626"
+          "color": "#9D5F5F"
         },
         {
           "id": "firing",
           "name": "Firing & Quitting",
           "icon": "exit",
-          "color": "#6B7280"
+          "color": "#D09595"
         },
         {
           "id": "privacy",
           "name": "Privacy",
           "icon": "eye-off",
-          "color": "#8B5CF6"
+          "color": "#B07070"
         },
         {
           "id": "minors",
           "name": "Teen Workers",
           "icon": "person",
-          "color": "#3B82F6"
+          "color": "#C08080"
         },
         {
           "id": "scheduling",
           "name": "Scheduling",
           "icon": "calendar",
-          "color": "#14B8A6"
+          "color": "#985858"
         },
         {
           "id": "tips",
           "name": "Tips & Commission",
           "icon": "wallet",
-          "color": "#F59E0B"
+          "color": "#BC7A7A"
         },
         {
           "id": "contracts",
           "name": "Contracts",
           "icon": "document-text",
-          "color": "#6366F1"
+          "color": "#CA8E8E"
         },
         {
           "id": "discrimination",
           "name": "Discrimination",
           "icon": "ban",
-          "color": "#EC4899"
+          "color": "#A86868"
         }
       ]
     },
@@ -161,67 +161,67 @@
           "id": "entry",
           "name": "Landlord Entry",
           "icon": "key",
-          "color": "#F97316"
+          "color": "#7BA37B"
         },
         {
           "id": "repairs",
           "name": "Repairs",
           "icon": "construct",
-          "color": "#3B82F6"
+          "color": "#6B936B"
         },
         {
           "id": "eviction",
           "name": "Eviction",
           "icon": "log-out",
-          "color": "#EF4444"
+          "color": "#8BB38B"
         },
         {
           "id": "deposits",
           "name": "Deposits",
           "icon": "cash",
-          "color": "#10B981"
+          "color": "#5D855D"
         },
         {
           "id": "lease",
           "name": "Lease & Rent",
           "icon": "document-text",
-          "color": "#8B5CF6"
+          "color": "#95BD95"
         },
         {
           "id": "roommates",
           "name": "Roommates",
           "icon": "people",
-          "color": "#EC4899"
+          "color": "#739B73"
         },
         {
           "id": "utilities",
           "name": "Utilities",
           "icon": "flash",
-          "color": "#F59E0B"
+          "color": "#83AB83"
         },
         {
           "id": "pets",
           "name": "Pets",
           "icon": "paw",
-          "color": "#14B8A6"
+          "color": "#557D55"
         },
         {
           "id": "noise",
           "name": "Noise & Neighbors",
           "icon": "volume-high",
-          "color": "#6366F1"
+          "color": "#7FA37F"
         },
         {
           "id": "discrimination",
           "name": "Discrimination",
           "icon": "ban",
-          "color": "#DC2626"
+          "color": "#8DB58D"
         },
         {
           "id": "moving",
           "name": "Moving Out",
           "icon": "car",
-          "color": "#0EA5E9"
+          "color": "#6B8F6B"
         }
       ]
     },
@@ -236,67 +236,67 @@
           "id": "stops",
           "name": "Being Stopped",
           "icon": "hand-left",
-          "color": "#F97316"
+          "color": "#8B7BA3"
         },
         {
           "id": "searches",
           "name": "Searches",
           "icon": "search",
-          "color": "#EF4444"
+          "color": "#7D6D95"
         },
         {
           "id": "arrests",
           "name": "Arrests",
           "icon": "lock-closed",
-          "color": "#DC2626"
+          "color": "#9B8BB3"
         },
         {
           "id": "rights",
           "name": "Your Rights",
           "icon": "shield-checkmark",
-          "color": "#3B82F6"
+          "color": "#6F5F87"
         },
         {
           "id": "recording",
           "name": "Recording",
           "icon": "videocam",
-          "color": "#8B5CF6"
+          "color": "#A89BC0"
         },
         {
           "id": "complaints",
           "name": "Complaints",
           "icon": "document-text",
-          "color": "#6B7280"
+          "color": "#857598"
         },
         {
           "id": "minors",
           "name": "Minors & Police",
           "icon": "person",
-          "color": "#10B981"
+          "color": "#9383AB"
         },
         {
           "id": "traffic",
           "name": "Traffic Stops",
           "icon": "car",
-          "color": "#F59E0B"
+          "color": "#73638B"
         },
         {
           "id": "home",
           "name": "Police at Home",
           "icon": "home",
-          "color": "#14B8A6"
+          "color": "#8F7FA7"
         },
         {
           "id": "witnesses",
           "name": "Being a Witness",
           "icon": "eye",
-          "color": "#6366F1"
+          "color": "#9D90B5"
         },
         {
           "id": "after",
           "name": "After Arrest",
           "icon": "time",
-          "color": "#EC4899"
+          "color": "#7B6B93"
         }
       ]
     },
@@ -311,67 +311,67 @@
           "id": "social",
           "name": "Social Media",
           "icon": "share-social",
-          "color": "#3B82F6"
+          "color": "#6B8FA8"
         },
         {
           "id": "data",
           "name": "Data & Tracking",
           "icon": "analytics",
-          "color": "#10B981"
+          "color": "#5D8199"
         },
         {
           "id": "harassment",
           "name": "Harassment",
           "icon": "alert-circle",
-          "color": "#EF4444"
+          "color": "#7B9FB8"
         },
         {
           "id": "photos",
           "name": "Photos & Images",
           "icon": "images",
-          "color": "#EC4899"
+          "color": "#4F7389"
         },
         {
           "id": "accounts",
           "name": "Accounts",
           "icon": "key",
-          "color": "#F97316"
+          "color": "#88ADC5"
         },
         {
           "id": "school-monitoring",
           "name": "School Devices",
           "icon": "eye",
-          "color": "#6B7280"
+          "color": "#6589A2"
         },
         {
           "id": "scams",
           "name": "Scams & Fraud",
           "icon": "warning",
-          "color": "#DC2626"
+          "color": "#7597B0"
         },
         {
           "id": "gaming",
           "name": "Gaming",
           "icon": "game-controller",
-          "color": "#8B5CF6"
+          "color": "#577B92"
         },
         {
           "id": "shopping",
           "name": "Online Shopping",
           "icon": "cart",
-          "color": "#14B8A6"
+          "color": "#6F93AC"
         },
         {
           "id": "copyright",
           "name": "Copyright",
           "icon": "document",
-          "color": "#6366F1"
+          "color": "#82A5BC"
         },
         {
           "id": "ai",
           "name": "AI & Deepfakes",
           "icon": "hardware-chip",
-          "color": "#0EA5E9"
+          "color": "#5F839A"
         }
       ]
     },
@@ -386,67 +386,67 @@
           "id": "filming",
           "name": "Filming",
           "icon": "camera",
-          "color": "#3B82F6"
+          "color": "#5EA89A"
         },
         {
           "id": "protests",
           "name": "Protests",
           "icon": "megaphone",
-          "color": "#EF4444"
+          "color": "#50998B"
         },
         {
           "id": "stores",
           "name": "Stores",
           "icon": "storefront",
-          "color": "#F97316"
+          "color": "#6EB8AA"
         },
         {
           "id": "transport",
           "name": "Transportation",
           "icon": "bus",
-          "color": "#10B981"
+          "color": "#428B7D"
         },
         {
           "id": "parks",
           "name": "Parks",
           "icon": "leaf",
-          "color": "#14B8A6"
+          "color": "#7BC5B7"
         },
         {
           "id": "curfew",
           "name": "Curfews",
           "icon": "moon",
-          "color": "#8B5CF6"
+          "color": "#58A294"
         },
         {
           "id": "malls",
           "name": "Malls & Shopping",
           "icon": "bag",
-          "color": "#EC4899"
+          "color": "#68B2A4"
         },
         {
           "id": "events",
           "name": "Events & Concerts",
           "icon": "musical-notes",
-          "color": "#6366F1"
+          "color": "#3E8375"
         },
         {
           "id": "restaurants",
           "name": "Restaurants",
           "icon": "restaurant",
-          "color": "#F59E0B"
+          "color": "#62AC9E"
         },
         {
           "id": "id",
           "name": "ID Requirements",
           "icon": "card",
-          "color": "#DC2626"
+          "color": "#74BDB0"
         },
         {
           "id": "banned",
           "name": "Being Banned",
           "icon": "ban",
-          "color": "#6B7280"
+          "color": "#529C8E"
         }
       ]
     },
@@ -461,67 +461,67 @@
           "id": "documents",
           "name": "Documents",
           "icon": "document-text",
-          "color": "#3B82F6"
+          "color": "#6B9E8A"
         },
         {
           "id": "police",
           "name": "Police & ICE",
           "icon": "shield",
-          "color": "#EF4444"
+          "color": "#5D907C"
         },
         {
           "id": "work",
           "name": "Work Rights",
           "icon": "briefcase",
-          "color": "#F97316"
+          "color": "#7BAE9A"
         },
         {
           "id": "school",
           "name": "School Rights",
           "icon": "school",
-          "color": "#10B981"
+          "color": "#4F826E"
         },
         {
           "id": "travel",
           "name": "Travel",
           "icon": "airplane",
-          "color": "#8B5CF6"
+          "color": "#88BBA7"
         },
         {
           "id": "healthcare",
           "name": "Healthcare",
           "icon": "medkit",
-          "color": "#EC4899"
+          "color": "#659884"
         },
         {
           "id": "housing",
           "name": "Housing",
           "icon": "home",
-          "color": "#14B8A6"
+          "color": "#75A894"
         },
         {
           "id": "detention",
           "name": "Detention",
           "icon": "lock-closed",
-          "color": "#DC2626"
+          "color": "#497C6A"
         },
         {
           "id": "family",
           "name": "Family",
           "icon": "people",
-          "color": "#6366F1"
+          "color": "#6FA28E"
         },
         {
           "id": "daca",
           "name": "DACA",
           "icon": "ribbon",
-          "color": "#F59E0B"
+          "color": "#80B29E"
         },
         {
           "id": "raids",
           "name": "Raids & Checkpoints",
           "icon": "warning",
-          "color": "#6B7280"
+          "color": "#599480"
         }
       ]
     },
@@ -536,67 +536,67 @@
           "id": "returns",
           "name": "Returns & Refunds",
           "icon": "refresh",
-          "color": "#10B981"
+          "color": "#B8977B"
         },
         {
           "id": "warranties",
           "name": "Warranties",
           "icon": "shield-checkmark",
-          "color": "#3B82F6"
+          "color": "#A8876B"
         },
         {
           "id": "scams",
           "name": "Scams",
           "icon": "warning",
-          "color": "#EF4444"
+          "color": "#C8A78B"
         },
         {
           "id": "billing",
           "name": "Billing Disputes",
           "icon": "card",
-          "color": "#F97316"
+          "color": "#987760"
         },
         {
           "id": "complaints",
           "name": "Complaints",
           "icon": "megaphone",
-          "color": "#8B5CF6"
+          "color": "#D4B498"
         },
         {
           "id": "contracts",
           "name": "Contracts & Subscriptions",
           "icon": "document-text",
-          "color": "#6366F1"
+          "color": "#B09073"
         },
         {
           "id": "debt",
           "name": "Debt Collection",
           "icon": "cash",
-          "color": "#DC2626"
+          "color": "#C09F83"
         },
         {
           "id": "privacy",
           "name": "Privacy & Data",
           "icon": "lock-closed",
-          "color": "#14B8A6"
+          "color": "#907058"
         },
         {
           "id": "discrimination",
           "name": "Discrimination",
           "icon": "ban",
-          "color": "#EC4899"
+          "color": "#BC9B7F"
         },
         {
           "id": "repairs",
           "name": "Repairs & Services",
           "icon": "construct",
-          "color": "#F59E0B"
+          "color": "#CCAB90"
         },
         {
           "id": "online",
           "name": "Online Purchases",
           "icon": "globe",
-          "color": "#0EA5E9"
+          "color": "#A88568"
         }
       ]
     }
