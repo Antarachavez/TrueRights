@@ -94,8 +94,8 @@ export default function ResourcesScreen() {
     const colors: { [key: string]: string } = {
       'Emergency Hotlines': '#EF4444',
       'Emergency': '#EF4444',
-      'Legal Aid': '#3B82F6',
-      'Legal': '#3B82F6',
+      'Legal Aid': '#1B2A4A',
+      'Legal': '#1B2A4A',
       'Youth Support': '#EC4899',
       'Youth': '#EC4899',
       'Worker Rights': '#F97316',
@@ -120,7 +120,7 @@ export default function ResourcesScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#3B82F6" />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#1B2A4A" />
         }
       >
         {resources.map((resourceCategory, index) => {
@@ -146,7 +146,7 @@ export default function ResourcesScreen() {
                 <Ionicons 
                   name={isExpanded ? "chevron-up" : "chevron-down"} 
                   size={20} 
-                  color="#64748B" 
+                  color="#5E6E7D" 
                 />
               </TouchableOpacity>
 
@@ -194,7 +194,7 @@ export default function ResourcesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAFAFE',
+    backgroundColor: '#FAF8F5',
   },
   header: {
     paddingHorizontal: 20,
@@ -204,11 +204,11 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#1E1B4B',
+    color: '#1B2A4A',
   },
   headerSubtitle: {
     fontSize: 14,
-    color: '#64748B',
+    color: '#5E6E7D',
     marginTop: 4,
   },
   scrollView: {
@@ -219,12 +219,12 @@ const styles = StyleSheet.create({
     paddingTop: 4,
   },
   categoryContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     borderRadius: 16,
     marginBottom: 12,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#F1F1F5',
+    borderColor: '#EDE9E3',
   },
   categoryHeader: {
     flexDirection: 'row',
@@ -247,14 +247,14 @@ const styles = StyleSheet.create({
   categoryTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1E1B4B',
+    color: '#1B2A4A',
   },
   itemsContainer: {
     paddingHorizontal: 16,
     paddingBottom: 16,
   },
   resourceItem: {
-    backgroundColor: '#FAFAFE',
+    backgroundColor: '#FAF8F5',
     borderRadius: 12,
     padding: 14,
     marginBottom: 8,
@@ -265,12 +265,12 @@ const styles = StyleSheet.create({
   resourceName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#1E1B4B',
+    color: '#1B2A4A',
     marginBottom: 4,
   },
   resourceDescription: {
     fontSize: 13,
-    color: '#64748B',
+    color: '#5E6E7D',
   },
   contactBadge: {
     flexDirection: 'row',
@@ -290,17 +290,17 @@ const styles = StyleSheet.create({
   helpTip: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     borderRadius: 12,
     padding: 14,
     marginTop: 8,
     borderWidth: 1,
-    borderColor: '#F1F1F5',
+    borderColor: '#EDE9E3',
   },
   helpTipText: {
     flex: 1,
     fontSize: 13,
-    color: '#64748B',
+    color: '#5E6E7D',
     marginLeft: 10,
     lineHeight: 18,
   },

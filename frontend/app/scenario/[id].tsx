@@ -33,13 +33,13 @@ interface ScenarioDetail {
 
 const CATEGORY_COLORS: Record<string, string> = {
   school: '#7DD3FC', work: '#FCA5A5', housing: '#86EFAC', police: '#FDA4AF',
-  online: '#C4B5FD', public: '#6EE7B7', immigration: '#67E8F9', consumer: '#FDBA74',
+  online: '#E8A5A5', public: '#6EE7B7', immigration: '#67E8F9', consumer: '#FDBA74',
 };
 
 const QUOTE_TYPE_CONFIG: Record<string, { icon: string; color: string }> = {
-  'Constitution': { icon: 'shield-checkmark', color: '#8B5CF6' },
+  'Constitution': { icon: 'shield-checkmark', color: '#C45C5C' },
   'Supreme Court': { icon: 'hammer', color: '#EC4899' },
-  'Federal Law': { icon: 'document-text', color: '#3B82F6' },
+  'Federal Law': { icon: 'document-text', color: '#1B2A4A' },
   'Federal Court': { icon: 'business', color: '#10B981' },
   'State Law': { icon: 'flag', color: '#F59E0B' },
   'Common Law': { icon: 'book', color: '#06B6D4' },
@@ -75,13 +75,13 @@ export default function ScenarioScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.center}>
-          <ActivityIndicator size="large" color="#8B5CF6" />
+          <ActivityIndicator size="large" color="#C45C5C" />
         </View>
       </SafeAreaView>
     );
   }
 
-  const color = CATEGORY_COLORS[scenario.category] || '#8B5CF6';
+  const color = CATEGORY_COLORS[scenario.category] || '#C45C5C';
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -111,7 +111,7 @@ export default function ScenarioScreen() {
         {/* Explanation */}
         <View style={styles.section}>
           <View style={styles.sectionRow}>
-            <Ionicons name="information-circle" size={18} color="#64748B" />
+            <Ionicons name="information-circle" size={18} color="#5E6E7D" />
             <Text style={[styles.sectionTitle, { color: '#333333' }]}>What This Means</Text>
           </View>
           <Text style={[styles.body, { color: '#555555' }]}>{scenario.explanation}</Text>
@@ -120,7 +120,7 @@ export default function ScenarioScreen() {
         {/* Next Steps */}
         <View style={styles.section}>
           <View style={styles.sectionRow}>
-            <Ionicons name="footsteps" size={18} color="#64748B" />
+            <Ionicons name="footsteps" size={18} color="#5E6E7D" />
             <Text style={[styles.sectionTitle, { color: '#333333' }]}>Next Steps</Text>
           </View>
           {scenario.next_steps.map((step, i) => (
@@ -137,7 +137,7 @@ export default function ScenarioScreen() {
         {scenario.legal_quotes && scenario.legal_quotes.length > 0 && (
           <View style={styles.section}>
             <View style={styles.sectionRow}>
-              <Ionicons name="book" size={18} color="#8B5CF6" />
+              <Ionicons name="book" size={18} color="#C45C5C" />
               <Text style={styles.sectionTitle}>What the Law Says</Text>
             </View>
             {scenario.legal_quotes.map((quote, i) => {
@@ -170,7 +170,7 @@ export default function ScenarioScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#FAFAFE' },
+  container: { flex: 1, backgroundColor: '#FAF8F5' },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   header: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
@@ -178,22 +178,22 @@ const styles = StyleSheet.create({
   },
   backBtn: {
     width: 40, height: 40, borderRadius: 20,
-    backgroundColor: '#FFFFFF', justifyContent: 'center', alignItems: 'center',
-    borderWidth: 1, borderColor: '#F1F1F5',
+    backgroundColor: '#FFFDF9', justifyContent: 'center', alignItems: 'center',
+    borderWidth: 1, borderColor: '#EDE9E3',
   },
   badge: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: 12 },
   badgeText: { fontSize: 13, fontWeight: '600', textTransform: 'capitalize' },
   shareBtn: {
     width: 40, height: 40, borderRadius: 20,
-    backgroundColor: '#FFFFFF', justifyContent: 'center', alignItems: 'center',
-    borderWidth: 1, borderColor: '#F1F1F5',
+    backgroundColor: '#FFFDF9', justifyContent: 'center', alignItems: 'center',
+    borderWidth: 1, borderColor: '#EDE9E3',
   },
   scroll: { flex: 1 },
   scrollContent: { padding: 20, paddingTop: 8, paddingBottom: 40 },
   question: { fontSize: 24, fontWeight: '700', color: '#111827', lineHeight: 32, marginBottom: 20 },
   card: {
-    backgroundColor: '#FFFFFF', borderRadius: 14, padding: 16, marginBottom: 24,
-    borderWidth: 1, borderColor: '#F1F1F5',
+    backgroundColor: '#FFFDF9', borderRadius: 14, padding: 16, marginBottom: 24,
+    borderWidth: 1, borderColor: '#EDE9E3',
   },
   cardLabel: { fontSize: 11, fontWeight: '700', color: '#94A3B8', letterSpacing: 0.5, marginBottom: 8 },
   answer: { fontSize: 16, fontWeight: '600', color: '#111827', lineHeight: 24 },
@@ -206,8 +206,8 @@ const styles = StyleSheet.create({
   stepNumText: { fontSize: 13, fontWeight: '600' },
   stepText: { flex: 1, fontSize: 14, color: '#374151', lineHeight: 20 },
   quoteCard: {
-    backgroundColor: '#FFFFFF', borderRadius: 14, padding: 16, marginBottom: 12,
-    borderWidth: 1, borderColor: '#F1F1F5',
+    backgroundColor: '#FFFDF9', borderRadius: 14, padding: 16, marginBottom: 12,
+    borderWidth: 1, borderColor: '#EDE9E3',
   },
   quoteBadge: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'flex-start', marginBottom: 10 },
   quoteBadgeText: { fontSize: 11, fontWeight: '600', marginLeft: 5, textTransform: 'uppercase', letterSpacing: 0.3 },
@@ -216,8 +216,8 @@ const styles = StyleSheet.create({
   sourceText: { fontSize: 12, color: '#94A3B8', marginLeft: 6, flex: 1 },
   disclaimer: {
     flexDirection: 'row', alignItems: 'flex-start',
-    backgroundColor: '#FFFFFF', borderRadius: 12, padding: 12,
-    borderWidth: 1, borderColor: '#F1F1F5',
+    backgroundColor: '#FFFDF9', borderRadius: 12, padding: 12,
+    borderWidth: 1, borderColor: '#EDE9E3',
   },
   disclaimerText: { flex: 1, fontSize: 12, color: '#94A3B8', marginLeft: 8, lineHeight: 18 },
 });

@@ -150,7 +150,7 @@ export default function SettingsScreen() {
             onPress={() => setShowStateModal(true)}
           >
             <View style={styles.stateSelectorContent}>
-              <Ionicons name="location" size={20} color="#3B82F6" />
+              <Ionicons name="location" size={20} color="#1B2A4A" />
               <Text style={styles.stateSelectorText}>
                 {selectedState || 'Select your state'}
               </Text>
@@ -164,10 +164,10 @@ export default function SettingsScreen() {
             disabled={detectingLocation}
           >
             {detectingLocation ? (
-              <ActivityIndicator size="small" color="#3B82F6" />
+              <ActivityIndicator size="small" color="#1B2A4A" />
             ) : (
               <>
-                <Ionicons name="navigate" size={18} color="#3B82F6" />
+                <Ionicons name="navigate" size={18} color="#1B2A4A" />
                 <Text style={styles.detectButtonText}>Detect my location</Text>
               </>
             )}
@@ -277,7 +277,7 @@ export default function SettingsScreen() {
                     selectedState === state && styles.stateItemTextSelected
                   ]}>{state}</Text>
                   {selectedState === state && (
-                    <Ionicons name="checkmark" size={20} color="#3B82F6" />
+                    <Ionicons name="checkmark" size={20} color="#1B2A4A" />
                   )}
                 </TouchableOpacity>
               ))}
@@ -292,7 +292,7 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAFAFE',
+    backgroundColor: '#FAF8F5',
   },
   header: {
     paddingHorizontal: 20,
@@ -302,11 +302,11 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#1E1B4B',
+    color: '#1B2A4A',
   },
   headerSubtitle: {
     fontSize: 14,
-    color: '#64748B',
+    color: '#5E6E7D',
     marginTop: 4,
   },
   scrollView: {
@@ -322,12 +322,12 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1E1B4B',
+    color: '#1B2A4A',
     marginBottom: 8,
   },
   sectionDescription: {
     fontSize: 13,
-    color: '#64748B',
+    color: '#5E6E7D',
     marginBottom: 16,
     lineHeight: 18,
   },
@@ -335,11 +335,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#F1F1F5',
+    borderColor: '#EDE9E3',
   },
   stateSelectorContent: {
     flexDirection: 'row',
@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
   },
   stateSelectorText: {
     fontSize: 15,
-    color: '#1E1B4B',
+    color: '#1B2A4A',
     marginLeft: 12,
   },
   detectButton: {
@@ -359,7 +359,7 @@ const styles = StyleSheet.create({
   },
   detectButtonText: {
     fontSize: 14,
-    color: '#3B82F6',
+    color: '#1B2A4A',
     marginLeft: 8,
   },
   inputContainer: {
@@ -367,20 +367,20 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     fontSize: 13,
-    color: '#64748B',
+    color: '#5E6E7D',
     marginBottom: 8,
   },
   textInput: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     borderRadius: 12,
     padding: 16,
-    color: '#1E1B4B',
+    color: '#1B2A4A',
     fontSize: 15,
     borderWidth: 1,
-    borderColor: '#F1F1F5',
+    borderColor: '#EDE9E3',
   },
   saveButton: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: '#C45C5C',
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
@@ -395,7 +395,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
@@ -410,35 +410,35 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#F1F1F5',
+    borderColor: '#EDE9E3',
   },
   aboutLabel: {
     fontSize: 15,
-    color: '#64748B',
+    color: '#5E6E7D',
   },
   aboutValue: {
     fontSize: 15,
-    color: '#1E1B4B',
+    color: '#1B2A4A',
     fontWeight: '500',
   },
   disclaimerBox: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#F1F1F5',
+    borderColor: '#EDE9E3',
   },
   disclaimerText: {
     flex: 1,
     fontSize: 13,
-    color: '#64748B',
+    color: '#5E6E7D',
     marginLeft: 12,
     lineHeight: 18,
   },
@@ -448,7 +448,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '70%',
@@ -459,12 +459,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F1F5',
+    borderBottomColor: '#EDE9E3',
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1E1B4B',
+    color: '#1B2A4A',
   },
   statesList: {
     padding: 8,
@@ -477,14 +477,14 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   stateItemSelected: {
-    backgroundColor: '#3B82F610',
+    backgroundColor: '#1B2A4A10',
   },
   stateItemText: {
     fontSize: 15,
     color: '#374151',
   },
   stateItemTextSelected: {
-    color: '#3B82F6',
+    color: '#1B2A4A',
     fontWeight: '600',
   },
 });

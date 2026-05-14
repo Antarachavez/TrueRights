@@ -104,7 +104,7 @@ export default function SubcategoryScreen() {
       {/* Header */}
       <View style={[styles.header, { borderBottomColor: `${subcategory.color}30` }]}>
         <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="#1E1B4B" />
+          <Ionicons name="arrow-back" size={24} color="#1B2A4A" />
         </TouchableOpacity>
         
         <View style={styles.headerContent}>
@@ -166,7 +166,7 @@ export default function SubcategoryScreen() {
 
         {filteredScenarios.length === 0 && searchQuery.trim() && (
           <View style={styles.noResults}>
-            <Ionicons name="search-outline" size={40} color="#64748B" />
+            <Ionicons name="search-outline" size={40} color="#5E6E7D" />
             <Text style={styles.noResultsText}>No matches found</Text>
           </View>
         )}
@@ -177,13 +177,13 @@ export default function SubcategoryScreen() {
           onPress={() => router.push('/(tabs)/chat')}
         >
           <View style={styles.askAiIcon}>
-            <Ionicons name="chatbubbles" size={20} color="#3B82F6" />
+            <Ionicons name="chatbubbles" size={20} color="#1B2A4A" />
           </View>
           <View style={styles.askAiText}>
             <Text style={styles.askAiTitle}>Don't see your question?</Text>
             <Text style={styles.askAiDesc}>Ask AI for help</Text>
           </View>
-          <Ionicons name="arrow-forward" size={16} color="#3B82F6" />
+          <Ionicons name="arrow-forward" size={16} color="#1B2A4A" />
         </TouchableOpacity>
 
         <View style={styles.disclaimer}>
@@ -197,34 +197,34 @@ export default function SubcategoryScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#FAFAFE' },
+  container: { flex: 1, backgroundColor: '#FAF8F5' },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  loadingText: { color: '#1E1B4B', fontSize: 16 },
+  loadingText: { color: '#1B2A4A', fontSize: 16 },
   header: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 14, borderBottomWidth: 1 },
-  backButton: { width: 38, height: 38, borderRadius: 19, backgroundColor: '#FFFFFF', justifyContent: 'center', alignItems: 'center', marginBottom: 12 },
+  backButton: { width: 38, height: 38, borderRadius: 19, backgroundColor: '#FFFDF9', justifyContent: 'center', alignItems: 'center', marginBottom: 12 },
   headerContent: { flexDirection: 'row', alignItems: 'center' },
   subcategoryIcon: { width: 52, height: 52, borderRadius: 14, justifyContent: 'center', alignItems: 'center', marginRight: 14 },
   headerText: { flex: 1 },
   breadcrumb: { fontSize: 12, color: '#94A3B8', marginBottom: 2 },
   subcategoryName: { fontSize: 20, fontWeight: '700' },
   searchContainer: { paddingHorizontal: 20, paddingVertical: 10 },
-  searchBar: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#FFFFFF', borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10, borderWidth: 1 },
-  searchInput: { flex: 1, fontSize: 14, color: "#1E1B4B", marginLeft: 8 },
+  searchBar: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#FFFDF9', borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10, borderWidth: 1 },
+  searchInput: { flex: 1, fontSize: 14, color: "#1B2A4A", marginLeft: 8 },
   scrollView: { flex: 1 },
   scrollContent: { padding: 20, paddingTop: 6 },
   sectionTitle: { fontSize: 13, fontWeight: '500', color: '#94A3B8', marginBottom: 12 },
-  scenarioCard: { backgroundColor: '#FFFFFF', borderRadius: 14, padding: 14, marginBottom: 10, borderLeftWidth: 3, flexDirection: 'row', alignItems: 'center' },
+  scenarioCard: { backgroundColor: '#FFFDF9', borderRadius: 14, padding: 14, marginBottom: 10, borderLeftWidth: 3, flexDirection: 'row', alignItems: 'center' },
   scenarioContent: { flex: 1, marginRight: 10 },
-  scenarioQuestion: { fontSize: 15, fontWeight: '600', color: "#1E1B4B", marginBottom: 6, lineHeight: 20 },
-  scenarioAnswer: { fontSize: 13, color: '#64748B', lineHeight: 18 },
+  scenarioQuestion: { fontSize: 15, fontWeight: '600', color: "#1B2A4A", marginBottom: 6, lineHeight: 20 },
+  scenarioAnswer: { fontSize: 13, color: '#5E6E7D', lineHeight: 18 },
   arrowCircle: { width: 32, height: 32, borderRadius: 16, justifyContent: 'center', alignItems: 'center' },
   noResults: { alignItems: 'center', paddingTop: 30 },
   noResultsText: { fontSize: 15, color: '#94A3B8', marginTop: 10 },
-  askAiCard: { backgroundColor: '#FFFFFF', borderRadius: 12, padding: 12, marginTop: 10, flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: '#3B82F620' },
-  askAiIcon: { width: 38, height: 38, borderRadius: 10, backgroundColor: '#3B82F612', justifyContent: 'center', alignItems: 'center', marginRight: 10 },
+  askAiCard: { backgroundColor: '#FFFDF9', borderRadius: 12, padding: 12, marginTop: 10, flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: '#1B2A4A20' },
+  askAiIcon: { width: 38, height: 38, borderRadius: 10, backgroundColor: '#1B2A4A12', justifyContent: 'center', alignItems: 'center', marginRight: 10 },
   askAiText: { flex: 1 },
-  askAiTitle: { fontSize: 13, fontWeight: '600', color: '#1E1B4B' },
-  askAiDesc: { fontSize: 11, color: '#64748B', marginTop: 1 },
+  askAiTitle: { fontSize: 13, fontWeight: '600', color: '#1B2A4A' },
+  askAiDesc: { fontSize: 11, color: '#5E6E7D', marginTop: 1 },
   disclaimer: { paddingTop: 16, paddingBottom: 8 },
-  disclaimerText: { fontSize: 11, color: '#64748B', textAlign: 'center' },
+  disclaimerText: { fontSize: 11, color: '#5E6E7D', textAlign: 'center' },
 });

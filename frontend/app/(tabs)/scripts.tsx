@@ -141,7 +141,7 @@ export default function ScriptsScreen() {
   };
 
   const getCategoryColor = (category: string) => {
-    return categoriesData[category]?.color || '#3B82F6';
+    return categoriesData[category]?.color || '#1B2A4A';
   };
 
   // Filtered scripts for category detail view
@@ -247,7 +247,7 @@ export default function ScriptsScreen() {
               <Ionicons
                 name={isCopied ? "checkmark" : "copy-outline"}
                 size={18}
-                color={isCopied ? "#10B981" : "#64748B"}
+                color={isCopied ? "#10B981" : "#5E6E7D"}
               />
             </TouchableOpacity>
             {!isSaved ? (
@@ -256,7 +256,7 @@ export default function ScriptsScreen() {
                 onPress={() => saveScript(script as Script)}
                 activeOpacity={0.7}
               >
-                <Ionicons name="bookmark-outline" size={18} color="#64748B" />
+                <Ionicons name="bookmark-outline" size={18} color="#5E6E7D" />
               </TouchableOpacity>
             ) : (
               <TouchableOpacity
@@ -310,7 +310,7 @@ export default function ScriptsScreen() {
       showsVerticalScrollIndicator={false}
       keyboardShouldPersistTaps="handled"
       refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#3B82F6" />
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#1B2A4A" />
       }
     >
       {/* Show global search results when searching */}
@@ -323,7 +323,7 @@ export default function ScriptsScreen() {
         </>
       ) : searchQuery.trim() && globalSearchResults.length === 0 ? (
         <View style={styles.emptyState}>
-          <Ionicons name="search-outline" size={44} color="#64748B" />
+          <Ionicons name="search-outline" size={44} color="#5E6E7D" />
           <Text style={styles.emptyTitle}>No scripts match "{searchQuery}"</Text>
           <Text style={styles.emptyText}>Try different words or check spelling</Text>
         </View>
@@ -413,7 +413,7 @@ export default function ScriptsScreen() {
 
         {filteredCategoryScripts.length === 0 && searchQuery.length > 0 && (
           <View style={styles.emptyState}>
-            <Ionicons name="search-outline" size={44} color="#64748B" />
+            <Ionicons name="search-outline" size={44} color="#5E6E7D" />
             <Text style={styles.emptyTitle}>No scripts match "{searchQuery}"</Text>
             <Text style={styles.emptyText}>Try a different search term</Text>
           </View>
@@ -438,13 +438,13 @@ export default function ScriptsScreen() {
         ))
       ) : savedScripts.length === 0 ? (
         <View style={styles.emptyState}>
-          <Ionicons name="bookmark-outline" size={48} color="#64748B" />
+          <Ionicons name="bookmark-outline" size={48} color="#5E6E7D" />
           <Text style={styles.emptyTitle}>No saved scripts yet</Text>
           <Text style={styles.emptyText}>Tap the bookmark icon on any script to save it here</Text>
         </View>
       ) : (
         <View style={styles.emptyState}>
-          <Ionicons name="search-outline" size={44} color="#64748B" />
+          <Ionicons name="search-outline" size={44} color="#5E6E7D" />
           <Text style={styles.emptyTitle}>No results for "{searchQuery}"</Text>
           <Text style={styles.emptyText}>Try a different search term</Text>
         </View>
@@ -459,7 +459,7 @@ export default function ScriptsScreen() {
       return {
         title: catData?.name || 'Scripts',
         subtitle: `${catData?.count || 0} ready-to-use phrases`,
-        color: catData?.color || '#3B82F6',
+        color: catData?.color || '#1B2A4A',
         searchPlaceholder: `Search ${catData?.name || ''} scripts...`
       };
     }
@@ -474,7 +474,7 @@ export default function ScriptsScreen() {
     return {
       title: 'Scripts',
       subtitle: `${totalScripts} ready-to-use phrases`,
-      color: '#3B82F6',
+      color: '#1B2A4A',
       searchPlaceholder: 'Search all scripts and categories...'
     };
   };
@@ -492,7 +492,7 @@ export default function ScriptsScreen() {
               onPress={goBack}
               activeOpacity={0.7}
             >
-              <Ionicons name="arrow-back" size={24} color="#1E1B4B" />
+              <Ionicons name="arrow-back" size={24} color="#1B2A4A" />
             </TouchableOpacity>
           )}
           <View style={styles.headerTextContainer}>
@@ -548,7 +548,7 @@ export default function ScriptsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAFAFE',
+    backgroundColor: '#FAF8F5',
   },
   header: {
     paddingHorizontal: 20,
@@ -563,7 +563,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -574,18 +574,18 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 26,
     fontWeight: '700',
-    color: "#1E1B4B",
+    color: "#1B2A4A",
   },
   headerSubtitle: {
     fontSize: 13,
-    color: '#64748B',
+    color: '#5E6E7D',
     marginTop: 2,
   },
   savedButton: {
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
@@ -615,16 +615,16 @@ const styles = StyleSheet.create({
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     borderRadius: 12,
     paddingHorizontal: 14,
     height: 44,
     borderWidth: 1,
-    borderColor: '#F1F1F5',
+    borderColor: '#EDE9E3',
   },
   searchInput: {
     flex: 1,
-    color: "#1E1B4B",
+    color: "#1B2A4A",
     fontSize: 15,
     marginLeft: 10,
     paddingVertical: 0,
@@ -643,12 +643,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     borderRadius: 16,
     padding: 16,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: '#F1F1F5',
+    borderColor: '#EDE9E3',
   },
   savedBannerLeft: {
     flexDirection: 'row',
@@ -666,18 +666,18 @@ const styles = StyleSheet.create({
   savedBannerTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: "#1E1B4B",
+    color: "#1B2A4A",
   },
   savedBannerCount: {
     fontSize: 13,
-    color: '#64748B',
+    color: '#5E6E7D',
     marginTop: 2,
   },
   // Section
   sectionLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#64748B',
+    color: '#5E6E7D',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
     marginBottom: 14,
@@ -693,12 +693,12 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   categoryCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     borderRadius: 16,
     padding: 18,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#F1F1F5',
+    borderColor: '#EDE9E3',
     minHeight: 140,
     justifyContent: 'center',
   },
@@ -713,7 +713,7 @@ const styles = StyleSheet.create({
   categoryCardName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#1E1B4B',
+    color: '#1B2A4A',
     textAlign: 'center',
   },
   categoryCardCount: {
@@ -731,7 +731,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingBottom: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F1F5',
+    borderBottomColor: '#EDE9E3',
   },
   subcategoryDot: {
     width: 8,
@@ -748,7 +748,7 @@ const styles = StyleSheet.create({
   subcategoryCount: {
     fontSize: 13,
     color: '#94A3B8',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 8,
@@ -756,12 +756,12 @@ const styles = StyleSheet.create({
   },
   // Script Card
   scriptCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     borderRadius: 14,
     padding: 14,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#F1F1F5',
+    borderColor: '#EDE9E3',
   },
   scriptHeader: {
     flexDirection: 'row',
@@ -792,12 +792,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
-    backgroundColor: '#F1F1F5',
+    backgroundColor: '#EDE9E3',
   },
   subBadgeText: {
     fontSize: 11,
     fontWeight: '500',
-    color: '#64748B',
+    color: '#5E6E7D',
   },
   scriptActions: {
     flexDirection: 'row',
@@ -808,7 +808,7 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
     borderRadius: 17,
-    backgroundColor: '#F1F1F5',
+    backgroundColor: '#EDE9E3',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -818,25 +818,25 @@ const styles = StyleSheet.create({
   scriptTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#64748B',
+    color: '#5E6E7D',
     marginBottom: 8,
   },
   scriptContentContainer: {
-    backgroundColor: '#FAFAFE',
+    backgroundColor: '#FAF8F5',
     borderRadius: 10,
     padding: 12,
     position: 'relative',
   },
   quoteIcon: {
     fontSize: 22,
-    color: '#64748B',
+    color: '#5E6E7D',
     position: 'absolute',
     top: 2,
     left: 6,
   },
   quoteIconEnd: {
     fontSize: 22,
-    color: '#64748B',
+    color: '#5E6E7D',
     position: 'absolute',
     bottom: -4,
     right: 6,
@@ -857,7 +857,7 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: "#1E1B4B",
+    color: "#1B2A4A",
     marginTop: 16,
   },
   emptyText: {

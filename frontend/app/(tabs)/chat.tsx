@@ -137,7 +137,7 @@ export default function ChatScreen() {
             <Text style={styles.headerSubtitle}>Rights education assistant</Text>
           </View>
           <TouchableOpacity style={styles.clearButton} onPress={clearChat}>
-            <Ionicons name="refresh" size={20} color="#64748B" />
+            <Ionicons name="refresh" size={20} color="#5E6E7D" />
           </TouchableOpacity>
         </View>
 
@@ -159,7 +159,7 @@ export default function ChatScreen() {
             >
               {message.role === 'assistant' && (
                 <View style={styles.assistantIcon}>
-                  <Ionicons name="shield-checkmark" size={16} color="#C4B5FD" />
+                  <Ionicons name="shield-checkmark" size={16} color="#E8A5A5" />
                 </View>
               )}
               <Text style={[
@@ -173,7 +173,7 @@ export default function ChatScreen() {
           
           {isLoading && (
             <View style={[styles.messageBubble, styles.assistantBubble]}>
-              <ActivityIndicator size="small" color="#C4B5FD" />
+              <ActivityIndicator size="small" color="#E8A5A5" />
               <Text style={styles.thinkingText}>Thinking...</Text>
             </View>
           )}
@@ -221,7 +221,7 @@ export default function ChatScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAFAFE',
+    backgroundColor: '#FAF8F5',
   },
   keyboardView: {
     flex: 1,
@@ -233,23 +233,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F1F5',
+    borderBottomColor: '#EDE9E3',
   },
   headerTitle: {
     fontSize: 24,
     fontWeight: '700',
-    color: "#1E1B4B",
+    color: "#1B2A4A",
   },
   headerSubtitle: {
     fontSize: 13,
-    color: '#64748B',
+    color: '#5E6E7D',
     marginTop: 2,
   },
   clearButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -266,22 +266,22 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   userBubble: {
-    backgroundColor: '#C4B5FD',
+    backgroundColor: '#E8A5A5',
     alignSelf: 'flex-end',
     borderBottomRightRadius: 4,
   },
   assistantBubble: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     alignSelf: 'flex-start',
     borderBottomLeftRadius: 4,
     borderWidth: 1,
-    borderColor: '#F1F1F5',
+    borderColor: '#EDE9E3',
   },
   assistantIcon: {
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: '#3B82F620',
+    backgroundColor: '#1B2A4A20',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
@@ -297,7 +297,7 @@ const styles = StyleSheet.create({
     color: '#374151',
   },
   thinkingText: {
-    color: '#64748B',
+    color: '#5E6E7D',
     marginLeft: 8,
     fontSize: 14,
   },
@@ -306,16 +306,16 @@ const styles = StyleSheet.create({
   },
   quickQuestionsTitle: {
     fontSize: 14,
-    color: '#64748B',
+    color: '#5E6E7D',
     marginBottom: 12,
   },
   quickQuestion: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     borderRadius: 12,
     padding: 14,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: '#F1F1F5',
+    borderColor: '#EDE9E3',
   },
   quickQuestionText: {
     color: '#374151',
@@ -327,27 +327,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderTopWidth: 1,
-    borderTopColor: '#F1F1F5',
-    backgroundColor: '#FAFAFE',
+    borderTopColor: '#EDE9E3',
+    backgroundColor: '#FAF8F5',
   },
   textInput: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 12,
-    color: '#1E1B4B',
+    color: '#1B2A4A',
     fontSize: 15,
     maxHeight: 100,
     marginRight: 12,
     borderWidth: 1,
-    borderColor: '#F1F1F5',
+    borderColor: '#EDE9E3',
   },
   sendButton: {
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#C4B5FD',
+    backgroundColor: '#C45C5C',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -357,7 +357,7 @@ const styles = StyleSheet.create({
   disclaimerBar: {
     paddingVertical: 8,
     alignItems: 'center',
-    backgroundColor: '#FAFAFE',
+    backgroundColor: '#FAF8F5',
   },
   disclaimerText: {
     fontSize: 11,

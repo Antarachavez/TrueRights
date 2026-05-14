@@ -78,7 +78,7 @@ export default function OnboardingScreen() {
   if (checking) return (
     <View style={styles.container}>
       <View style={styles.loadingContainer}>
-        <Ionicons name="shield-checkmark" size={48} color="#8B5CF6" />
+        <Ionicons name="shield-checkmark" size={48} color="#C45C5C" />
       </View>
     </View>
   );
@@ -98,7 +98,7 @@ export default function OnboardingScreen() {
           {/* Header */}
           <View style={styles.headerSection}>
             <View style={styles.logoRow}>
-              <LinearGradient colors={['#3B82F6', '#2563EB']} style={styles.logoCircle} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+              <LinearGradient colors={['#1B2A4A', '#152238']} style={styles.logoCircle} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
                 <Ionicons name="shield-checkmark" size={32} color="#FFFFFF" />
               </LinearGradient>
             </View>
@@ -109,7 +109,7 @@ export default function OnboardingScreen() {
           {/* State Selection */}
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <Ionicons name="location" size={18} color="#3B82F6" />
+              <Ionicons name="location" size={18} color="#1B2A4A" />
               <Text style={styles.sectionTitle}>Your State</Text>
             </View>
             <Text style={styles.sectionDesc}>Laws vary by state. This helps us give accurate info.</Text>
@@ -159,7 +159,7 @@ export default function OnboardingScreen() {
 
           {/* Info Note */}
           <View style={styles.infoBox}>
-            <Ionicons name="information-circle" size={18} color="#64748B" />
+            <Ionicons name="information-circle" size={18} color="#5E6E7D" />
             <Text style={styles.infoText}>You can always change these later in Settings. All fields are optional.</Text>
           </View>
         </ScrollView>
@@ -167,7 +167,7 @@ export default function OnboardingScreen() {
         {/* Continue Button */}
         <View style={styles.bottomContainer}>
           <TouchableOpacity style={styles.continueButton} onPress={handleContinue} activeOpacity={0.85}>
-            <LinearGradient colors={['#3B82F6', '#2563EB']} style={styles.continueGradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
+            <LinearGradient colors={['#1B2A4A', '#152238']} style={styles.continueGradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
               <Text style={styles.continueText}>Continue</Text>
               <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
             </LinearGradient>
@@ -214,7 +214,7 @@ export default function OnboardingScreen() {
                   }}
                 >
                   <Text style={[styles.stateItemText, selectedState === state && styles.stateItemTextSelected]}>{state}</Text>
-                  {selectedState === state && <Ionicons name="checkmark" size={20} color="#3B82F6" />}
+                  {selectedState === state && <Ionicons name="checkmark" size={20} color="#1B2A4A" />}
                 </TouchableOpacity>
               ))}
             </ScrollView>
@@ -226,7 +226,7 @@ export default function OnboardingScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#FAFAFE' },
+  container: { flex: 1, backgroundColor: '#FAF8F5' },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   scrollView: { flex: 1 },
   scrollContent: { paddingHorizontal: 24, paddingTop: 24, paddingBottom: 16 },
@@ -234,36 +234,36 @@ const styles = StyleSheet.create({
   headerSection: { alignItems: 'center', marginBottom: 28 },
   logoRow: { marginBottom: 16 },
   logoCircle: { width: 64, height: 64, borderRadius: 32, justifyContent: 'center', alignItems: 'center' },
-  title: { fontSize: 26, fontWeight: '700', color: '#1E1B4B', marginBottom: 8, textAlign: 'center' },
-  subtitle: { fontSize: 14, color: '#64748B', textAlign: 'center', lineHeight: 20 },
+  title: { fontSize: 26, fontWeight: '700', color: '#1B2A4A', marginBottom: 8, textAlign: 'center' },
+  subtitle: { fontSize: 14, color: '#5E6E7D', textAlign: 'center', lineHeight: 20 },
 
   section: { marginBottom: 24 },
   sectionHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 6 },
-  sectionTitle: { fontSize: 16, fontWeight: '600', color: '#1E1B4B', marginLeft: 8 },
-  sectionDesc: { fontSize: 13, color: '#64748B', marginBottom: 12, lineHeight: 18 },
+  sectionTitle: { fontSize: 16, fontWeight: '600', color: '#1B2A4A', marginLeft: 8 },
+  sectionDesc: { fontSize: 13, color: '#5E6E7D', marginBottom: 12, lineHeight: 18 },
 
   selector: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    backgroundColor: '#FFFFFF', borderRadius: 12, padding: 16,
-    borderWidth: 1, borderColor: '#F1F1F5',
+    backgroundColor: '#FFFDF9', borderRadius: 12, padding: 16,
+    borderWidth: 1, borderColor: '#EDE9E3',
   },
-  selectorText: { fontSize: 15, color: '#1E1B4B' },
+  selectorText: { fontSize: 15, color: '#1B2A4A' },
   selectorPlaceholder: { fontSize: 15, color: '#94A3B8' },
 
   inputGroup: { marginBottom: 14 },
-  inputLabel: { fontSize: 13, color: '#64748B', marginBottom: 6 },
+  inputLabel: { fontSize: 13, color: '#5E6E7D', marginBottom: 6 },
   textInput: {
-    backgroundColor: '#FFFFFF', borderRadius: 12, padding: 14,
-    fontSize: 15, color: '#1E1B4B',
-    borderWidth: 1, borderColor: '#F1F1F5',
+    backgroundColor: '#FFFDF9', borderRadius: 12, padding: 14,
+    fontSize: 15, color: '#1B2A4A',
+    borderWidth: 1, borderColor: '#EDE9E3',
   },
 
   infoBox: {
     flexDirection: 'row', alignItems: 'flex-start',
-    backgroundColor: '#FFFFFF', borderRadius: 12, padding: 14,
-    borderWidth: 1, borderColor: '#F1F1F5',
+    backgroundColor: '#FFFDF9', borderRadius: 12, padding: 14,
+    borderWidth: 1, borderColor: '#EDE9E3',
   },
-  infoText: { flex: 1, fontSize: 12, color: '#64748B', marginLeft: 10, lineHeight: 17 },
+  infoText: { flex: 1, fontSize: 12, color: '#5E6E7D', marginLeft: 10, lineHeight: 17 },
 
   bottomContainer: { paddingHorizontal: 24, paddingBottom: 16, paddingTop: 8 },
   continueButton: { borderRadius: 14, overflow: 'hidden', marginBottom: 12 },
@@ -276,24 +276,24 @@ const styles = StyleSheet.create({
 
   // Modal
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
-  modalContent: { backgroundColor: '#FFFFFF', borderTopLeftRadius: 24, borderTopRightRadius: 24, maxHeight: '70%' },
+  modalContent: { backgroundColor: '#FFFDF9', borderTopLeftRadius: 24, borderTopRightRadius: 24, maxHeight: '70%' },
   modalHeader: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    padding: 20, borderBottomWidth: 1, borderBottomColor: '#F1F1F5',
+    padding: 20, borderBottomWidth: 1, borderBottomColor: '#EDE9E3',
   },
-  modalTitle: { fontSize: 18, fontWeight: '600', color: '#1E1B4B' },
+  modalTitle: { fontSize: 18, fontWeight: '600', color: '#1B2A4A' },
   modalSearch: {
     flexDirection: 'row', alignItems: 'center',
     margin: 16, marginBottom: 8, padding: 12,
     backgroundColor: '#F8F9FA', borderRadius: 10,
   },
-  modalSearchInput: { flex: 1, fontSize: 15, color: '#1E1B4B', marginLeft: 8 },
+  modalSearchInput: { flex: 1, fontSize: 15, color: '#1B2A4A', marginLeft: 8 },
   statesList: { paddingHorizontal: 8, paddingBottom: 20 },
   stateItem: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
     padding: 14, borderRadius: 10,
   },
-  stateItemSelected: { backgroundColor: '#3B82F610' },
+  stateItemSelected: { backgroundColor: '#1B2A4A10' },
   stateItemText: { fontSize: 15, color: '#374151' },
-  stateItemTextSelected: { color: '#3B82F6', fontWeight: '600' },
+  stateItemTextSelected: { color: '#1B2A4A', fontWeight: '600' },
 });

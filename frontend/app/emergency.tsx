@@ -357,7 +357,7 @@ export default function EmergencyScreen() {
           </TouchableOpacity>
         ) : (
           <TouchableOpacity style={styles.emergencyBarContent} onPress={() => router.push('/(tabs)/settings')}>
-            <Ionicons name="person-add" size={20} color="#64748B" />
+            <Ionicons name="person-add" size={20} color="#5E6E7D" />
             <Text style={styles.emergencyBarText}>Set up emergency contact</Text>
             <Ionicons name="chevron-forward" size={18} color="#94A3B8" />
           </TouchableOpacity>
@@ -370,7 +370,7 @@ export default function EmergencyScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAFAFE',
+    backgroundColor: '#FAF8F5',
   },
   header: {
     flexDirection: 'row',
@@ -383,11 +383,11 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#F1F1F5',
+    borderColor: '#EDE9E3',
   },
   headerCenter: {
     alignItems: 'center',
@@ -395,11 +395,11 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1E1B4B',
+    color: '#1B2A4A',
   },
   headerSubtitle: {
     fontSize: 13,
-    color: '#64748B',
+    color: '#5E6E7D',
     marginTop: 2,
   },
   alertButton: {
@@ -414,16 +414,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 24,
     marginHorizontal: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     borderRadius: 20,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#F1F1F5',
+    borderColor: '#EDE9E3',
   },
   timerText: {
     fontSize: 48,
     fontWeight: '300',
-    color: '#1E1B4B',
+    color: '#1B2A4A',
     fontVariant: ['tabular-nums'],
   },
   timerControls: {
@@ -459,13 +459,13 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 12,
     marginHorizontal: 4,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     borderWidth: 1,
-    borderColor: '#F1F1F5',
+    borderColor: '#EDE9E3',
   },
   activeTab: {
-    backgroundColor: '#8B5CF6',
-    borderColor: '#8B5CF6',
+    backgroundColor: '#C45C5C',
+    borderColor: '#C45C5C',
   },
   tabText: {
     fontSize: 13,
@@ -484,23 +484,23 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1E1B4B',
+    color: '#1B2A4A',
     marginBottom: 4,
   },
   sectionDesc: {
     fontSize: 13,
-    color: '#64748B',
+    color: '#5E6E7D',
     marginBottom: 16,
   },
   scriptCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     borderRadius: 14,
     padding: 14,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#F1F1F5',
+    borderColor: '#EDE9E3',
   },
   scriptNumber: {
     width: 32,
@@ -522,25 +522,25 @@ const styles = StyleSheet.create({
   scriptTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1E1B4B',
+    color: '#1B2A4A',
     marginBottom: 4,
   },
   scriptText: {
     fontSize: 13,
-    color: '#64748B',
+    color: '#5E6E7D',
     fontStyle: 'italic',
   },
   noteInputContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     borderRadius: 14,
     padding: 14,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#F1F1F5',
+    borderColor: '#EDE9E3',
   },
   noteInput: {
     fontSize: 15,
-    color: '#1E1B4B',
+    color: '#1B2A4A',
     minHeight: 100,
     textAlignVertical: 'top',
   },
@@ -548,7 +548,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#3B82F6',
+    backgroundColor: '#C45C5C',
     borderRadius: 10,
     paddingVertical: 12,
     marginTop: 12,
@@ -565,16 +565,16 @@ const styles = StyleSheet.create({
   tipBox: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     borderRadius: 12,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#F1F1F5',
+    borderColor: '#EDE9E3',
   },
   tipText: {
     flex: 1,
     fontSize: 13,
-    color: '#64748B',
+    color: '#5E6E7D',
     marginLeft: 10,
     lineHeight: 18,
   },
@@ -582,7 +582,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#3B82F6',
+    backgroundColor: '#C45C5C',
     borderRadius: 12,
     paddingVertical: 14,
     marginBottom: 16,
@@ -594,23 +594,23 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   eventsList: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     borderRadius: 14,
     padding: 4,
     borderWidth: 1,
-    borderColor: '#F1F1F5',
+    borderColor: '#EDE9E3',
   },
   eventItem: {
     flexDirection: 'row',
     paddingVertical: 12,
     paddingHorizontal: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F1F5',
+    borderBottomColor: '#EDE9E3',
   },
   eventTime: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#3B82F6',
+    color: '#1B2A4A',
     width: 80,
   },
   eventNote: {
@@ -631,21 +631,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderTopWidth: 1,
-    borderTopColor: '#F1F1F5',
+    borderTopColor: '#EDE9E3',
   },
   emergencyBarContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     borderRadius: 12,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#F1F1F5',
+    borderColor: '#EDE9E3',
   },
   emergencyBarText: {
     flex: 1,
     fontSize: 14,
-    color: '#1E1B4B',
+    color: '#1B2A4A',
     marginLeft: 12,
   },
 });

@@ -47,7 +47,7 @@ export default function HomeScreen() {
     <SafeAreaView style={styles.container} edges={['top']}>
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#8B5CF6" />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#C45C5C" />}
       >
         {/* Header */}
         <View style={styles.header}>
@@ -105,12 +105,12 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#FAFAFE' },
+  container: { flex: 1, backgroundColor: '#FAF8F5' },
   scrollView: { flex: 1 },
   scrollContent: { paddingHorizontal: 20, paddingBottom: 24 },
   header: { marginTop: 12, marginBottom: 14, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  greeting: { fontSize: 22, fontWeight: '700', color: '#1E1B4B', letterSpacing: -0.5 },
-  subGreeting: { fontSize: 13, color: '#64748B', marginTop: 2 },
+  greeting: { fontSize: 22, fontWeight: '700', color: '#1B2A4A', letterSpacing: -0.5 },
+  subGreeting: { fontSize: 13, color: '#5E6E7D', marginTop: 2 },
   emergencyBtn: { borderRadius: 18, overflow: 'hidden' },
   emergencyBtnGrad: { width: 36, height: 36, borderRadius: 18, justifyContent: 'center', alignItems: 'center' },
   emergencyBanner: { borderRadius: 14, overflow: 'hidden', marginBottom: 16 },
@@ -119,13 +119,13 @@ const styles = StyleSheet.create({
   emergencyBannerText: { marginLeft: 12 },
   emergencyBannerTitle: { fontSize: 16, fontWeight: '600', color: '#FFFFFF' },
   emergencyBannerDesc: { fontSize: 13, color: 'rgba(255,255,255,0.8)', marginTop: 1 },
-  sectionTitle: { fontSize: 15, fontWeight: '600', color: '#1E1B4B', marginBottom: 12 },
+  sectionTitle: { fontSize: 15, fontWeight: '600', color: '#1B2A4A', marginBottom: 12 },
   categoryRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 },
   categoryCardOuter: { width: '48%' },
-  categoryCard: { backgroundColor: '#FFFFFF', borderRadius: 14, padding: 14, minHeight: 110, borderWidth: 1, borderColor: '#F1F1F5' },
+  categoryCard: { backgroundColor: '#FFFDF9', borderRadius: 14, padding: 14, minHeight: 110, borderWidth: 1, borderColor: '#EDE9E3' },
   categoryIcon: { width: 42, height: 42, borderRadius: 12, justifyContent: 'center', alignItems: 'center', marginBottom: 10 },
-  categoryName: { fontSize: 14, fontWeight: '600', color: '#1E1B4B', marginBottom: 3 },
+  categoryName: { fontSize: 14, fontWeight: '600', color: '#1B2A4A', marginBottom: 3 },
   categoryDesc: { fontSize: 12, color: '#94A3B8', lineHeight: 16 },
-  disclaimer: { flexDirection: 'row', alignItems: 'flex-start', backgroundColor: '#FFFFFF', borderRadius: 12, padding: 12, marginTop: 12, borderWidth: 1, borderColor: '#F1F1F5' },
+  disclaimer: { flexDirection: 'row', alignItems: 'flex-start', backgroundColor: '#FFFDF9', borderRadius: 12, padding: 12, marginTop: 12, borderWidth: 1, borderColor: '#EDE9E3' },
   disclaimerText: { flex: 1, fontSize: 12, color: '#94A3B8', marginLeft: 8, lineHeight: 18 },
 });

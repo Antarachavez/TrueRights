@@ -13,7 +13,7 @@ import axios from 'axios';
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
 
 const QUOTE_TYPE_CONFIG: { [key: string]: { icon: string; gradient: string[] } } = {
-  'Constitution': { icon: 'shield-checkmark', gradient: ['#C4B5FD', '#DDD6FE'] },
+  'Constitution': { icon: 'shield-checkmark', gradient: ['#E8A5A5', '#DDD6FE'] },
   'Supreme Court': { icon: 'hammer', gradient: ['#FDA4AF', '#FCA5A5'] },
   'Federal Law': { icon: 'document-text', gradient: ['#7DD3FC', '#93C5FD'] },
   'Federal Court': { icon: 'business', gradient: ['#86EFAC', '#6EE7B7'] },
@@ -57,7 +57,7 @@ export default function GeneratedScenarioScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#C4B5FD" />
+          <ActivityIndicator size="large" color="#E8A5A5" />
           <Text style={styles.loadingText}>Loading...</Text>
         </View>
       </SafeAreaView>
@@ -69,11 +69,11 @@ export default function GeneratedScenarioScreen() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="#1E1B4B" />
+          <Ionicons name="arrow-back" size={24} color="#1B2A4A" />
         </TouchableOpacity>
         <View style={styles.headerActions}>
           <TouchableOpacity style={styles.actionBtn} onPress={shareScenario}>
-            <Ionicons name="share-outline" size={20} color="#1E1B4B" />
+            <Ionicons name="share-outline" size={20} color="#1B2A4A" />
           </TouchableOpacity>
         </View>
       </View>
@@ -83,7 +83,7 @@ export default function GeneratedScenarioScreen() {
         <View>
           <View style={styles.aiBadge}>
             <LinearGradient
-              colors={['#C4B5FD', '#A78BFA']}
+              colors={['#E8A5A5', '#D4787A']}
               style={styles.aiBadgeGradient}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
@@ -110,7 +110,7 @@ export default function GeneratedScenarioScreen() {
             <Ionicons name="flash" size={20} color="#FDBA74" />
             <Text style={styles.sectionTitle}>Quick Answer</Text>
           </View>
-          <View style={[styles.answerCard, { borderLeftColor: '#C4B5FD' }]}>
+          <View style={[styles.answerCard, { borderLeftColor: '#E8A5A5' }]}>
             <Text style={styles.shortAnswer}>{scenario.short_answer}</Text>
           </View>
         </View>
@@ -118,7 +118,7 @@ export default function GeneratedScenarioScreen() {
         {/* Explanation */}
         <View>
           <View style={styles.sectionHeader}>
-            <Ionicons name="information-circle" size={20} color="#64748B" />
+            <Ionicons name="information-circle" size={20} color="#5E6E7D" />
             <Text style={styles.sectionTitle}>What This Usually Means</Text>
           </View>
           <Text style={styles.explanation}>{scenario.explanation}</Text>
@@ -128,7 +128,7 @@ export default function GeneratedScenarioScreen() {
         {scenario.next_steps && scenario.next_steps.length > 0 && (
           <View>
             <View style={styles.sectionHeader}>
-              <Ionicons name="footsteps" size={20} color="#64748B" />
+              <Ionicons name="footsteps" size={20} color="#5E6E7D" />
               <Text style={styles.sectionTitle}>Next Steps</Text>
             </View>
             <View style={styles.stepsList}>
@@ -148,7 +148,7 @@ export default function GeneratedScenarioScreen() {
         {scenario.legal_quotes && scenario.legal_quotes.length > 0 && (
           <View>
             <View style={styles.sectionHeader}>
-              <Ionicons name="book" size={20} color="#C4B5FD" />
+              <Ionicons name="book" size={20} color="#E8A5A5" />
               <Text style={styles.sectionTitle}>What the Law Says</Text>
             </View>
             {scenario.legal_quotes.map((quote: any, index: number) => {
@@ -192,9 +192,9 @@ export default function GeneratedScenarioScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#FAFAFE' },
+  container: { flex: 1, backgroundColor: '#FAF8F5' },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  loadingText: { color: '#64748B', fontSize: 14, marginTop: 12 },
+  loadingText: { color: '#5E6E7D', fontSize: 14, marginTop: 12 },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -205,13 +205,13 @@ const styles = StyleSheet.create({
   },
   backButton: {
     width: 40, height: 40, borderRadius: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     justifyContent: 'center', alignItems: 'center',
   },
   headerActions: { flexDirection: 'row', gap: 8 },
   actionBtn: {
     width: 40, height: 40, borderRadius: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFDF9',
     justifyContent: 'center', alignItems: 'center',
   },
   scrollView: { flex: 1 },
@@ -223,29 +223,29 @@ const styles = StyleSheet.create({
   },
   aiBadgeText: { color: '#FFFFFF', fontSize: 12, fontWeight: '600' },
   categoryBadge: {
-    backgroundColor: '#F1F1F5', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8,
+    backgroundColor: '#EDE9E3', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8,
   },
-  categoryBadgeText: { color: '#64748B', fontSize: 12, fontWeight: '500' },
-  question: { fontSize: 22, fontWeight: '700', color: '#1E1B4B', lineHeight: 30, marginBottom: 20 },
+  categoryBadgeText: { color: '#5E6E7D', fontSize: 12, fontWeight: '500' },
+  question: { fontSize: 22, fontWeight: '700', color: '#1B2A4A', lineHeight: 30, marginBottom: 20 },
   section: { marginBottom: 20 },
   sectionHeader: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 12 },
   sectionTitle: { fontSize: 16, fontWeight: '600', color: '#374151' },
   answerCard: {
-    backgroundColor: '#FFFFFF', borderRadius: 14, padding: 16,
-    borderLeftWidth: 3, borderWidth: 1, borderColor: '#F1F1F5',
+    backgroundColor: '#FFFDF9', borderRadius: 14, padding: 16,
+    borderLeftWidth: 3, borderWidth: 1, borderColor: '#EDE9E3',
   },
-  shortAnswer: { fontSize: 16, color: '#1E1B4B', lineHeight: 24, fontWeight: '500' },
-  explanation: { fontSize: 15, color: '#64748B', lineHeight: 24 },
+  shortAnswer: { fontSize: 16, color: '#1B2A4A', lineHeight: 24, fontWeight: '500' },
+  explanation: { fontSize: 15, color: '#5E6E7D', lineHeight: 24 },
   stepsList: { gap: 10 },
   stepItem: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   stepNumber: {
     width: 28, height: 28, borderRadius: 14,
-    backgroundColor: '#C4B5FD20',
+    backgroundColor: '#E8A5A520',
     justifyContent: 'center', alignItems: 'center',
   },
-  stepNumberText: { color: '#C4B5FD', fontSize: 13, fontWeight: '600' },
-  stepText: { flex: 1, fontSize: 14, color: '#64748B', lineHeight: 20 },
-  legalQuoteCard: { borderRadius: 16, overflow: 'hidden', marginBottom: 12, borderWidth: 1, borderColor: '#F1F1F5' },
+  stepNumberText: { color: '#E8A5A5', fontSize: 13, fontWeight: '600' },
+  stepText: { flex: 1, fontSize: 14, color: '#5E6E7D', lineHeight: 20 },
+  legalQuoteCard: { borderRadius: 16, overflow: 'hidden', marginBottom: 12, borderWidth: 1, borderColor: '#EDE9E3' },
   legalQuoteGradient: { padding: 16 },
   legalQuoteHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
   legalTypeBadge: {
@@ -258,8 +258,8 @@ const styles = StyleSheet.create({
   legalSourceText: { fontSize: 12, color: '#94A3B8', marginLeft: 6, flex: 1, fontWeight: '500' },
   disclaimer: {
     flexDirection: 'row', alignItems: 'flex-start',
-    backgroundColor: '#FFFFFF', borderRadius: 12, padding: 12,
-    borderWidth: 1, borderColor: '#F1F1F5', marginTop: 8,
+    backgroundColor: '#FFFDF9', borderRadius: 12, padding: 12,
+    borderWidth: 1, borderColor: '#EDE9E3', marginTop: 8,
   },
   disclaimerText: { flex: 1, fontSize: 12, color: '#94A3B8', marginLeft: 8, lineHeight: 18 },
 });
