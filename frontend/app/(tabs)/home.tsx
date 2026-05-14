@@ -84,8 +84,8 @@ export default function HomeScreen() {
             {categories.slice(rowIndex * 2, rowIndex * 2 + 2).map((cat) => (
               <View key={cat.id} style={styles.categoryCardOuter}>
                 <TouchableOpacity style={styles.categoryCard} onPress={() => router.push(`/category/${cat.id}`)} activeOpacity={0.7}>
-                  <View style={styles.categoryIcon}>
-                    <Ionicons name={getIconName(cat.icon)} size={22} color="#1B2A4A" />
+                  <View style={[styles.categoryIcon, { backgroundColor: `${cat.color}18` }]}>
+                    <Ionicons name={getIconName(cat.icon)} size={22} color={cat.color} />
                   </View>
                   <Text style={styles.categoryName}>{cat.name}</Text>
                   <Text style={styles.categoryDesc} numberOfLines={2}>{cat.description}</Text>
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   categoryRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 },
   categoryCardOuter: { width: '48%' },
   categoryCard: { backgroundColor: '#FFFDF9', borderRadius: 14, padding: 14, minHeight: 110, borderWidth: 1, borderColor: '#EDE9E3' },
-  categoryIcon: { width: 42, height: 42, borderRadius: 12, backgroundColor: '#E8E2DA', justifyContent: 'center', alignItems: 'center', marginBottom: 10 },
+  categoryIcon: { width: 42, height: 42, borderRadius: 12, justifyContent: 'center', alignItems: 'center', marginBottom: 10 },
   categoryName: { fontSize: 14, fontWeight: '600', color: '#1B2A4A', marginBottom: 3 },
   categoryDesc: { fontSize: 12, color: '#8B9AAB', lineHeight: 16 },
   disclaimer: { flexDirection: 'row', alignItems: 'flex-start', backgroundColor: '#FFFDF9', borderRadius: 12, padding: 12, marginTop: 12, borderWidth: 1, borderColor: '#EDE9E3' },

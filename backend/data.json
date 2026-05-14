@@ -4,7 +4,7 @@
       "id": "school",
       "name": "School",
       "icon": "school",
-      "color": "#7DD3FC",
+      "color": "#5B8DAF",
       "description": "Know your rights at school",
       "subcategories": [
         {
@@ -79,7 +79,7 @@
       "id": "work",
       "name": "Work",
       "icon": "briefcase",
-      "color": "#FCA5A5",
+      "color": "#B87878",
       "description": "Workplace rights",
       "subcategories": [
         {
@@ -154,7 +154,7 @@
       "id": "housing",
       "name": "Housing",
       "icon": "home",
-      "color": "#86EFAC",
+      "color": "#7BA37B",
       "description": "Tenant rights",
       "subcategories": [
         {
@@ -229,7 +229,7 @@
       "id": "police",
       "name": "Police",
       "icon": "shield",
-      "color": "#FDA4AF",
+      "color": "#8B7BA3",
       "description": "Police interactions",
       "subcategories": [
         {
@@ -304,7 +304,7 @@
       "id": "online",
       "name": "Online",
       "icon": "lock",
-      "color": "#C4B5FD",
+      "color": "#6B8FA8",
       "description": "Digital safety",
       "subcategories": [
         {
@@ -379,7 +379,7 @@
       "id": "public",
       "name": "Public Spaces",
       "icon": "map-pin",
-      "color": "#6EE7B7",
+      "color": "#5EA89A",
       "description": "Public rights",
       "subcategories": [
         {
@@ -454,7 +454,7 @@
       "id": "immigration",
       "name": "Immigration",
       "icon": "globe",
-      "color": "#67E8F9",
+      "color": "#6B9E8A",
       "description": "Immigration rights",
       "subcategories": [
         {
@@ -529,7 +529,7 @@
       "id": "consumer",
       "name": "Customer Service",
       "icon": "cart",
-      "color": "#FDBA74",
+      "color": "#B8977B",
       "description": "Consumer rights",
       "subcategories": [
         {
