@@ -56,23 +56,25 @@ export default function HomeScreen() {
             <Text style={styles.subGreeting}>What do you need help with?</Text>
           </View>
           <TouchableOpacity style={styles.emergencyBtn} onPress={() => router.push('/emergency')} activeOpacity={0.8}>
-            <LinearGradient colors={['#FB7185', '#F43F5E']} style={styles.emergencyBtnGrad} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
-              <Ionicons name="warning" size={18} color="#FFFFFF" />
-            </LinearGradient>
+            <View style={styles.emergencyBtnGrad}>
+              <Ionicons name="warning" size={18} color="#C45C5C" />
+            </View>
           </TouchableOpacity>
         </View>
 
         {/* Emergency Banner */}
         <TouchableOpacity style={styles.emergencyBanner} onPress={() => router.push('/emergency')} activeOpacity={0.85}>
-          <LinearGradient colors={['#FB7185', '#EC4899']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.emergencyBannerGrad}>
+          <View style={styles.emergencyBannerInner}>
             <View style={styles.emergencyBannerContent}>
-              <Ionicons name="alert-circle" size={22} color="#FFFFFF" />
+              <View style={styles.emergencyIconCircle}>
+                <Ionicons name="alert-circle" size={20} color="#C45C5C" />
+              </View>
               <View style={styles.emergencyBannerText}>
                 <Text style={styles.emergencyBannerTitle}>Emergency Mode</Text>
               </View>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="rgba(255,255,255,0.7)" />
-          </LinearGradient>
+            <Ionicons name="chevron-forward" size={20} color="#C45C5C" />
+          </View>
         </TouchableOpacity>
 
         {/* Categories */}
@@ -82,8 +84,8 @@ export default function HomeScreen() {
             {categories.slice(rowIndex * 2, rowIndex * 2 + 2).map((cat) => (
               <View key={cat.id} style={styles.categoryCardOuter}>
                 <TouchableOpacity style={styles.categoryCard} onPress={() => router.push(`/category/${cat.id}`)} activeOpacity={0.7}>
-                  <View style={[styles.categoryIcon, { backgroundColor: `${cat.color}10` }]}>
-                    <Ionicons name={getIconName(cat.icon)} size={22} color={cat.color} />
+                  <View style={styles.categoryIcon}>
+                    <Ionicons name={getIconName(cat.icon)} size={22} color="#1B2A4A" />
                   </View>
                   <Text style={styles.categoryName}>{cat.name}</Text>
                   <Text style={styles.categoryDesc} numberOfLines={2}>{cat.description}</Text>
@@ -105,27 +107,29 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#FAF8F5' },
+  container: { flex: 1, backgroundColor: '#F5F0EB' },
   scrollView: { flex: 1 },
   scrollContent: { paddingHorizontal: 20, paddingBottom: 24 },
   header: { marginTop: 12, marginBottom: 14, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   greeting: { fontSize: 22, fontWeight: '700', color: '#1B2A4A', letterSpacing: -0.5 },
   subGreeting: { fontSize: 13, color: '#5E6E7D', marginTop: 2 },
   emergencyBtn: { borderRadius: 18, overflow: 'hidden' },
-  emergencyBtnGrad: { width: 36, height: 36, borderRadius: 18, justifyContent: 'center', alignItems: 'center' },
-  emergencyBanner: { borderRadius: 14, overflow: 'hidden', marginBottom: 16 },
+  emergencyBtnGrad: { width: 36, height: 36, borderRadius: 18, justifyContent: 'center', alignItems: 'center', backgroundColor: '#FDEAEA' },
+  emergencyBanner: { borderRadius: 14, overflow: 'hidden', marginBottom: 16, backgroundColor: '#FDEAEA', borderWidth: 1, borderColor: '#F5CDCD' },
+  emergencyBannerInner: { padding: 14, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   emergencyBannerGrad: { padding: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   emergencyBannerContent: { flexDirection: 'row', alignItems: 'center', flex: 1 },
+  emergencyIconCircle: { width: 36, height: 36, borderRadius: 18, backgroundColor: '#F9D4D4', justifyContent: 'center', alignItems: 'center' },
   emergencyBannerText: { marginLeft: 12 },
-  emergencyBannerTitle: { fontSize: 16, fontWeight: '600', color: '#FFFFFF' },
+  emergencyBannerTitle: { fontSize: 15, fontWeight: '600', color: '#8B3A3A' },
   emergencyBannerDesc: { fontSize: 13, color: 'rgba(255,255,255,0.8)', marginTop: 1 },
   sectionTitle: { fontSize: 15, fontWeight: '600', color: '#1B2A4A', marginBottom: 12 },
   categoryRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 },
   categoryCardOuter: { width: '48%' },
   categoryCard: { backgroundColor: '#FFFDF9', borderRadius: 14, padding: 14, minHeight: 110, borderWidth: 1, borderColor: '#EDE9E3' },
-  categoryIcon: { width: 42, height: 42, borderRadius: 12, justifyContent: 'center', alignItems: 'center', marginBottom: 10 },
+  categoryIcon: { width: 42, height: 42, borderRadius: 12, backgroundColor: '#E8E2DA', justifyContent: 'center', alignItems: 'center', marginBottom: 10 },
   categoryName: { fontSize: 14, fontWeight: '600', color: '#1B2A4A', marginBottom: 3 },
-  categoryDesc: { fontSize: 12, color: '#94A3B8', lineHeight: 16 },
+  categoryDesc: { fontSize: 12, color: '#8B9AAB', lineHeight: 16 },
   disclaimer: { flexDirection: 'row', alignItems: 'flex-start', backgroundColor: '#FFFDF9', borderRadius: 12, padding: 12, marginTop: 12, borderWidth: 1, borderColor: '#EDE9E3' },
-  disclaimerText: { flex: 1, fontSize: 12, color: '#94A3B8', marginLeft: 8, lineHeight: 18 },
+  disclaimerText: { flex: 1, fontSize: 12, color: '#8B9AAB', marginLeft: 8, lineHeight: 18 },
 });

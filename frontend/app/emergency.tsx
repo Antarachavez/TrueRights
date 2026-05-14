@@ -370,7 +370,7 @@ export default function EmergencyScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAF8F5',
+    backgroundColor: '#F5F0EB',
   },
   header: {
     flexDirection: 'row',

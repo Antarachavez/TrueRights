@@ -192,7 +192,7 @@ export default function GeneratedScenarioScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#FAF8F5' },
+  container: { flex: 1, backgroundColor: '#F5F0EB' },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   loadingText: { color: '#5E6E7D', fontSize: 14, marginTop: 12 },
   header: {

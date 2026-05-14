@@ -221,7 +221,7 @@ export default function ChatScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAF8F5',
+    backgroundColor: '#F5F0EB',
   },
   keyboardView: {
     flex: 1,
@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderTopWidth: 1,
     borderTopColor: '#EDE9E3',
-    backgroundColor: '#FAF8F5',
+    backgroundColor: '#F5F0EB',
   },
   textInput: {
     flex: 1,
@@ -357,7 +357,7 @@ const styles = StyleSheet.create({
   disclaimerBar: {
     paddingVertical: 8,
     alignItems: 'center',
-    backgroundColor: '#FAF8F5',
+    backgroundColor: '#F5F0EB',
   },
   disclaimerText: {
     fontSize: 11,

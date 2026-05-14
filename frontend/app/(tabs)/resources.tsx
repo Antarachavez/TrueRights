@@ -194,7 +194,7 @@ export default function ResourcesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAF8F5',
+    backgroundColor: '#F5F0EB',
   },
   header: {
     paddingHorizontal: 20,
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
   },
   resourceItem: {
-    backgroundColor: '#FAF8F5',
+    backgroundColor: '#F5F0EB',
     borderRadius: 12,
     padding: 14,
     marginBottom: 8,

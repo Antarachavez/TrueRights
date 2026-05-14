@@ -548,7 +548,7 @@ export default function ScriptsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAF8F5',
+    backgroundColor: '#F5F0EB',
   },
   header: {
     paddingHorizontal: 20,
@@ -822,7 +822,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   scriptContentContainer: {
-    backgroundColor: '#FAF8F5',
+    backgroundColor: '#F5F0EB',
     borderRadius: 10,
     padding: 12,
     position: 'relative',
