@@ -57,7 +57,7 @@ export default function HomeScreen() {
           </View>
           <TouchableOpacity style={styles.emergencyBtn} onPress={() => router.push('/emergency')} activeOpacity={0.8}>
             <View style={styles.emergencyBtnGrad}>
-              <Ionicons name="warning" size={18} color="#C45C5C" />
+              <Ionicons name="warning" size={18} color="#FFFFFF" />
             </View>
           </TouchableOpacity>
         </View>
@@ -67,13 +67,13 @@ export default function HomeScreen() {
           <View style={styles.emergencyBannerInner}>
             <View style={styles.emergencyBannerContent}>
               <View style={styles.emergencyIconCircle}>
-                <Ionicons name="alert-circle" size={20} color="#C45C5C" />
+                <Ionicons name="alert-circle" size={20} color="#FFFFFF" />
               </View>
               <View style={styles.emergencyBannerText}>
                 <Text style={styles.emergencyBannerTitle}>Emergency Mode</Text>
               </View>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="#C45C5C" />
+            <Ionicons name="chevron-forward" size={20} color="rgba(255,255,255,0.7)" />
           </View>
         </TouchableOpacity>
 
@@ -114,14 +114,14 @@ const styles = StyleSheet.create({
   greeting: { fontSize: 22, fontWeight: '700', color: '#1B2A4A', letterSpacing: -0.5 },
   subGreeting: { fontSize: 13, color: '#5E6E7D', marginTop: 2 },
   emergencyBtn: { borderRadius: 18, overflow: 'hidden' },
-  emergencyBtnGrad: { width: 36, height: 36, borderRadius: 18, justifyContent: 'center', alignItems: 'center', backgroundColor: '#FDEAEA' },
-  emergencyBanner: { borderRadius: 14, overflow: 'hidden', marginBottom: 16, backgroundColor: '#FDEAEA', borderWidth: 1, borderColor: '#F5CDCD' },
+  emergencyBtnGrad: { width: 36, height: 36, borderRadius: 18, justifyContent: 'center', alignItems: 'center', backgroundColor: '#B87878' },
+  emergencyBanner: { borderRadius: 14, overflow: 'hidden', marginBottom: 16, backgroundColor: '#B87878' },
   emergencyBannerInner: { padding: 14, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   emergencyBannerGrad: { padding: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   emergencyBannerContent: { flexDirection: 'row', alignItems: 'center', flex: 1 },
-  emergencyIconCircle: { width: 36, height: 36, borderRadius: 18, backgroundColor: '#F9D4D4', justifyContent: 'center', alignItems: 'center' },
+  emergencyIconCircle: { width: 36, height: 36, borderRadius: 18, backgroundColor: 'rgba(255,255,255,0.25)', justifyContent: 'center', alignItems: 'center' },
   emergencyBannerText: { marginLeft: 12 },
-  emergencyBannerTitle: { fontSize: 15, fontWeight: '600', color: '#8B3A3A' },
+  emergencyBannerTitle: { fontSize: 15, fontWeight: '600', color: '#FFFFFF' },
   emergencyBannerDesc: { fontSize: 13, color: 'rgba(255,255,255,0.8)', marginTop: 1 },
   sectionTitle: { fontSize: 15, fontWeight: '600', color: '#1B2A4A', marginBottom: 12 },
   categoryRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 },
