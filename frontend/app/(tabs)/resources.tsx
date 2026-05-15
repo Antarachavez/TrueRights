@@ -20,6 +20,7 @@ interface ResourceCategory {
 }
 
 export default function ResourcesScreen() {
+  const { t } = useLanguage();
   const [resources, setResources] = useState<ResourceCategory[]>([]);
   const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -93,26 +94,44 @@ export default function ResourcesScreen() {
 
   const getCategoryColor = (category: string): string => {
     const colors: { [key: string]: string } = {
-      'Emergency Hotlines': '#EF4444',
-      'Emergency': '#EF4444',
+      'Emergency Hotlines': '#C45C5C',
+      'Emergency': '#C45C5C',
       'Legal Aid': '#1B2A4A',
       'Legal': '#1B2A4A',
-      'Youth Support': '#EC4899',
-      'Youth': '#EC4899',
-      'Worker Rights': '#F97316',
-      'Immigration': '#06B6D4',
-      'Housing Help': '#10B981',
-      'Consumer': '#F59E0B',
+      'Youth Support': '#B87878',
+      'Youth': '#B87878',
+      'Worker Rights': '#B8977B',
+      'Immigration': '#6B9E8A',
+      'Housing Help': '#7BA37B',
+      'Consumer': '#5B8DAF',
     };
-    return colors[category] || '#94A3B8';
+    return colors[category] || '#8B9AAB';
+  };
+
+  const CAT_KEY_MAP: { [key: string]: string } = {
+    'Emergency Hotlines': 'resources.cat.emergency',
+    'Emergency': 'resources.cat.emergency',
+    'Legal Aid': 'resources.cat.legal',
+    'Legal': 'resources.cat.legal',
+    'Youth Support': 'resources.cat.youth',
+    'Youth': 'resources.cat.youth',
+    'Worker Rights': 'resources.cat.worker',
+    'Immigration': 'resources.cat.immigration',
+    'Housing Help': 'resources.cat.housing',
+    'Consumer': 'resources.cat.consumer',
+  };
+
+  const translateCategory = (cat: string) => {
+    const key = CAT_KEY_MAP[cat];
+    return key ? t(key) : cat;
   };
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Resources</Text>
-        <Text style={styles.headerSubtitle}>Hotlines, legal aid, and support</Text>
+        <Text style={styles.headerTitle}>{t('resources.title')}</Text>
+        <Text style={styles.headerSubtitle}>{t('resources.subtitle')}</Text>
       </View>
 
       {/* Resources List */}
@@ -142,7 +161,7 @@ export default function ResourcesScreen() {
                   <View style={[styles.categoryIcon, { backgroundColor: `${color}20` }]}>
                     <Ionicons name={getCategoryIcon(resourceCategory.category)} size={20} color={color} />
                   </View>
-                  <Text style={styles.categoryTitle}>{resourceCategory.category}</Text>
+                  <Text style={styles.categoryTitle}>{translateCategory(resourceCategory.category)}</Text>
                 </View>
                 <Ionicons 
                   name={isExpanded ? "chevron-up" : "chevron-down"} 
@@ -182,9 +201,9 @@ export default function ResourcesScreen() {
 
         {/* Help Tip */}
         <View style={styles.helpTip}>
-          <Ionicons name="bulb" size={20} color="#F59E0B" />
+          <Ionicons name="bulb" size={20} color="#B8977B" />
           <Text style={styles.helpTipText}>
-            Tap any contact to call, text, or visit the website directly.
+            {t('resources.tapTip')}
           </Text>
         </View>
       </ScrollView>

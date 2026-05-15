@@ -95,8 +95,8 @@ export default function OnboardingScreen() {
               <Ionicons name="shield-checkmark" size={32} color="#FFFFFF" />
             </LinearGradient>
             <Text style={styles.title}>True Rights</Text>
-            <Text style={styles.langSubtitle}>Choose your language</Text>
-            <Text style={styles.langSubtitleSmall}>Elige tu idioma · Choisissez votre langue · 选择语言</Text>
+            <Text style={styles.langSubtitle}>{t('onboarding.chooseLanguage')}</Text>
+            <Text style={styles.langSubtitleSmall}>{t('onboarding.languageSub')}</Text>
           </View>
 
           <View style={styles.langOptions}>

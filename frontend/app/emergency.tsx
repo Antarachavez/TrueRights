@@ -10,36 +10,17 @@ import Animated, { FadeIn, FadeInUp, useAnimatedStyle, useSharedValue, withRepea
 
 const { width } = Dimensions.get('window');
 
-const EMERGENCY_SCRIPTS = [
-  {
-    id: '1',
-    title: 'Stay Calm',
-    content: "I want to remain calm. I am documenting this situation."
-  },
-  {
-    id: '2',
-    title: 'Ask If Detained',
-    content: "Am I free to go, or am I being detained?"
-  },
-  {
-    id: '3',
-    title: 'Decline Search',
-    content: "I do not consent to a search."
-  },
-  {
-    id: '4',
-    title: 'Request Support',
-    content: "I would like to contact a parent, guardian, or lawyer."
-  },
-  {
-    id: '5',
-    title: 'Remain Silent',
-    content: "I am exercising my right to remain silent."
-  }
+const EMERGENCY_SCRIPTS_KEYS = [
+  { id: '1', titleKey: 'emergency.script1Title', contentKey: 'emergency.script1Content' },
+  { id: '2', titleKey: 'emergency.script2Title', contentKey: 'emergency.script2Content' },
+  { id: '3', titleKey: 'emergency.script3Title', contentKey: 'emergency.script3Content' },
+  { id: '4', titleKey: 'emergency.script4Title', contentKey: 'emergency.script4Content' },
+  { id: '5', titleKey: 'emergency.script5Title', contentKey: 'emergency.script5Content' },
 ];
 
 export default function EmergencyScreen() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<'scripts' | 'notes' | 'timer'>('scripts');
   const [notes, setNotes] = useState('');
   const [timerSeconds, setTimerSeconds] = useState(0);
@@ -95,6 +76,12 @@ export default function EmergencyScreen() {
     }
   };
 
+  const EMERGENCY_SCRIPTS = EMERGENCY_SCRIPTS_KEYS.map(s => ({
+    id: s.id,
+    title: t(s.titleKey),
+    content: t(s.contentKey),
+  }));
+
   const formatTime = (seconds: number) => {
     const hrs = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
@@ -107,7 +94,7 @@ export default function EmergencyScreen() {
     timerRef.current = setInterval(() => {
       setTimerSeconds(prev => prev + 1);
     }, 1000);
-    logEvent('Timer started');
+    logEvent(t('emergency.timerStarted'));
   };
 
   const stopTimer = () => {
@@ -116,7 +103,7 @@ export default function EmergencyScreen() {
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
-    logEvent('Timer stopped');
+    logEvent(t('emergency.timerStopped'));
   };
 
   const logEvent = (note: string) => {
@@ -131,33 +118,33 @@ export default function EmergencyScreen() {
     
     logEvent(notes.trim());
     setNotes('');
-    Alert.alert('Note Saved', 'Your note has been recorded.');
+    Alert.alert(t('emergency.noteSaved'), t('emergency.noteRecorded'));
   };
 
   const callEmergencyContact = () => {
     if (!emergencyContact) {
       Alert.alert(
-        'No Emergency Contact',
-        'Please set up an emergency contact in Settings first.',
+        t('emergency.noContact'),
+        t('emergency.noContactDesc'),
         [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'Go to Settings', onPress: () => router.push('/(tabs)/settings') }
+          { text: t('emergency.cancel'), style: 'cancel' },
+          { text: t('emergency.goSettings'), onPress: () => router.push('/(tabs)/settings') }
         ]
       );
       return;
     }
 
     Alert.alert(
-      'Call Contact',
-      `Call ${emergencyContact.name}?`,
+      t('emergency.callContactTitle'),
+      `${t('emergency.callContactQ')} ${emergencyContact.name}?`,
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('emergency.cancel'), style: 'cancel' },
         {
-          text: 'Call',
+          text: t('emergency.callContactCall'),
           onPress: () => {
             Linking.openURL(`tel:${emergencyContact.phone}`);
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-            logEvent(`Called ${emergencyContact.name}`);
+            logEvent(`${t('emergency.calledLog')} ${emergencyContact.name}`);
           }
         }
       ]
@@ -166,16 +153,16 @@ export default function EmergencyScreen() {
 
   const call911 = () => {
     Alert.alert(
-      'Call 911',
-      'This will open your phone dialer to call 911.',
+      t('emergency.call911'),
+      t('emergency.callConfirm'),
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('emergency.cancel'), style: 'cancel' },
         {
-          text: 'Call 911',
+          text: t('emergency.call911'),
           style: 'destructive',
           onPress: () => {
             Linking.openURL('tel:911');
-            logEvent('Called 911');
+            logEvent(`${t('emergency.calledLog')} 911`);
           }
         }
       ]
@@ -195,8 +182,8 @@ export default function EmergencyScreen() {
           <Ionicons name="close" size={24} color="#374151" />
         </TouchableOpacity>
         <View style={styles.headerCenter}>
-          <Text style={styles.headerTitle}>Emergency Mode</Text>
-          <Text style={styles.headerSubtitle}>Stay calm. You've got this.</Text>
+          <Text style={styles.headerTitle}>{t('emergency.title')}</Text>
+          <Text style={styles.headerSubtitle}>{t('emergency.subtitle')}</Text>
         </View>
         <TouchableOpacity 
           style={styles.alertButton}
@@ -213,12 +200,12 @@ export default function EmergencyScreen() {
           {!timerRunning ? (
             <TouchableOpacity style={styles.timerButton} onPress={startTimer}>
               <Ionicons name="play" size={20} color="#FFFFFF" />
-              <Text style={styles.timerButtonText}>Start Recording</Text>
+              <Text style={styles.timerButtonText}>{t('emergency.startRecording')}</Text>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity style={[styles.timerButton, styles.timerButtonStop]} onPress={stopTimer}>
               <Ionicons name="stop" size={20} color="#FFFFFF" />
-              <Text style={styles.timerButtonText}>Stop</Text>
+              <Text style={styles.timerButtonText}>{t('emergency.stop')}</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -231,21 +218,21 @@ export default function EmergencyScreen() {
           onPress={() => setActiveTab('scripts')}
         >
           <Ionicons name="document-text" size={18} color={activeTab === 'scripts' ? '#FFFFFF' : '#94A3B8'} />
-          <Text style={[styles.tabText, activeTab === 'scripts' && styles.activeTabText]}>Scripts</Text>
+          <Text style={[styles.tabText, activeTab === 'scripts' && styles.activeTabText]}>{t('emergency.scripts')}</Text>
         </TouchableOpacity>
         <TouchableOpacity 
           style={[styles.tab, activeTab === 'notes' && styles.activeTab]}
           onPress={() => setActiveTab('notes')}
         >
           <Ionicons name="create" size={18} color={activeTab === 'notes' ? '#FFFFFF' : '#94A3B8'} />
-          <Text style={[styles.tabText, activeTab === 'notes' && styles.activeTabText]}>Notes</Text>
+          <Text style={[styles.tabText, activeTab === 'notes' && styles.activeTabText]}>{t('emergency.notes')}</Text>
         </TouchableOpacity>
         <TouchableOpacity 
           style={[styles.tab, activeTab === 'timer' && styles.activeTab]}
           onPress={() => setActiveTab('timer')}
         >
           <Ionicons name="time" size={18} color={activeTab === 'timer' ? '#FFFFFF' : '#94A3B8'} />
-          <Text style={[styles.tabText, activeTab === 'timer' && styles.activeTabText]}>Log</Text>
+          <Text style={[styles.tabText, activeTab === 'timer' && styles.activeTabText]}>{t('emergency.log')}</Text>
         </TouchableOpacity>
       </View>
 
@@ -253,8 +240,8 @@ export default function EmergencyScreen() {
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {activeTab === 'scripts' && (
           <Animated.View entering={FadeIn.duration(300)}>
-            <Text style={styles.sectionTitle}>Say This Out Loud</Text>
-            <Text style={styles.sectionDesc}>Tap any script to read it calmly</Text>
+            <Text style={styles.sectionTitle}>{t('emergency.sayThis')}</Text>
+            <Text style={styles.sectionDesc}>{t('emergency.sayThisDesc')}</Text>
             
             {EMERGENCY_SCRIPTS.map((script, index) => (
               <Animated.View key={script.id} entering={FadeInUp.duration(300).delay(index * 50)}>
@@ -262,7 +249,7 @@ export default function EmergencyScreen() {
                   style={styles.scriptCard}
                   onPress={() => {
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                    Alert.alert(script.title, `\n"${script.content}"\n\nSay this clearly and calmly.`);
+                    Alert.alert(script.title, `\n"${script.content}"\n\n${t('emergency.sayClearly')}`);
                   }}
                 >
                   <View style={styles.scriptNumber}>
@@ -280,13 +267,13 @@ export default function EmergencyScreen() {
 
         {activeTab === 'notes' && (
           <Animated.View entering={FadeIn.duration(300)}>
-            <Text style={styles.sectionTitle}>Document What's Happening</Text>
-            <Text style={styles.sectionDesc}>Write down details while they're fresh</Text>
+            <Text style={styles.sectionTitle}>{t('emergency.documentTitle')}</Text>
+            <Text style={styles.sectionDesc}>{t('emergency.documentDesc')}</Text>
             
             <View style={styles.noteInputContainer}>
               <TextInput
                 style={styles.noteInput}
-                placeholder="What's happening? Who's involved? What time is it?"
+                placeholder={t('emergency.notePlaceholderShort')}
                 placeholderTextColor="#94A3B8"
                 value={notes}
                 onChangeText={setNotes}
@@ -299,28 +286,28 @@ export default function EmergencyScreen() {
                 disabled={!notes.trim()}
               >
                 <Ionicons name="add" size={20} color="#FFFFFF" />
-                <Text style={styles.addNoteButtonText}>Save Note</Text>
+                <Text style={styles.addNoteButtonText}>{t('emergency.saveNote')}</Text>
               </TouchableOpacity>
             </View>
 
             <View style={styles.tipBox}>
               <Ionicons name="bulb" size={18} color="#F59E0B" />
-              <Text style={styles.tipText}>Include: names, badge numbers, time, location, witnesses</Text>
+              <Text style={styles.tipText}>{t('emergency.tipText')}</Text>
             </View>
           </Animated.View>
         )}
 
         {activeTab === 'timer' && (
           <Animated.View entering={FadeIn.duration(300)}>
-            <Text style={styles.sectionTitle}>Event Log</Text>
-            <Text style={styles.sectionDesc}>Timestamped record of events</Text>
+            <Text style={styles.sectionTitle}>{t('emergency.eventLog')}</Text>
+            <Text style={styles.sectionDesc}>{t('emergency.eventLogDesc')}</Text>
             
             <TouchableOpacity 
               style={styles.logEventButton}
-              onPress={() => logEvent('Event marked')}
+              onPress={() => logEvent(t('emergency.eventMarked'))}
             >
               <Ionicons name="flag" size={18} color="#FFFFFF" />
-              <Text style={styles.logEventButtonText}>Mark Event</Text>
+              <Text style={styles.logEventButtonText}>{t('emergency.markEvent')}</Text>
             </TouchableOpacity>
 
             {events.length > 0 ? (
@@ -335,7 +322,7 @@ export default function EmergencyScreen() {
             ) : (
               <View style={styles.emptyLog}>
                 <Ionicons name="time-outline" size={32} color="#94A3B8" />
-                <Text style={styles.emptyLogText}>No events logged yet</Text>
+                <Text style={styles.emptyLogText}>{t('emergency.noEvents')}</Text>
               </View>
             )}
           </Animated.View>
@@ -346,17 +333,17 @@ export default function EmergencyScreen() {
       <View style={styles.emergencyBar}>
         <TouchableOpacity style={styles.call911Button} onPress={call911}>
           <Ionicons name="call" size={20} color="#FFFFFF" />
-          <Text style={styles.call911Text}>Call 911</Text>
+          <Text style={styles.call911Text}>{t('emergency.call911')}</Text>
         </TouchableOpacity>
         {emergencyContact ? (
           <TouchableOpacity style={styles.callContactButton} onPress={callEmergencyContact}>
             <Ionicons name="person" size={18} color="#1B2A4A" />
-            <Text style={styles.callContactText}>Call {emergencyContact.name}</Text>
+            <Text style={styles.callContactText}>{t('emergency.callBtnLabel')} {emergencyContact.name}</Text>
           </TouchableOpacity>
         ) : (
           <TouchableOpacity style={styles.callContactButton} onPress={() => router.push('/(tabs)/settings')}>
             <Ionicons name="person-add" size={18} color="#5E6E7D" />
-            <Text style={styles.callContactText}>Set up emergency contact</Text>
+            <Text style={styles.callContactText}>{t('emergency.setupContact')}</Text>
           </TouchableOpacity>
         )}
       </View>

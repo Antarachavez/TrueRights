@@ -45,7 +45,7 @@ interface CategoryData {
 type ViewMode = 'categories' | 'category-detail' | 'saved';
 
 export default function ScriptsScreen() {
-  const { lang } = useLanguage();
+  const { lang, t } = useLanguage();
   const [categoriesData, setCategoriesData] = useState<Record<string, CategoryData>>({});
   const [savedScripts, setSavedScripts] = useState<SavedScript[]>([]);
   const [viewMode, setViewMode] = useState<ViewMode>('categories');
@@ -112,21 +112,21 @@ export default function ScriptsScreen() {
       });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       await fetchAll();
-      Alert.alert('Saved!', 'Script added to your saved collection.');
+      Alert.alert(t('scripts.scriptSavedTitle'), t('scripts.scriptSavedBody'));
     } catch (error) {
       console.error('Error saving script:', error);
-      Alert.alert('Error', 'Could not save script.');
+      Alert.alert(t('scripts.errorTitle'), t('scripts.errorSave'));
     }
   };
 
   const deleteScript = async (scriptId: string) => {
     Alert.alert(
-      'Delete Script',
-      'Are you sure you want to remove this saved script?',
+      t('scripts.deleteTitle'),
+      t('scripts.deleteConfirm'),
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: 'Delete',
+          text: t('common.delete'),
           style: 'destructive',
           onPress: async () => {
             try {
@@ -318,7 +318,7 @@ export default function ScriptsScreen() {
       {/* Show global search results when searching */}
       {searchQuery.trim() && globalSearchResults.length > 0 ? (
         <>
-          <Text style={styles.sectionLabel}>{globalSearchResults.length} scripts found</Text>
+          <Text style={styles.sectionLabel}>{globalSearchResults.length} {t('scripts.scriptsFound')}</Text>
           {globalSearchResults.map((script, index) => (
             <ScriptCard key={script.id} script={script} index={index} />
           ))}
@@ -326,8 +326,8 @@ export default function ScriptsScreen() {
       ) : searchQuery.trim() && globalSearchResults.length === 0 ? (
         <View style={styles.emptyState}>
           <Ionicons name="search-outline" size={44} color="#5E6E7D" />
-          <Text style={styles.emptyTitle}>No scripts match "{searchQuery}"</Text>
-          <Text style={styles.emptyText}>Try different words or check spelling</Text>
+          <Text style={styles.emptyTitle}>{t('scripts.noScriptsMatch')} "{searchQuery}"</Text>
+          <Text style={styles.emptyText}>{t('scripts.tryDifferent')}</Text>
         </View>
       ) : (
         <>
@@ -342,15 +342,15 @@ export default function ScriptsScreen() {
                 <Ionicons name="bookmark" size={20} color="#F59E0B" />
               </View>
               <View>
-                <Text style={styles.savedBannerTitle}>My Saved Scripts</Text>
-                <Text style={styles.savedBannerCount}>{savedScripts.length} saved</Text>
+                <Text style={styles.savedBannerTitle}>{t('scripts.mySavedScripts')}</Text>
+                <Text style={styles.savedBannerCount}>{savedScripts.length} {t('scripts.saved')}</Text>
               </View>
             </View>
             <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
           </TouchableOpacity>
 
           {/* Category Grid */}
-          <Text style={styles.sectionLabel}>Browse by Category</Text>
+          <Text style={styles.sectionLabel}>{t('scripts.browseCategory')}</Text>
           <View style={styles.categoryGrid}>
             {filteredCategories.map(([catId, catData], index) => (
               <Animated.View
@@ -416,8 +416,8 @@ export default function ScriptsScreen() {
         {filteredCategoryScripts.length === 0 && searchQuery.length > 0 && (
           <View style={styles.emptyState}>
             <Ionicons name="search-outline" size={44} color="#5E6E7D" />
-            <Text style={styles.emptyTitle}>No scripts match "{searchQuery}"</Text>
-            <Text style={styles.emptyText}>Try a different search term</Text>
+            <Text style={styles.emptyTitle}>{t('scripts.noScriptsMatch')} "{searchQuery}"</Text>
+            <Text style={styles.emptyText}>{t('scripts.trySearch')}</Text>
           </View>
         )}
       </ScrollView>
@@ -441,14 +441,14 @@ export default function ScriptsScreen() {
       ) : savedScripts.length === 0 ? (
         <View style={styles.emptyState}>
           <Ionicons name="bookmark-outline" size={48} color="#5E6E7D" />
-          <Text style={styles.emptyTitle}>No saved scripts yet</Text>
-          <Text style={styles.emptyText}>Tap the bookmark icon on any script to save it here</Text>
+          <Text style={styles.emptyTitle}>{t('scripts.noSaved')}</Text>
+          <Text style={styles.emptyText}>{t('scripts.tapBookmark')}</Text>
         </View>
       ) : (
         <View style={styles.emptyState}>
           <Ionicons name="search-outline" size={44} color="#5E6E7D" />
-          <Text style={styles.emptyTitle}>No results for "{searchQuery}"</Text>
-          <Text style={styles.emptyText}>Try a different search term</Text>
+          <Text style={styles.emptyTitle}>{t('scripts.noResultsFor')} "{searchQuery}"</Text>
+          <Text style={styles.emptyText}>{t('scripts.trySearch')}</Text>
         </View>
       )}
     </ScrollView>
@@ -459,25 +459,25 @@ export default function ScriptsScreen() {
     if (viewMode === 'category-detail' && selectedCategory) {
       const catData = categoriesData[selectedCategory];
       return {
-        title: catData?.name || 'Scripts',
-        subtitle: `${catData?.count || 0} ready-to-use phrases`,
+        title: catData?.name || t('scripts.title'),
+        subtitle: `${catData?.count || 0} ${t('scripts.readyPhrases')}`,
         color: catData?.color || '#1B2A4A',
-        searchPlaceholder: `Search ${catData?.name || ''} scripts...`
+        searchPlaceholder: t('scripts.searchInCategory').replace('{cat}', catData?.name || '')
       };
     }
     if (viewMode === 'saved') {
       return {
-        title: 'Saved Scripts',
-        subtitle: `${savedScripts.length} saved phrases`,
+        title: t('scripts.savedHeader'),
+        subtitle: `${savedScripts.length} ${t('scripts.savedPhrases')}`,
         color: '#F59E0B',
-        searchPlaceholder: 'Search saved scripts...'
+        searchPlaceholder: t('scripts.searchSaved')
       };
     }
     return {
-      title: 'Scripts',
-      subtitle: `${totalScripts} ready-to-use phrases`,
+      title: t('scripts.title'),
+      subtitle: `${totalScripts} ${t('scripts.readyPhrases')}`,
       color: '#1B2A4A',
-      searchPlaceholder: 'Search all scripts and categories...'
+      searchPlaceholder: t('scripts.searchAll')
     };
   };
 

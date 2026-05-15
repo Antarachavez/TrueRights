@@ -76,7 +76,7 @@ const ICON_MAP: { [key: string]: keyof typeof Ionicons.glyphMap } = {
 export default function CategoryScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
-  const { lang } = useLanguage();
+  const { lang, t } = useLanguage();
   const [category, setCategory] = useState<Category | null>(null);
   const [allScenarios, setAllScenarios] = useState<Scenario[]>([]);
   const [scenarioCounts, setScenarioCounts] = useState<{ [key: string]: number }>({});
@@ -142,7 +142,7 @@ export default function CategoryScreen() {
       setGeneratedScenarios(genRes.data || []);
     } catch (error) {
       console.error('Error generating:', error);
-      Alert.alert('Error', 'Could not generate answer. Please try again.');
+      Alert.alert(t('category.errorTitle'), t('category.errorBody'));
     } finally {
       setGenerating(false);
     }
@@ -161,7 +161,7 @@ export default function CategoryScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <Text style={styles.loadingText}>Loading...</Text>
+          <Text style={styles.loadingText}>{t('common.loadingDots')}</Text>
         </View>
       </SafeAreaView>
     );
@@ -192,7 +192,7 @@ export default function CategoryScreen() {
           <Ionicons name="search" size={20} color="#94A3B8" />
           <TextInput
             style={styles.searchInput}
-            placeholder={`Search ${category.name.toLowerCase()} questions...`}
+            placeholder={t('category.searchPlaceholder')}
             placeholderTextColor="#94A3B8"
             value={searchQuery}
             onChangeText={setSearchQuery}
@@ -233,8 +233,8 @@ export default function CategoryScreen() {
             {searchResults.length === 0 && (
               <View style={styles.noResults}>
                 <Ionicons name="search-outline" size={48} color="#5E6E7D" />
-                <Text style={styles.noResultsText}>No pre-loaded answers found</Text>
-                <Text style={styles.noResultsHint}>Want AI to research this for you?</Text>
+                <Text style={styles.noResultsText}>{t('category.noPreloaded')}</Text>
+                <Text style={styles.noResultsHint}>{t('category.wantAi')}</Text>
                 <TouchableOpacity
                   style={styles.generateButton}
                   onPress={generateWithAI}
@@ -250,12 +250,12 @@ export default function CategoryScreen() {
                     {generating ? (
                       <>
                         <ActivityIndicator size="small" color="#FFFFFF" />
-                        <Text style={styles.generateText}>AI is researching...</Text>
+                        <Text style={styles.generateText}>{t('category.aiResearching')}</Text>
                       </>
                     ) : (
                       <>
                         <Ionicons name="sparkles" size={18} color="#FFFFFF" />
-                        <Text style={styles.generateText}>Generate with AI</Text>
+                        <Text style={styles.generateText}>{t('category.generateAi')}</Text>
                       </>
                     )}
                   </LinearGradient>
@@ -266,7 +266,7 @@ export default function CategoryScreen() {
         ) : (
           <>
             {/* Subcategories Grid */}
-            <Text style={styles.sectionTitle}>Choose a Topic</Text>
+            <Text style={styles.sectionTitle}>{t('category.chooseTopic')}</Text>
             <View style={styles.subcategoriesGrid}>
               {category.subcategories?.map((sub, index) => (
                 <Animated.View 
@@ -283,7 +283,7 @@ export default function CategoryScreen() {
                     </View>
                     <Text style={styles.subcategoryName}>{sub.name}</Text>
                     <Text style={styles.subcategoryCount}>
-                      {scenarioCounts[sub.id] || 0} questions
+                      {scenarioCounts[sub.id] || 0} {t('category.questionsCount')}
                     </Text>
                     <View style={[styles.arrowCircle, { backgroundColor: `${sub.color}15` }]}>
                       <Ionicons name="chevron-forward" size={14} color={sub.color} />
@@ -302,8 +302,8 @@ export default function CategoryScreen() {
                 <Ionicons name="sparkles" size={22} color="#E8A5A5" />
               </View>
               <View style={styles.askAiText}>
-                <Text style={styles.askAiTitle}>Can't find your question?</Text>
-                <Text style={styles.askAiDesc}>Search above and AI will generate an answer</Text>
+                <Text style={styles.askAiTitle}>{t('category.cantFind')}</Text>
+                <Text style={styles.askAiDesc}>{t('category.searchAbove')}</Text>
               </View>
               <Ionicons name="arrow-forward" size={18} color="#E8A5A5" />
             </TouchableOpacity>
@@ -313,7 +313,7 @@ export default function CategoryScreen() {
               <>
                 <View style={styles.generatedHeader}>
                   <Ionicons name="sparkles" size={16} color="#E8A5A5" />
-                  <Text style={styles.generatedTitle}>AI Generated</Text>
+                  <Text style={styles.generatedTitle}>{t('category.aiGenerated')}</Text>
                   <Text style={styles.generatedCount}>{generatedScenarios.length}</Text>
                 </View>
                 {generatedScenarios.map((scenario: any, index: number) => (
@@ -326,7 +326,7 @@ export default function CategoryScreen() {
                         <View style={styles.aiBadgeRow}>
                           <View style={styles.aiBadge}>
                             <Ionicons name="sparkles" size={10} color="#E8A5A5" />
-                            <Text style={styles.aiBadgeText}>AI Generated</Text>
+                            <Text style={styles.aiBadgeText}>{t('category.aiGenerated')}</Text>
                           </View>
                         </View>
                         <Text style={styles.searchResultQuestion}>{scenario.question}</Text>

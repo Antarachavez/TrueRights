@@ -54,7 +54,7 @@ export default function SettingsScreen() {
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        Alert.alert('Permission Denied', 'Location permission is needed to detect your state.');
+        Alert.alert(t('settings.permissionDenied'), t('settings.permissionDeniedBody'));
         setDetectingLocation(false);
         return;
       }
@@ -68,13 +68,13 @@ export default function SettingsScreen() {
       if (address?.region) {
         setSelectedState(address.region);
         await AsyncStorage.setItem('user_state', address.region);
-        Alert.alert('Location Detected', `Your state has been set to ${address.region}`);
+        Alert.alert(t('settings.locationDetected'), `${t('settings.locationDetectedBody')} ${address.region}`);
       } else {
-        Alert.alert('Could Not Detect', 'Unable to determine your state. Please select manually.');
+        Alert.alert(t('settings.couldNotDetect'), t('settings.couldNotDetectBody'));
       }
     } catch (error) {
       console.error('Location error:', error);
-      Alert.alert('Error', 'Could not detect your location. Please select your state manually.');
+      Alert.alert(t('settings.errorTitle'), t('settings.locationErrorBody'));
     }
     setDetectingLocation(false);
   };
@@ -94,22 +94,22 @@ export default function SettingsScreen() {
         onboarding_completed: true
       });
 
-      Alert.alert('Saved', 'Your settings have been saved.');
+      Alert.alert(t('settings.saved'), t('settings.settingsSaved'));
     } catch (error) {
       console.error('Save error:', error);
-      Alert.alert('Error', 'Could not save settings. Please try again.');
+      Alert.alert(t('settings.errorTitle'), t('settings.errorSave'));
     }
     setSaving(false);
   };
 
   const clearAllData = () => {
     Alert.alert(
-      'Clear All Data',
-      'This will reset all your settings, saved scripts, and chat history. Are you sure?',
+      t('settings.clearAll'),
+      t('settings.clearConfirm'),
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: 'Clear',
+          text: t('common.delete'),
           style: 'destructive',
           onPress: async () => {
             try {
@@ -118,7 +118,7 @@ export default function SettingsScreen() {
               setSelectedState(null);
               setEmergencyName('');
               setEmergencyPhone('');
-              Alert.alert('Cleared', 'All data has been cleared.');
+              Alert.alert(t('settings.clearedTitle'), t('settings.clearedBody'));
             } catch (error) {
               console.error('Clear error:', error);
             }
@@ -175,7 +175,7 @@ export default function SettingsScreen() {
             <View style={styles.stateSelectorContent}>
               <Ionicons name="location" size={20} color="#1B2A4A" />
               <Text style={styles.stateSelectorText}>
-                {selectedState || 'Select your state'}
+                {selectedState || t('settings.selectYourState')}
               </Text>
             </View>
             <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
@@ -191,7 +191,7 @@ export default function SettingsScreen() {
             ) : (
               <>
                 <Ionicons name="navigate" size={18} color="#1B2A4A" />
-                <Text style={styles.detectButtonText}>Detect my location</Text>
+                <Text style={styles.detectButtonText}>{t('settings.detectLocation')}</Text>
               </>
             )}
           </TouchableOpacity>
@@ -201,14 +201,14 @@ export default function SettingsScreen() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>{t('settings.emergencyContact')}</Text>
           <Text style={styles.sectionDescription}>
-            This contact can be quickly notified in Emergency Mode.
+            {t('settings.emergencyShort')}
           </Text>
           
           <View style={styles.inputContainer}>
-            <Text style={styles.inputLabel}>Contact Name</Text>
+            <Text style={styles.inputLabel}>{t('settings.contactName')}</Text>
             <TextInput
               style={styles.textInput}
-              placeholder="e.g., Mom, Dad, Trusted Adult"
+              placeholder={t('settings.contactNamePlaceholder')}
               placeholderTextColor="#94A3B8"
               value={emergencyName}
               onChangeText={setEmergencyName}
@@ -216,10 +216,10 @@ export default function SettingsScreen() {
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.inputLabel}>Phone Number</Text>
+            <Text style={styles.inputLabel}>{t('settings.phoneNumber')}</Text>
             <TextInput
               style={styles.textInput}
-              placeholder="e.g., 555-123-4567"
+              placeholder={t('settings.phonePlaceholderShort')}
               placeholderTextColor="#94A3B8"
               value={emergencyPhone}
               onChangeText={setEmergencyPhone}
@@ -277,7 +277,7 @@ export default function SettingsScreen() {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Select Your State</Text>
+              <Text style={styles.modalTitle}>{t('onboarding.selectStateTitle')}</Text>
               <TouchableOpacity onPress={() => setShowStateModal(false)}>
                 <Ionicons name="close" size={24} color="#374151" />
               </TouchableOpacity>

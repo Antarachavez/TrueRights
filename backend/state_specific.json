@@ -1,0 +1,89 @@
+{
+  "_comment": "Maps state -> category prefix (matching scenario id prefix like 'school-search') -> list of state-specific notes/quotes. Notes are short, user-friendly callouts shown alongside federal info.",
+  "California": {
+    "housing": [{
+      "type": "State Law",
+      "source": "CA Civ. Code §1954",
+      "text": "California landlords must give 24-hour written notice before entering (except emergencies). Security deposits are capped at 2 months unfurnished, 3 months furnished, and must be returned within 21 days.",
+      "note": "California has some of the strongest tenant protections in the U.S."
+    }],
+    "police": [{
+      "type": "State Law",
+      "source": "CA Penal Code §853.5 / SB 178",
+      "text": "California law lets you refuse to show ID unless you're being arrested or driving. Police generally need a warrant to search your phone (Riley v. California also applies here).",
+      "note": "California is a 'stop and identify' exception state — strong privacy rights."
+    }],
+    "work": [{
+      "type": "State Law",
+      "source": "CA Labor Code §1197",
+      "text": "California's minimum wage ($16+/hr statewide; higher in many cities), guaranteed paid sick leave, mandatory meal & rest breaks, and one of the strictest non-compete bans in the country.",
+      "note": "California workers have stronger protections than federal law requires."
+    }],
+    "school": [{
+      "type": "State Law",
+      "source": "CA Ed. Code §48907",
+      "text": "California explicitly protects student free speech and student journalism in public schools beyond what the federal Tinker standard requires.",
+      "note": "California protects student speech more than the federal minimum."
+    }]
+  },
+  "New York": {
+    "housing": [{
+      "type": "State Law",
+      "source": "NY RPL §235-f / HSTPA 2019",
+      "text": "New York requires 30+ days written notice for rent increases or non-renewal (more if you've been there longer). Security deposits are capped at 1 month and must be returned within 14 days with an itemized list.",
+      "note": "Strong tenant protections — especially in NYC."
+    }],
+    "police": [{
+      "type": "State Law",
+      "source": "NY CPL §140.50",
+      "text": "Under NY's 'stop and frisk' law, an officer needs reasonable suspicion of a crime to stop you. You can refuse a search and ask 'Am I free to go?'",
+      "note": "Stop-and-frisk reforms apply statewide."
+    }]
+  },
+  "Texas": {
+    "housing": [{
+      "type": "State Law",
+      "source": "TX Prop. Code §92.331",
+      "text": "Texas landlords must return security deposits within 30 days. Texas allows a 3-day notice to vacate before eviction filings, which is shorter than many states.",
+      "note": "Texas tenant law is more landlord-friendly — know your timelines."
+    }],
+    "police": [{
+      "type": "State Law",
+      "source": "TX Penal Code §38.02",
+      "text": "Texas is a 'stop and identify' state — you must give your name if lawfully arrested. You do NOT have to show ID just for being stopped (unless driving).",
+      "note": "Know the difference between being detained and being arrested."
+    }]
+  },
+  "Florida": {
+    "housing": [{
+      "type": "State Law",
+      "source": "FL Stat. §83.49",
+      "text": "Florida landlords have 15 days to return your deposit (or 30 days with a written claim). Eviction notice can be as short as 3 days for nonpayment.",
+      "note": "Florida timelines are tight — respond to any notice fast."
+    }]
+  },
+  "Illinois": {
+    "housing": [{
+      "type": "State Law",
+      "source": "Chicago RLTO / IL 765 ILCS 710",
+      "text": "Illinois (and especially Chicago's RLTO) requires landlords to pay interest on security deposits, give 48-hour notice before entry, and return deposits within 30-45 days.",
+      "note": "Chicago tenants have extra protections under the RLTO."
+    }]
+  },
+  "Washington": {
+    "housing": [{
+      "type": "State Law",
+      "source": "RCW 59.18.150",
+      "text": "Washington requires 2 days written notice before a landlord enters and 21 days to return your deposit.",
+      "note": "Washington is one of the more tenant-friendly states."
+    }]
+  },
+  "Massachusetts": {
+    "housing": [{
+      "type": "State Law",
+      "source": "MGL c.186 §15B",
+      "text": "Massachusetts requires landlords to hold security deposits in interest-bearing accounts and return them within 30 days. Last-month rent rules are also strict.",
+      "note": "MA has some of the most detailed deposit rules in the country."
+    }]
+  }
+}

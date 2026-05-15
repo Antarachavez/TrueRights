@@ -35,6 +35,13 @@ DEFAULT_SCRIPTS = _DATA["default_scripts"]
 RESOURCES = _DATA["resources"]
 US_STATES = _DATA["us_states"]
 
+# Load state-specific data
+_STATE_SPECIFIC = {}
+_state_file = ROOT_DIR / 'state_specific.json'
+if _state_file.exists():
+    with open(_state_file) as _f:
+        _STATE_SPECIFIC = json_module.load(_f)
+
 def get_data_for_lang(lang):
     """Get the data dict for a given language, falling back to English."""
     if lang and lang != "en" and lang in _TRANSLATED_DATA:
@@ -245,6 +252,10 @@ async def root():
 
 @api_router.get("/categories")
 async def get_categories(lang: str = "en"):
+    # Use translated data file if available, else fall back to dict-translation
+    lang_data = get_data_for_lang(lang)
+    if lang != "en" and "categories" in lang_data and lang_data["categories"]:
+        return lang_data["categories"]
     return translate_categories(CATEGORIES, lang)
 
 # === Translation endpoint - translates scenario content using AI ===
@@ -516,7 +527,7 @@ async def get_scenarios_by_subcategory(category_id: str, subcategory_id: str, la
     return scenarios[category_id][subcategory_id]
 
 @api_router.get("/scenario/{scenario_id}")
-async def get_scenario_detail(scenario_id: str, lang: str = "en"):
+async def get_scenario_detail(scenario_id: str, lang: str = "en", state: str = ""):
     lang_data = get_data_for_lang(lang)
     scenarios = lang_data["scenarios"]
     scenario_legal_quotes = lang_data.get("scenario_legal_quotes", SCENARIO_LEGAL_QUOTES)
@@ -536,6 +547,14 @@ async def get_scenario_detail(scenario_id: str, lang: str = "en"):
                         match = re.match(r"^([a-z]+-[a-z]+)", scenario_id)
                         prefix = match.group(1) if match else scenario_id
                         r["legal_quotes"] = subcategory_legal_quotes.get(prefix, [])
+                    # State-specific quotes overlay
+                    if state and state in _STATE_SPECIFIC:
+                        state_rules = _STATE_SPECIFIC[state]
+                        if cat_id in state_rules:
+                            r["state_specific"] = {
+                                "state": state,
+                                "quotes": state_rules[cat_id]
+                            }
                     return r
     raise HTTPException(status_code=404, detail="Not found")
 

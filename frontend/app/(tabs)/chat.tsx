@@ -17,6 +17,7 @@ interface Message {
 }
 
 export default function ChatScreen() {
+  const { t } = useLanguage();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -48,7 +49,7 @@ export default function ChatScreen() {
       setMessages([{
         id: 'welcome',
         role: 'assistant',
-        content: `Hi! I'm here to help you understand your rights. Ask me about:\n\n• School searches and policies\n• Workplace rights\n• Housing and tenant issues\n• Police interactions\n• Online privacy\n• Public spaces\n\nRemember: I provide educational info, not legal advice. What's on your mind?`,
+        content: t('chat.welcomeFull'),
         timestamp: new Date(),
       }]);
     } catch (error) {
@@ -91,7 +92,7 @@ export default function ChatScreen() {
       const errorMessage: Message = {
         id: `error_${Date.now()}`,
         role: 'assistant',
-        content: "I'm having trouble connecting right now. Please try again in a moment.",
+        content: t('chat.errorConnecting'),
         timestamp: new Date(),
       };
       setMessages(prev => [...prev, errorMessage]);
@@ -106,7 +107,7 @@ export default function ChatScreen() {
     setMessages([{
       id: 'welcome',
       role: 'assistant',
-      content: `Chat cleared! I'm ready to help you understand your rights. What would you like to know?`,
+      content: t('chat.cleared'),
       timestamp: new Date(),
     }]);
   };
@@ -134,8 +135,8 @@ export default function ChatScreen() {
         {/* Header */}
         <View style={styles.header}>
           <View>
-            <Text style={styles.headerTitle}>Ask AI</Text>
-            <Text style={styles.headerSubtitle}>Rights education assistant</Text>
+            <Text style={styles.headerTitle}>{t('chat.title')}</Text>
+            <Text style={styles.headerSubtitle}>{t('chat.rightsEducation')}</Text>
           </View>
           <TouchableOpacity style={styles.clearButton} onPress={clearChat}>
             <Ionicons name="refresh" size={20} color="#5E6E7D" />
@@ -175,17 +176,17 @@ export default function ChatScreen() {
           {isLoading && (
             <View style={[styles.messageBubble, styles.assistantBubble]}>
               <ActivityIndicator size="small" color="#E8A5A5" />
-              <Text style={styles.thinkingText}>Thinking...</Text>
+              <Text style={styles.thinkingText}>{t('chat.thinking')}</Text>
             </View>
           )}
 
           {messages.length <= 1 && (
             <View style={styles.quickQuestionsContainer}>
-              <Text style={styles.quickQuestionsTitle}>Try asking:</Text>
-              <QuickQuestion text="Can my school search my phone?" />
-              <QuickQuestion text="What do I say if police stop me?" />
-              <QuickQuestion text="Can my boss make me work unpaid?" />
-              <QuickQuestion text="Can my landlord enter without notice?" />
+              <Text style={styles.quickQuestionsTitle}>{t('chat.tryAskingHeader')}</Text>
+              <QuickQuestion text={t('chat.q1')} />
+              <QuickQuestion text={t('chat.q2')} />
+              <QuickQuestion text={t('chat.q3')} />
+              <QuickQuestion text={t('chat.q4')} />
             </View>
           )}
         </ScrollView>
@@ -194,7 +195,7 @@ export default function ChatScreen() {
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.textInput}
-            placeholder="Ask about your rights..."
+            placeholder={t('chat.placeholder')}
             placeholderTextColor="#94A3B8"
             value={inputText}
             onChangeText={setInputText}
@@ -212,7 +213,7 @@ export default function ChatScreen() {
 
         {/* Disclaimer */}
         <View style={styles.disclaimerBar}>
-          <Text style={styles.disclaimerText}>Educational info only • Not legal advice</Text>
+          <Text style={styles.disclaimerText}>{t('chat.disclaimerShort')}</Text>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>

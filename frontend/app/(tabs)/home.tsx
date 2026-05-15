@@ -27,8 +27,17 @@ export default function HomeScreen() {
   const { lang, t } = useLanguage();
   const [categories, setCategories] = useState<Category[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [userState, setUserState] = useState<string | null>(null);
 
-  useEffect(() => { fetchCategories(); }, [lang]);
+  useEffect(() => { fetchCategories(); loadState(); }, [lang]);
+
+  const loadState = async () => {
+    try {
+      const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
+      const s = await AsyncStorage.getItem('user_state');
+      setUserState(s);
+    } catch (e) {}
+  };
 
   const fetchCategories = async () => {
     try {
@@ -79,8 +88,20 @@ export default function HomeScreen() {
           </View>
         </TouchableOpacity>
 
+        {/* State Banner */}
+        {userState && (
+          <TouchableOpacity style={styles.stateBanner} onPress={() => router.push('/(tabs)/settings')} activeOpacity={0.7}>
+            <Ionicons name="location" size={16} color="#1B2A4A" />
+            <View style={styles.stateBannerTextWrap}>
+              <Text style={styles.stateBannerText}>{t('home.showingFor')} <Text style={styles.stateBannerState}>{userState}</Text></Text>
+              <Text style={styles.stateBannerSub}>{t('home.tapToChange')}</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={14} color="#8B9AAB" />
+          </TouchableOpacity>
+        )}
+
         {/* Categories */}
-        <Text style={styles.sectionTitle}>Choose a Situation</Text>
+        <Text style={styles.sectionTitle}>{t('home.chooseCategory')}</Text>
         {Array.from({ length: Math.ceil(categories.length / 2) }).map((_, rowIndex) => (
           <View key={rowIndex} style={styles.categoryRow}>
             {categories.slice(rowIndex * 2, rowIndex * 2 + 2).map((cat) => (
@@ -101,7 +122,7 @@ export default function HomeScreen() {
         {/* Disclaimer */}
         <View style={styles.disclaimer}>
           <Ionicons name="information-circle" size={14} color="#94A3B8" />
-          <Text style={styles.disclaimerText}>Educational information only. Laws vary by state. Not legal advice.</Text>
+          <Text style={styles.disclaimerText}>{t('common.disclaimerLong')}</Text>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -134,4 +155,9 @@ const styles = StyleSheet.create({
   categoryDesc: { fontSize: 12, color: '#8B9AAB', lineHeight: 16 },
   disclaimer: { flexDirection: 'row', alignItems: 'flex-start', backgroundColor: '#FFFDF9', borderRadius: 12, padding: 12, marginTop: 12, borderWidth: 1, borderColor: '#EDE9E3' },
   disclaimerText: { flex: 1, fontSize: 12, color: '#8B9AAB', marginLeft: 8, lineHeight: 18 },
+  stateBanner: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#FFFDF9', borderRadius: 12, paddingVertical: 10, paddingHorizontal: 14, marginBottom: 16, borderWidth: 1, borderColor: '#EDE9E3', gap: 10 },
+  stateBannerTextWrap: { flex: 1 },
+  stateBannerText: { fontSize: 13, color: '#5E6E7D' },
+  stateBannerState: { color: '#1B2A4A', fontWeight: '600' },
+  stateBannerSub: { fontSize: 11, color: '#8B9AAB', marginTop: 1 },
 });

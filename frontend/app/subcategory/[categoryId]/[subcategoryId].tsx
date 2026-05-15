@@ -49,7 +49,7 @@ const ICON_MAP: { [key: string]: keyof typeof Ionicons.glyphMap } = {
 export default function SubcategoryScreen() {
   const { categoryId, subcategoryId } = useLocalSearchParams<{ categoryId: string; subcategoryId: string }>();
   const router = useRouter();
-  const { lang } = useLanguage();
+  const { lang, t } = useLanguage();
   const [category, setCategory] = useState<Category | null>(null);
   const [subcategory, setSubcategory] = useState<Subcategory | null>(null);
   const [scenarios, setScenarios] = useState<Scenario[]>([]);
@@ -95,7 +95,7 @@ export default function SubcategoryScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <Text style={styles.loadingText}>Loading...</Text>
+          <Text style={styles.loadingText}>{t('common.loadingDots')}</Text>
         </View>
       </SafeAreaView>
     );
@@ -126,7 +126,7 @@ export default function SubcategoryScreen() {
           <Ionicons name="search" size={18} color="#94A3B8" />
           <TextInput
             style={styles.searchInput}
-            placeholder="Search questions..."
+            placeholder={t('category.searchPlaceholder')}
             placeholderTextColor="#94A3B8"
             value={searchQuery}
             onChangeText={setSearchQuery}
@@ -147,7 +147,7 @@ export default function SubcategoryScreen() {
         keyboardShouldPersistTaps="handled"
       >
         <Text style={styles.sectionTitle}>
-          {filteredScenarios.length} question{filteredScenarios.length !== 1 ? 's' : ''}
+          {filteredScenarios.length} {filteredScenarios.length !== 1 ? t('subcategory.questionPlural') : t('subcategory.questionSingle')}
         </Text>
         
         {filteredScenarios.map((scenario, index) => (
@@ -169,7 +169,7 @@ export default function SubcategoryScreen() {
         {filteredScenarios.length === 0 && searchQuery.trim() && (
           <View style={styles.noResults}>
             <Ionicons name="search-outline" size={40} color="#5E6E7D" />
-            <Text style={styles.noResultsText}>No matches found</Text>
+            <Text style={styles.noResultsText}>{t('subcategory.noMatches')}</Text>
           </View>
         )}
 
@@ -182,15 +182,15 @@ export default function SubcategoryScreen() {
             <Ionicons name="chatbubbles" size={20} color="#1B2A4A" />
           </View>
           <View style={styles.askAiText}>
-            <Text style={styles.askAiTitle}>Don't see your question?</Text>
-            <Text style={styles.askAiDesc}>Ask AI for help</Text>
+            <Text style={styles.askAiTitle}>{t('subcategory.dontSee')}</Text>
+            <Text style={styles.askAiDesc}>{t('subcategory.askAiHelp')}</Text>
           </View>
           <Ionicons name="arrow-forward" size={16} color="#1B2A4A" />
         </TouchableOpacity>
 
         <View style={styles.disclaimer}>
           <Text style={styles.disclaimerText}>
-            Laws vary by state. This is educational info, not legal advice.
+            {t('subcategory.disclaimer')}
           </Text>
         </View>
       </ScrollView>

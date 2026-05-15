@@ -19,6 +19,12 @@ interface LegalQuote {
   source: string;
   text: string;
   type: string;
+  note?: string;
+}
+
+interface StateSpecific {
+  state: string;
+  quotes: LegalQuote[];
 }
 
 interface ScenarioDetail {
@@ -30,6 +36,7 @@ interface ScenarioDetail {
   script: string;
   next_steps: string[];
   legal_quotes?: LegalQuote[];
+  state_specific?: StateSpecific;
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -49,15 +56,21 @@ const QUOTE_TYPE_CONFIG: Record<string, { icon: string; color: string }> = {
 export default function ScenarioScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
-  const { lang } = useLanguage();
+  const { lang, t } = useLanguage();
   const [scenario, setScenario] = useState<ScenarioDetail | null>(null);
   const [loading, setLoading] = useState(true);
+  const [userState, setUserState] = useState<string>('');
 
-  useEffect(() => { fetchScenario(); }, [id, lang]);
+  useEffect(() => { fetchScenario(); }, [id, lang, userState]);
+
+  useEffect(() => {
+    AsyncStorage.getItem('user_state').then(s => { if (s) setUserState(s); });
+  }, []);
 
   const fetchScenario = async () => {
     try {
-      const response = await axios.get(`${BACKEND_URL}/api/scenario/${id}?lang=${lang}`);
+      const stateParam = userState ? `&state=${encodeURIComponent(userState)}` : '';
+      const response = await axios.get(`${BACKEND_URL}/api/scenario/${id}?lang=${lang}${stateParam}`);
       setScenario(response.data);
     } catch (error) {
       console.error('Error:', error);
@@ -93,7 +106,7 @@ export default function ScenarioScreen() {
           <Ionicons name="arrow-back" size={22} color="#374151" />
         </TouchableOpacity>
         <View style={[styles.badge, { backgroundColor: `${color}15` }]}>
-          <Text style={[styles.badgeText, { color }]}>{scenario.category}</Text>
+          <Text style={[styles.badgeText, { color }]}>{t(`catId.${scenario.category}`)}</Text>
         </View>
         <TouchableOpacity style={styles.shareBtn} onPress={shareScenario}>
           <Ionicons name="share-outline" size={20} color="#374151" />
@@ -106,7 +119,7 @@ export default function ScenarioScreen() {
 
         {/* Quick Answer */}
         <View style={[styles.card, { borderLeftWidth: 4, borderLeftColor: color }]}>
-          <Text style={styles.cardLabel}>QUICK ANSWER</Text>
+          <Text style={styles.cardLabel}>{t('scenario.quickAnswerLabel')}</Text>
           <Text style={[styles.answer, { color: '#333333' }]}>{scenario.short_answer}</Text>
         </View>
 
@@ -114,7 +127,7 @@ export default function ScenarioScreen() {
         <View style={styles.section}>
           <View style={styles.sectionRow}>
             <Ionicons name="information-circle" size={18} color="#5E6E7D" />
-            <Text style={[styles.sectionTitle, { color: '#333333' }]}>What This Means</Text>
+            <Text style={[styles.sectionTitle, { color: '#333333' }]}>{t('scenario.whatThisMeans')}</Text>
           </View>
           <Text style={[styles.body, { color: '#555555' }]}>{scenario.explanation}</Text>
         </View>
@@ -123,7 +136,7 @@ export default function ScenarioScreen() {
         <View style={styles.section}>
           <View style={styles.sectionRow}>
             <Ionicons name="footsteps" size={18} color="#5E6E7D" />
-            <Text style={[styles.sectionTitle, { color: '#333333' }]}>Next Steps</Text>
+            <Text style={[styles.sectionTitle, { color: '#333333' }]}>{t('scenario.nextSteps')}</Text>
           </View>
           {scenario.next_steps.map((step, i) => (
             <View key={i} style={styles.stepRow}>
@@ -140,7 +153,7 @@ export default function ScenarioScreen() {
           <View style={styles.section}>
             <View style={styles.sectionRow}>
               <Ionicons name="book" size={18} color="#C45C5C" />
-              <Text style={styles.sectionTitle}>What the Law Says</Text>
+              <Text style={styles.sectionTitle}>{t('scenario.whatLawSays')}</Text>
             </View>
             {scenario.legal_quotes.map((quote, i) => {
               const cfg = QUOTE_TYPE_CONFIG[quote.type] || QUOTE_TYPE_CONFIG['Federal Law'];
@@ -161,10 +174,34 @@ export default function ScenarioScreen() {
           </View>
         )}
 
+        {/* State Specific Section */}
+        {scenario.state_specific && scenario.state_specific.quotes.length > 0 && (
+          <View style={styles.section}>
+            <View style={styles.stateHeaderRow}>
+              <Ionicons name="location" size={18} color="#1B2A4A" />
+              <Text style={styles.stateHeaderText}>{t('scenario.inState')} {scenario.state_specific.state}</Text>
+            </View>
+            {scenario.state_specific.quotes.map((quote, i) => (
+              <View key={`st-${i}`} style={styles.stateCard}>
+                <View style={styles.stateBadge}>
+                  <Ionicons name="flag" size={11} color="#1B2A4A" />
+                  <Text style={styles.stateBadgeText}>{quote.type}</Text>
+                </View>
+                <Text style={styles.stateQuoteText}>{"\u201C"}{quote.text}{"\u201D"}</Text>
+                {quote.note ? <Text style={styles.stateNote}>{quote.note}</Text> : null}
+                <View style={styles.sourceRow}>
+                  <Ionicons name="link" size={11} color="#94A3B8" />
+                  <Text style={styles.sourceText}>{quote.source}</Text>
+                </View>
+              </View>
+            ))}
+          </View>
+        )}
+
         {/* Disclaimer */}
         <View style={styles.disclaimer}>
           <Ionicons name="information-circle" size={14} color="#94A3B8" />
-          <Text style={styles.disclaimerText}>Educational information only. Laws vary by state. Not legal advice.</Text>
+          <Text style={styles.disclaimerText}>{t('scenario.disclaimer')}</Text>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -222,4 +259,11 @@ const styles = StyleSheet.create({
     borderWidth: 1, borderColor: '#EDE9E3',
   },
   disclaimerText: { flex: 1, fontSize: 12, color: '#94A3B8', marginLeft: 8, lineHeight: 18 },
+  stateHeaderRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 12, gap: 8 },
+  stateHeaderText: { fontSize: 16, fontWeight: '700', color: '#1B2A4A' },
+  stateCard: { backgroundColor: '#FFFDF9', borderRadius: 14, padding: 16, marginBottom: 12, borderLeftWidth: 4, borderLeftColor: '#1B2A4A', borderWidth: 1, borderColor: '#EDE9E3' },
+  stateBadge: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'flex-start', marginBottom: 10, backgroundColor: '#1B2A4A12', gap: 5 },
+  stateBadgeText: { fontSize: 11, fontWeight: '700', color: '#1B2A4A', textTransform: 'uppercase', letterSpacing: 0.3 },
+  stateQuoteText: { fontSize: 14, color: '#374151', lineHeight: 22, marginBottom: 8 },
+  stateNote: { fontSize: 12, color: '#1B2A4A', fontWeight: '500', marginBottom: 8, fontStyle: 'italic' },
 });

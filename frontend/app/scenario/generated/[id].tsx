@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../utils/LanguageContext';
 import React, { useState, useEffect } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity, ScrollView,
@@ -24,6 +25,7 @@ const QUOTE_TYPE_CONFIG: { [key: string]: { icon: string; gradient: string[] } }
 export default function GeneratedScenarioScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+  const { t } = useLanguage();
   const [scenario, setScenario] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -108,7 +110,7 @@ export default function GeneratedScenarioScreen() {
         <View>
           <View style={styles.sectionHeader}>
             <Ionicons name="flash" size={20} color="#FDBA74" />
-            <Text style={styles.sectionTitle}>Quick Answer</Text>
+            <Text style={styles.sectionTitle}>{t('scenario.quickAnswer')}</Text>
           </View>
           <View style={[styles.answerCard, { borderLeftColor: '#E8A5A5' }]}>
             <Text style={styles.shortAnswer}>{scenario.short_answer}</Text>
@@ -129,7 +131,7 @@ export default function GeneratedScenarioScreen() {
           <View>
             <View style={styles.sectionHeader}>
               <Ionicons name="footsteps" size={20} color="#5E6E7D" />
-              <Text style={styles.sectionTitle}>Next Steps</Text>
+              <Text style={styles.sectionTitle}>{t('scenario.nextSteps')}</Text>
             </View>
             <View style={styles.stepsList}>
               {scenario.next_steps.map((step: string, index: number) => (
@@ -149,7 +151,7 @@ export default function GeneratedScenarioScreen() {
           <View>
             <View style={styles.sectionHeader}>
               <Ionicons name="book" size={20} color="#E8A5A5" />
-              <Text style={styles.sectionTitle}>What the Law Says</Text>
+              <Text style={styles.sectionTitle}>{t('scenario.whatLawSays')}</Text>
             </View>
             {scenario.legal_quotes.map((quote: any, index: number) => {
               const config = QUOTE_TYPE_CONFIG[quote.type] || QUOTE_TYPE_CONFIG['Federal Law'];
