@@ -19,6 +19,14 @@ import json as json_module
 with open(ROOT_DIR / 'data.json') as _f:
     _DATA = json_module.load(_f)
 
+# Load translated data files if available
+_TRANSLATED_DATA = {}
+for _lang_code in ['es', 'fr', 'zh']:
+    _lang_file = ROOT_DIR / f'data_{_lang_code}.json'
+    if _lang_file.exists():
+        with open(_lang_file) as _f:
+            _TRANSLATED_DATA[_lang_code] = json_module.load(_f)
+
 CATEGORIES = _DATA["categories"]
 SCENARIOS = _DATA["scenarios"]
 SUBCATEGORY_LEGAL_QUOTES = _DATA["subcategory_legal_quotes"]
@@ -26,6 +34,12 @@ SCENARIO_LEGAL_QUOTES = _DATA["scenario_legal_quotes"]
 DEFAULT_SCRIPTS = _DATA["default_scripts"]
 RESOURCES = _DATA["resources"]
 US_STATES = _DATA["us_states"]
+
+def get_data_for_lang(lang):
+    """Get the data dict for a given language, falling back to English."""
+    if lang and lang != "en" and lang in _TRANSLATED_DATA:
+        return _TRANSLATED_DATA[lang]
+    return _DATA
 
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
@@ -479,12 +493,14 @@ async def search_all_scenarios(query: str):
 # === Pre-loaded scenario routes ===
 
 @api_router.get("/scenarios/{category_id}")
-async def get_scenarios_by_category(category_id: str):
-    if category_id not in SCENARIOS:
+async def get_scenarios_by_category(category_id: str, lang: str = "en"):
+    lang_data = get_data_for_lang(lang)
+    scenarios = lang_data["scenarios"]
+    if category_id not in scenarios:
         raise HTTPException(status_code=404, detail="Not found")
     all_scenarios = []
-    for subcat_id, scenarios in SCENARIOS[category_id].items():
-        for s in scenarios:
+    for subcat_id, sc_list in scenarios[category_id].items():
+        for s in sc_list:
             sc = s.copy()
             sc["subcategory"] = subcat_id
             sc["category"] = category_id
@@ -492,33 +508,34 @@ async def get_scenarios_by_category(category_id: str):
     return all_scenarios
 
 @api_router.get("/scenarios/{category_id}/{subcategory_id}")
-async def get_scenarios_by_subcategory(category_id: str, subcategory_id: str):
-    if category_id not in SCENARIOS or subcategory_id not in SCENARIOS[category_id]:
+async def get_scenarios_by_subcategory(category_id: str, subcategory_id: str, lang: str = "en"):
+    lang_data = get_data_for_lang(lang)
+    scenarios = lang_data["scenarios"]
+    if category_id not in scenarios or subcategory_id not in scenarios[category_id]:
         raise HTTPException(status_code=404, detail="Not found")
-    return SCENARIOS[category_id][subcategory_id]
+    return scenarios[category_id][subcategory_id]
 
 @api_router.get("/scenario/{scenario_id}")
-async def get_scenario_detail(scenario_id: str):
-    for cat_id, cat_data in SCENARIOS.items():
-        for subcat_id, scenarios in cat_data.items():
-            for s in scenarios:
+async def get_scenario_detail(scenario_id: str, lang: str = "en"):
+    lang_data = get_data_for_lang(lang)
+    scenarios = lang_data["scenarios"]
+    scenario_legal_quotes = lang_data.get("scenario_legal_quotes", SCENARIO_LEGAL_QUOTES)
+    subcategory_legal_quotes = lang_data.get("subcategory_legal_quotes", SUBCATEGORY_LEGAL_QUOTES)
+    
+    for cat_id, cat_data in scenarios.items():
+        for subcat_id, sc_list in cat_data.items():
+            for s in sc_list:
                 if s["id"] == scenario_id:
                     r = s.copy()
                     r["category"] = cat_id
                     r["subcategory"] = subcat_id
-                    # Look up legal quotes: specific override first, then subcategory
-                    if scenario_id in SCENARIO_LEGAL_QUOTES:
-                        r["legal_quotes"] = SCENARIO_LEGAL_QUOTES[scenario_id]
+                    if scenario_id in scenario_legal_quotes:
+                        r["legal_quotes"] = scenario_legal_quotes[scenario_id]
                     else:
-                        # Find matching subcategory prefix
-                        prefix = "-".join(scenario_id.rsplit("-", 1)[0].split("-")[:2]) if "-" in scenario_id else scenario_id
-                        # Try prefix match (e.g. "sch-s" from "sch-s1")
                         import re
-                        sid = scenario_id
-                        match = re.match(r"^([a-z]+-[a-z]+)", sid)
-                        if match:
-                            prefix = match.group(1)
-                        r["legal_quotes"] = SUBCATEGORY_LEGAL_QUOTES.get(prefix, [])
+                        match = re.match(r"^([a-z]+-[a-z]+)", scenario_id)
+                        prefix = match.group(1) if match else scenario_id
+                        r["legal_quotes"] = subcategory_legal_quotes.get(prefix, [])
                     return r
     raise HTTPException(status_code=404, detail="Not found")
 
@@ -527,24 +544,28 @@ async def get_default_scripts():
     return DEFAULT_SCRIPTS
 
 @api_router.get("/scripts/by-category")
-async def get_scripts_by_category():
+async def get_scripts_by_category(lang: str = "en"):
     """Return all scripts extracted from scenarios, grouped by category."""
+    lang_data = get_data_for_lang(lang)
+    categories = lang_data["categories"]
+    scenarios = lang_data["scenarios"]
+    
     result = {}
-    for cat in CATEGORIES:
+    for cat in categories:
         cat_id = cat["id"]
         cat_name = cat["name"]
         cat_icon = cat["icon"]
         cat_color = cat["color"]
         scripts_list = []
-        if cat_id in SCENARIOS:
-            for subcat_id, scenarios in SCENARIOS[cat_id].items():
+        if cat_id in scenarios:
+            for subcat_id, sc_list in scenarios[cat_id].items():
                 # Find subcategory name
                 subcat_name = subcat_id
                 for sc in cat.get("subcategories", []):
                     if sc["id"] == subcat_id:
                         subcat_name = sc["name"]
                         break
-                for s in scenarios:
+                for s in sc_list:
                     if s.get("script"):
                         scripts_list.append({
                             "id": s["id"],

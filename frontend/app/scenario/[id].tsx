@@ -1,3 +1,4 @@
+import { useLanguage } from '../../utils/LanguageContext';
 import React, { useState, useEffect } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity, ScrollView,
@@ -48,14 +49,15 @@ const QUOTE_TYPE_CONFIG: Record<string, { icon: string; color: string }> = {
 export default function ScenarioScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+  const { lang } = useLanguage();
   const [scenario, setScenario] = useState<ScenarioDetail | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => { fetchScenario(); }, [id]);
+  useEffect(() => { fetchScenario(); }, [id, lang]);
 
   const fetchScenario = async () => {
     try {
-      const response = await axios.get(`${BACKEND_URL}/api/scenario/${id}`);
+      const response = await axios.get(`${BACKEND_URL}/api/scenario/${id}?lang=${lang}`);
       setScenario(response.data);
     } catch (error) {
       console.error('Error:', error);

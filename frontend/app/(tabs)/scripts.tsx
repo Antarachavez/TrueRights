@@ -1,3 +1,4 @@
+import { useLanguage } from '../../utils/LanguageContext';
 import React, { useState, useEffect, useMemo } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity, ScrollView,
@@ -44,6 +45,7 @@ interface CategoryData {
 type ViewMode = 'categories' | 'category-detail' | 'saved';
 
 export default function ScriptsScreen() {
+  const { lang } = useLanguage();
   const [categoriesData, setCategoriesData] = useState<Record<string, CategoryData>>({});
   const [savedScripts, setSavedScripts] = useState<SavedScript[]>([]);
   const [viewMode, setViewMode] = useState<ViewMode>('categories');
@@ -77,7 +79,7 @@ export default function ScriptsScreen() {
   const fetchAll = async (devId?: string) => {
     try {
       const [catRes, savedRes] = await Promise.all([
-        axios.get(`${BACKEND_URL}/api/scripts/by-category`),
+        axios.get(`${BACKEND_URL}/api/scripts/by-category?lang=${lang}`),
         axios.get(`${BACKEND_URL}/api/scripts/saved/${devId || deviceId}`)
       ]);
       setCategoriesData(catRes.data);

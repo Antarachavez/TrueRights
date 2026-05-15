@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../utils/LanguageContext';
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -48,6 +49,7 @@ const ICON_MAP: { [key: string]: keyof typeof Ionicons.glyphMap } = {
 export default function SubcategoryScreen() {
   const { categoryId, subcategoryId } = useLocalSearchParams<{ categoryId: string; subcategoryId: string }>();
   const router = useRouter();
+  const { lang } = useLanguage();
   const [category, setCategory] = useState<Category | null>(null);
   const [subcategory, setSubcategory] = useState<Subcategory | null>(null);
   const [scenarios, setScenarios] = useState<Scenario[]>([]);
@@ -61,8 +63,8 @@ export default function SubcategoryScreen() {
   const fetchData = async () => {
     try {
       const [categoriesRes, scenariosRes] = await Promise.all([
-        axios.get(`${BACKEND_URL}/api/categories`),
-        axios.get(`${BACKEND_URL}/api/scenarios/${categoryId}/${subcategoryId}`)
+        axios.get(`${BACKEND_URL}/api/categories?lang=${lang}`),
+        axios.get(`${BACKEND_URL}/api/scenarios/${categoryId}/${subcategoryId}?lang=${lang}`)
       ]);
       
       const foundCategory = categoriesRes.data.find((c: Category) => c.id === categoryId);

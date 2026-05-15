@@ -1,3 +1,4 @@
+import { useLanguage } from '../../utils/LanguageContext';
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions, TextInput, ActivityIndicator, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -75,6 +76,7 @@ const ICON_MAP: { [key: string]: keyof typeof Ionicons.glyphMap } = {
 export default function CategoryScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+  const { lang } = useLanguage();
   const [category, setCategory] = useState<Category | null>(null);
   const [allScenarios, setAllScenarios] = useState<Scenario[]>([]);
   const [scenarioCounts, setScenarioCounts] = useState<{ [key: string]: number }>({});
@@ -101,8 +103,8 @@ export default function CategoryScreen() {
   const fetchData = async () => {
     try {
       const [categoriesRes, scenariosRes, genRes] = await Promise.all([
-        axios.get(`${BACKEND_URL}/api/categories`),
-        axios.get(`${BACKEND_URL}/api/scenarios/${id}`),
+        axios.get(`${BACKEND_URL}/api/categories?lang=${lang}`),
+        axios.get(`${BACKEND_URL}/api/scenarios/${id}?lang=${lang}`),
         axios.get(`${BACKEND_URL}/api/scenarios/generated/${id}`),
       ]);
       
