@@ -17,6 +17,11 @@ const STOP_WORDS = new Set([
   'not', 'only', 'own', 'same', 'so', 'than', 'too', 'very', 'can', 'will', 'just',
   'don', 'should', 'now', 'get', 'got', 'im', "i'm", 'dont', "don't", 'cant', "can't",
   'wont', "won't", 'would', 'could', 'gonna', 'wanna', 'like', 'really', 'also',
+  'getting', 'going', 'want', 'need', 'make', 'made', 'still', 'keep',
+  'thing', 'things', 'something', 'anything', 'everything', 'nothing', 'someone',
+  'know', 'think', 'thought', 'feel', 'way', 'says', 'said',
+  'much', 'many', 'even', 'well', 'back', 'give', 'tell', 'told', 'ask', 'asked',
+  'put', 'try', 'come', 'came', 'went', 'go', 'let', 'help', 'sure', 'find',
 ]);
 
 // Synonym groups - words that mean similar things
@@ -99,35 +104,45 @@ function getSynonyms(word: string): string[] {
 /**
  * Score how well a scenario matches a search query.
  * Returns 0 if no match, higher scores = better match.
+ * STRICT: Only returns positive score if there's a genuine topic match.
  */
 function scoreMatch(query: string, targetQuestion: string, targetAnswer: string): number {
   const queryKeywords = extractKeywords(query);
   if (queryKeywords.length === 0) return 0;
 
   const targetText = `${targetQuestion} ${targetAnswer}`.toLowerCase();
-  const targetWords = targetText.split(/\s+/);
+  const targetWords = new Set(targetText.replace(/[^a-z0-9' ]/g, ' ').split(/\s+/).filter(w => w.length > 1));
 
   let score = 0;
   let matchedKeywords = 0;
 
   for (const keyword of queryKeywords) {
-    // Direct word match in target
-    if (targetText.includes(keyword)) {
-      score += 3;
+    // Direct word match in target text
+    if (targetWords.has(keyword) || targetText.includes(keyword)) {
+      score += 4;
       matchedKeywords++;
-      // Bonus for matching in question specifically
+      // Extra bonus for matching in question (more relevant)
       if (targetQuestion.toLowerCase().includes(keyword)) {
-        score += 2;
+        score += 3;
       }
       continue;
     }
 
-    // Synonym match
+    // Synonym match - check if any synonym of the keyword appears in target
     const synonyms = getSynonyms(keyword);
     let synonymMatched = false;
     for (const syn of synonyms) {
-      if (targetText.includes(syn)) {
-        score += 2;
+      // Only match whole words for synonyms (avoid partial matches)
+      if (syn.includes(' ')) {
+        // Multi-word synonym
+        if (targetText.includes(syn)) {
+          score += 3;
+          matchedKeywords++;
+          synonymMatched = true;
+          break;
+        }
+      } else if (targetWords.has(syn)) {
+        score += 3;
         matchedKeywords++;
         synonymMatched = true;
         break;
@@ -135,20 +150,49 @@ function scoreMatch(query: string, targetQuestion: string, targetAnswer: string)
     }
     if (synonymMatched) continue;
 
-    // Partial/stem match (e.g., "search" matches "searching", "searched")
-    const stem = keyword.length > 4 ? keyword.slice(0, -2) : keyword;
-    if (targetWords.some(w => w.startsWith(stem) || stem.startsWith(w.slice(0, -2)))) {
-      score += 1.5;
-      matchedKeywords++;
+    // Strict stem match - handle common suffixes (ing, ed, s, tion, etc.)
+    if (keyword.length >= 4) {
+      let stem = keyword;
+      // Remove common suffixes to get base form
+      if (stem.endsWith('ing')) stem = stem.slice(0, -3);
+      else if (stem.endsWith('tion')) stem = stem.slice(0, -4);
+      else if (stem.endsWith('ed')) stem = stem.slice(0, -2);
+      else if (stem.endsWith('ly')) stem = stem.slice(0, -2);
+      else if (stem.endsWith('er')) stem = stem.slice(0, -2);
+      else if (stem.endsWith('est')) stem = stem.slice(0, -3);
+      else if (stem.endsWith('ment')) stem = stem.slice(0, -4);
+      else if (stem.endsWith('ness')) stem = stem.slice(0, -4);
+      else if (stem.length >= 5) stem = stem.slice(0, -1); // generic trim last char
+      
+      if (stem.length >= 3) {
+        const found = Array.from(targetWords).some(w => 
+          w.length >= 3 && (w.startsWith(stem) || w === stem || stem.startsWith(w))
+        );
+        if (found) {
+          score += 2;
+          matchedKeywords++;
+        }
+      }
     }
   }
 
-  // Bonus for matching most/all keywords
+  // Require meaningful match ratio
   const matchRatio = matchedKeywords / queryKeywords.length;
-  if (matchRatio >= 0.8) score *= 1.5;
-  else if (matchRatio >= 0.5) score *= 1.2;
+  
+  // If only 1 keyword and it matched well, that's good
+  if (queryKeywords.length === 1 && matchedKeywords === 1) {
+    return score;
+  }
+  
+  // For multi-word queries, require at least 40% of keywords to match
+  if (queryKeywords.length > 1 && matchRatio < 0.4) {
+    return 0;
+  }
 
-  // Minimum threshold: at least 1 keyword must match
+  // Bonus for high match ratio
+  if (matchRatio >= 0.8) score *= 1.5;
+  else if (matchRatio >= 0.6) score *= 1.3;
+
   return matchedKeywords > 0 ? score : 0;
 }
 
