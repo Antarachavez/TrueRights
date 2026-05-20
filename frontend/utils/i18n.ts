@@ -1,5 +1,5 @@
 /**
- * Internationalization (i18n) system for True Rights app.
+ * Internationalization (i18n) system for TrueRights app.
  * Supports: English, French, Spanish, Mandarin Chinese
  */
 
@@ -14,7 +14,7 @@ export const LANGUAGES: { code: Language; name: string; nativeName: string; flag
 const translations: Record<Language, Record<string, string>> = {
   en: {
     // Onboarding
-    'app.name': 'True Rights',
+    'app.name': 'TrueRights',
     'onboarding.subtitle': "Let's set up a few things so the app works best for you",
     'onboarding.yourState': 'Your State',
     'onboarding.stateDesc': 'Laws vary by state. This helps us give accurate info.',
@@ -32,7 +32,7 @@ const translations: Record<Language, Record<string, string>> = {
     'onboarding.searchStates': 'Search states...',
 
     // Home
-    'home.greeting': 'True Rights',
+    'home.greeting': 'TrueRights',
     'home.subGreeting': 'Know your rights in any situation',
     'home.emergency': 'Emergency Mode',
     'home.categories': 'Categories',
@@ -316,7 +316,7 @@ const translations: Record<Language, Record<string, string>> = {
   },
 
   es: {
-    'app.name': 'True Rights',
+    'app.name': 'TrueRights',
     'onboarding.subtitle': 'Configuremos algunas cosas para que la app funcione mejor para ti',
     'onboarding.yourState': 'Tu Estado',
     'onboarding.stateDesc': 'Las leyes varían según el estado. Esto nos ayuda a darte información precisa.',
@@ -332,7 +332,7 @@ const translations: Record<Language, Record<string, string>> = {
     'onboarding.disclaimer': 'Solo información educativa. No es consejo legal.',
     'onboarding.selectStateTitle': 'Selecciona Tu Estado',
     'onboarding.searchStates': 'Buscar estados...',
-    'home.greeting': 'True Rights',
+    'home.greeting': 'TrueRights',
     'home.subGreeting': 'Conoce tus derechos en cualquier situación',
     'home.emergency': 'Modo de Emergencia',
     'home.categories': 'Categorías',

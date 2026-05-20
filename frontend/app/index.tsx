@@ -94,7 +94,7 @@ export default function OnboardingScreen() {
             <LinearGradient colors={['#1B2A4A', '#2A3F6A']} style={styles.logoCircle} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
               <Ionicons name="shield-checkmark" size={32} color="#FFFFFF" />
             </LinearGradient>
-            <Text style={styles.title}>True Rights</Text>
+            <Text style={styles.title}>TrueRights</Text>
             <Text style={styles.langSubtitle}>{t('onboarding.chooseLanguage')}</Text>
             <Text style={styles.langSubtitleSmall}>{t('onboarding.languageSub')}</Text>
           </View>

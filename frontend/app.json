@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "True Rights",
-    "slug": "know-your-rights",
+    "name": "TrueRights",
+    "slug": "true-rights",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "knowyourrights",
+    "scheme": "truerights",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "ios": {
