@@ -1,10 +1,3 @@
-To be 100% sure nothing gets missed, do this clean replace — don't try to merge:
-1. Open the editor
-https://github.com/Antarachavez/TrueRights/edit/main/frontend/app.json
-2. Click inside the editor box, then press these keys:
-Cmd+A (Mac) or Ctrl+A (Windows) → selects everything
-Delete key → empties the file
-3. The editor should now be completely empty. Now paste THIS exact text:
 {
   "expo": {
     "name": "TrueRights",
