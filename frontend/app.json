@@ -45,8 +45,13 @@
       ],
       "expo-web-browser"
     ],
-    "experiments": {
+   "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "04f7ce7f-1444-4cac-818d-3eaedaeec946"
+      }
     }
   }
 }
